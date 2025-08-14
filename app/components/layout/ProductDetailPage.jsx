@@ -1,0 +1,503 @@
+"use client";
+
+import { useState } from "react";
+import { FiChevronDown, FiChevronUp, FiMinus, FiPlus } from "react-icons/fi";
+import { IoHeartSharp } from "react-icons/io5";
+import { FaShop, FaTruckFast } from "react-icons/fa6";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaPhone,
+  FaWhatsapp,
+} from "react-icons/fa";
+import { TbShoppingBagPlus } from "react-icons/tb";
+import { MdOutlineTrendingDown } from "react-icons/md";
+
+export default function ProductDetailPage({ productData, isSet = false }) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
+  const [currentSubImageIndex, setCurrentSubImageIndex] = useState(0);
+
+  const getImageStructure = () => {
+    if (isSet) {
+      return {
+        mainImage: productData.mainImage,
+        products: productData.products.map((item) => ({
+          name: item.product.name,
+          count: item.count,
+          images: item.product.images,
+        })),
+      };
+    } else {
+      return {
+        mainImage: null,
+        products: [
+          {
+            name: productData.name,
+            count: 1,
+            images: productData.images,
+          },
+        ],
+      };
+    }
+  };
+
+  const imageStructure = getImageStructure();
+
+  const getCurrentImage = () => {
+    if (isSet) {
+      if (currentImageIndex === 0) {
+        return imageStructure.mainImage;
+      } else {
+        return imageStructure.products[currentProductIndex].images[
+          currentSubImageIndex
+        ];
+      }
+    } else {
+      return imageStructure.products[0].images[currentImageIndex];
+    }
+  };
+
+  const handleMainImageClick = () => {
+    if (isSet) {
+      setCurrentImageIndex(0);
+      setCurrentProductIndex(0);
+      setCurrentSubImageIndex(0);
+    }
+  };
+
+  const handleProductSelect = (productIndex) => {
+    if (isSet) {
+      setCurrentImageIndex(1);
+      setCurrentProductIndex(productIndex);
+      setCurrentSubImageIndex(0);
+    } else {
+      setCurrentImageIndex(productIndex);
+    }
+  };
+
+  const nextSubImage = () => {
+    if (isSet && currentImageIndex > 0) {
+      const currentProduct = imageStructure.products[currentProductIndex];
+      setCurrentSubImageIndex(
+        (prev) => (prev + 1) % currentProduct.images.length
+      );
+    }
+  };
+
+  const prevSubImage = () => {
+    if (isSet && currentImageIndex > 0) {
+      const currentProduct = imageStructure.products[currentProductIndex];
+      setCurrentSubImageIndex(
+        (prev) =>
+          (prev - 1 + currentProduct.images.length) %
+          currentProduct.images.length
+      );
+    }
+  };
+
+  const nextImage = () => {
+    if (!isSet) {
+      setCurrentImageIndex(
+        (prev) => (prev + 1) % imageStructure.products[0].images.length
+      );
+    } else {
+      nextSubImage();
+    }
+  };
+
+  const prevImage = () => {
+    if (!isSet) {
+      setCurrentImageIndex(
+        (prev) =>
+          (prev - 1 + imageStructure.products[0].images.length) %
+          imageStructure.products[0].images.length
+      );
+    } else {
+      prevSubImage();
+    }
+  };
+
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <span
+        key={i}
+        className={`text-yellow-400 ${
+          i < rating ? "fas fa-star" : "far fa-star"
+        }`}
+      ></span>
+    ));
+  };
+
+  const getProductLabel = (productIndex) => {
+    if (!isSet) return null;
+    return `${imageStructure.products[productIndex].count}x`;
+  };
+
+  const getShippingDate = () => {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentDay = now.getDay();
+
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const formatDate = (date) => {
+      const days = [
+        "Pazar",
+        "Pazartesi",
+        "Salı",
+        "Çarşamba",
+        "Perşembe",
+        "Cuma",
+        "Cumartesi",
+      ];
+      const months = [
+        "Ocak",
+        "Şubat",
+        "Mart",
+        "Nisan",
+        "Mayıs",
+        "Haziran",
+        "Temmuz",
+        "Ağustos",
+        "Eylül",
+        "Ekim",
+        "Kasım",
+        "Aralık",
+      ];
+
+      return `${date.getDate()} ${
+        months[date.getMonth()]
+      } ${date.getFullYear()} ${days[date.getDay()]}`;
+    };
+
+    // Saat 14:00'dan önce ise bugün kargoda
+    if (currentHour < 14) {
+      return `Bugün Kargoda!`;
+    }
+
+    // Saat 14:00'dan sonra
+    // Cumartesi (6) veya Pazar (0) ise pazartesi günü
+    if (currentDay === 6 || currentDay === 0) {
+      const monday = new Date(today);
+      const daysUntilMonday = currentDay === 6 ? 2 : 1; // Cumartesi ise 2 gün, Pazar ise 1 gün
+      monday.setDate(today.getDate() + daysUntilMonday);
+      return `${formatDate(monday)} Kargoda!`;
+    }
+
+    // Hafta içi ise yarın kargoda
+    return `${formatDate(tomorrow)} Kargoda!`;
+  };
+
+  return (
+    <div className="p-6 bg-white">
+      <div className="grid grid-cols-14 gap-6">
+        <div className="col-span-2">
+          <div className="space-y-3">
+            {isSet && (
+              <div
+                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden ${
+                  currentImageIndex === 0
+                    ? "border-blue-500"
+                    : "border-gray-200"
+                }`}
+                onClick={handleMainImageClick}
+              >
+                <img
+                  src={imageStructure.mainImage}
+                  alt="Ana set resmi"
+                  className="w-full h-20 object-contain"
+                />
+              </div>
+            )}
+            {imageStructure.products.map((product, productIndex) => (
+              <div key={productIndex} className="space-y-1">
+                <div
+                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
+                    (!isSet && currentImageIndex === productIndex) ||
+                    (isSet &&
+                      currentImageIndex > 0 &&
+                      currentProductIndex === productIndex)
+                      ? "border-blue-500 shadow-lg"
+                      : "border-gray-200"
+                  }`}
+                  onClick={() => handleProductSelect(productIndex)}
+                >
+                  <img
+                    src={product.images[0]}
+                    alt={`${product.name} thumbnail`}
+                    className="w-full h-20 object-contain"
+                  />
+                  {getProductLabel(productIndex) && (
+                    <div className="absolute bottom-1 left-1 text-green-800 text-xs px-1.5 py-0.5 rounded-full font-medium">
+                      {getProductLabel(productIndex)}
+                    </div>
+                  )}
+                </div>
+                {product.images.length > 1 && (
+                  <div className="grid grid-cols-2 gap-1">
+                    {product.images.slice(1, 5).map((image, imageIndex) => (
+                      <div
+                        key={imageIndex}
+                        className={`relative cursor-pointer border rounded overflow-hidden transition-all duration-200 hover:shadow-sm ${
+                          isSet &&
+                          currentImageIndex > 0 &&
+                          currentProductIndex === productIndex &&
+                          currentSubImageIndex === imageIndex + 1
+                            ? "border-blue-400 shadow-md"
+                            : "border-gray-200"
+                        }`}
+                        onClick={() => {
+                          if (isSet) {
+                            setCurrentImageIndex(1);
+                            setCurrentProductIndex(productIndex);
+                            setCurrentSubImageIndex(imageIndex + 1);
+                          } else {
+                            setCurrentImageIndex(imageIndex + 1);
+                          }
+                        }}
+                      >
+                        <img
+                          src={image}
+                          alt={`${product.name} resim ${imageIndex + 2}`}
+                          className="w-full h-8 object-contain"
+                        />
+                        {imageIndex === 3 && product.images.length > 5 && (
+                          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <span className="text-white text-xs font-medium">
+                              +{product.images.length - 5}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="col-span-6">
+          <div className="relative bg-transparent rounded-lg overflow-hidden">
+            <img
+              src={getCurrentImage()}
+              alt="Ana ürün resmi"
+              className="w-full h-[500px] object-contain"
+            />
+            {((!isSet && imageStructure.products[0].images.length > 1) ||
+              (isSet &&
+                currentImageIndex > 0 &&
+                imageStructure.products[currentProductIndex].images.length >
+                  1)) && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110"
+                >
+                  <FaChevronLeft />
+                </button>
+
+                <button
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110"
+                >
+                  <FaChevronRight />
+                </button>
+              </>
+            )}
+            {((!isSet && imageStructure.products[0].images.length > 1) ||
+              (isSet &&
+                currentImageIndex > 0 &&
+                imageStructure.products[currentProductIndex].images.length >
+                  1)) && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 bg-transparent bg-opacity-30 px-3 py-2 rounded-full">
+                {(isSet
+                  ? imageStructure.products[currentProductIndex].images
+                  : imageStructure.products[0].images
+                ).map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() =>
+                      isSet
+                        ? setCurrentSubImageIndex(index)
+                        : setCurrentImageIndex(index)
+                    }
+                    className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                      (isSet ? currentSubImageIndex : currentImageIndex) ===
+                      index
+                        ? "bg-green-500 scale-125"
+                        : "bg-white bg-opacity-70 hover:bg-opacity-90"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+            {((!isSet && imageStructure.products[0].images.length > 1) ||
+              (isSet &&
+                currentImageIndex > 0 &&
+                imageStructure.products[currentProductIndex].images.length >
+                  1)) && (
+              <div className="absolute top-4 right-4 bg-black bg-opacity-60 text-white px-2 py-1 rounded-full text-sm">
+                {isSet ? currentSubImageIndex + 1 : currentImageIndex + 1} /{" "}
+                {isSet
+                  ? imageStructure.products[currentProductIndex].images.length
+                  : imageStructure.products[0].images.length}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="col-span-6">
+          <div className="space-y-4">
+            <h1 className="text-2xl font-bold text-gray-800 border-b-1">
+              {productData.name}
+            </h1>
+            <div className="flex justify-between text-sm text-gray-600">
+              <span>• Ürün Kodu: {productData.productCode}</span>
+              <span>• Görüntülenme: {productData.viewCount}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="flex space-x-1">
+                {renderStars(productData.rating)}
+              </div>
+              <span className="text-gray-600">
+                {productData.reviewCount} yorum
+              </span>
+            </div>
+            <div className="space-y-2">
+              {productData.cartPrice &&
+              productData.cartPrice !== productData.price ? (
+                <div className="flex  justify-end items-center gap-5 space-y-2">
+                  <div className="flex items-start gap-1">
+                    <div className="text-3xl font-bold">
+                      {productData.cartPrice}
+                    </div>{" "}
+                    <div className="flex items-center gap-2 text-red-500 text-lg px-3 rounded-full font-medium">
+                      %
+                      {Math.round(
+                        ((parseFloat(
+                          productData.price
+                            .replace(/[^\d,]/g, "")
+                            .replace(",", ".")
+                        ) -
+                          parseFloat(
+                            productData.cartPrice
+                              .replace(/[^\d,]/g, "")
+                              .replace(",", ".")
+                          )) /
+                          parseFloat(
+                            productData.price
+                              .replace(/[^\d,]/g, "")
+                              .replace(",", ".")
+                          )) *
+                          100
+                      )}{" "}
+                      <MdOutlineTrendingDown />
+                    </div>
+                    <div className="text-lg text-gray-500 line-through">
+                      {productData.price}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-end text-3xl font-bold">
+                  {productData.price}
+                </div>
+              )}
+            </div>
+            {!isSet && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">
+                  Diğer Renk Seçenekleri:
+                </h3>
+                <div className="flex space-x-2">
+                  {[1, 2, 3].map((item) => (
+                    <div
+                      key={item}
+                      className="w-12 h-12 border border-gray-200 rounded-lg overflow-hidden cursor-pointer"
+                    >
+                      <img
+                        src={`https://placehold.co/48x48/DC2626/FFFFFF?text=${item}`}
+                        alt={`Renk seçeneği ${item}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end items-center space-x-4">
+              <div className="flex border border-white rounded overflow-hidden w-24">
+                <div className="flex-1 flex items-center justify-center bg-gray-50">
+                  <span className="text-lg font-medium">{quantity}</span>
+                </div>
+                <div className="flex flex-col border-l border-white">
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="flex-1 flex items-center justify-center px-2 hover:bg-green-200"
+                  >
+                    <FiChevronUp />
+                  </button>
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="flex-1 flex items-center justify-center px-2 hover:bg-red-200 border-t border-white"
+                  >
+                    <FiChevronDown />
+                  </button>
+                </div>
+              </div>
+              <button className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-lg font-medium shadow-md cursor-pointer">
+                <TbShoppingBagPlus />
+                Sepete Ekle
+              </button>
+              {/* <button className="p-3 rounded-lg bg-green-200">
+                <IoHeartSharp className="text-red-600" />
+              </button> */}
+            </div>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="flex gap-2 items-center text-green-700">
+                <FaTruckFast />
+                <span className="text-sm">
+                  <strong>{getShippingDate()}</strong>
+                </span>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <button className="text-sm flex items-center justify-center border border-black text-black hover:bg-black hover:border-black hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md">
+                <FaPhone />
+                Telefon ile Sipariş Ver
+              </button>
+              <button className="text-sm flex items-center justify-center border border-green-700 text-green-700 hover:bg-green-700 hover:border-green-700 hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md">
+                <FaWhatsapp />
+                WhatsApp ile Sipariş Ver
+              </button>
+            </div>
+            {isSet && (
+              <div className="border-t pt-4">
+                <h3 className="text-gray-800 mb-3 font-bold">Set İçeriği</h3>
+                <div className="space-y-2">
+                  {productData.products.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between text-sm"
+                    >
+                      <span>{item.product.name}</span>
+                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                        {item.count} Adet
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="text-sm mt-2">{productData?.description}</div>
+    </div>
+  );
+}

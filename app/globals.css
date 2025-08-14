@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@keyframes blink-green {
+  0%, 100% {
+    background-color: rgba(34, 197, 94, 1);
+  }
+  50% {
+    background-color: rgb(22, 125, 60, 1);
+  }
+}
+
+.animate-blink-green {
+  animation: blink-green 2s ease-in-out infinite;
+}
+
+@keyframes blink-white {
+  0%, 100% {
+    color: white;
+  }
+  50% {
+    color: transparent;
+  }
+}
+
+.animate-blink-white {
+  animation: blink-white 2s infinite;
+}
+
+
+:root {
+  --acik-yesil: #7F7B59;
+  --koyu-yesil: #505034;
+  --acik-kahve: #7C745E;
+  --koyu-kahve: #4E3E2D;
+}
+
+/* Utility classes */
+.bg-acik-yesil { background-color: var(--acik-yesil); }
+.bg-koyu-yesil { background-color: var(--koyu-yesil); }
+.bg-acik-kahve { background-color: var(--acik-kahve); }
+.bg-koyu-kahve { background-color: var(--koyu-kahve); }
+
+.text-acik-yesil { color: var(--acik-yesil); }
+.text-koyu-yesil { color: var(--koyu-yesil); }
+.text-acik-kahve { color: var(--acik-kahve); }
+.text-koyu-kahve { color: var(--koyu-kahve); }
+
+.border-acik-yesil { border-color: var(--acik-yesil); }
+.border-koyu-yesil { border-color: var(--koyu-yesil); }
+.border-acik-kahve { border-color: var(--acik-kahve); }
+.border-koyu-kahve { border-color: var(--koyu-kahve); }
+
+/* :root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+} */
