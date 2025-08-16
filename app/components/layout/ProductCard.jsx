@@ -3,11 +3,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { TbShoppingBagPlus } from "react-icons/tb";
 import { MdOutlineTrendingDown } from "react-icons/md";
+import { getProductCategorySlug } from "../../navLinks";
 
 export default function ProductCard({ set }) {
   const [isAllHovered, setIsAllHovered] = useState(false);
   const [isDetailHovered, setIsDetailHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+
+  const categorySlug = getProductCategorySlug(set);
 
   return (
     <div
@@ -30,7 +33,7 @@ export default function ProductCard({ set }) {
         />
 
         {isDetailHovered && (
-          <Link href={`/askerlik-setleri/${set.slug}`}>
+          <Link href={`/${categorySlug}/${set.slug}`}>
             <div className="absolute inset-0 bg-[rgba(0,0,0,0.6)] flex flex-col justify-center items-center space-y-3 transition-all duration-300 z-10 rounded-lg">
               <p className="text-white px-4 py-2 rounded font-medium">
                 Detaylı İncele

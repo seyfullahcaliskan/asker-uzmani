@@ -8,15 +8,7 @@ import { LiaLifeRingSolid } from "react-icons/lia";
 import { RiUser6Line } from "react-icons/ri";
 import { MdOutlineFavorite } from "react-icons/md";
 import { RiShoppingBasketLine } from "react-icons/ri";
-
-const navLinks = [
-  { href: "/", label: "Ana Sayfa" },
-  { href: "/askerlik-setleri", label: "Askerlik Setleri" },
-  { href: "/tekstil", label: "Tekstil" },
-  { href: "/canta", label: "Çanta" },
-  { href: "/kunye-isimlik", label: "Künye - İsimlik" },
-  { href: "/yardimci-ürünler", label: "Yardımcı Ürünler" },
-];
+import { navLinks } from "../../navLinks";
 
 export default function Header() {
   return (
@@ -94,7 +86,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Menü */}
         <div className="flex justify-center items-center gap-4 py-2 mt-2">
           {navLinks.map((link) => (
             <Link
