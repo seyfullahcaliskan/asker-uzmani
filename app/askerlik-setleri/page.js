@@ -23,7 +23,7 @@ export default function Products() {
 
   // İlk önce sadece isSet = 1 olan ürünleri alıyoruz
   const sets = useMemo(() => {
-    return products.filter((p) => p.isSet === 1);
+    return products.filter((p) => p.isSet);
   }, []);
 
   // Filtrelenmiş ürünler

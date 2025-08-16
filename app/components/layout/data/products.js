@@ -1,7 +1,8 @@
 const products = [
   {
+    category: "Tekstil",
     id: 3,
-    isSet: 1,
+    isSet: true,
     name: "Asker Malzemeleri 18 Parça 2'Li Set",
     slug: "asker-malzemeleri-18-parca-2-li-set",
     description:
@@ -9,9 +10,11 @@ const products = [
     mainImage: "/images/products/sets/asker_malzemeleri_18_parca_2_li_set.png",
     price: "1200₺",
     cartPrice: "1000₺",
+    stock: 999999,
     products: [
       {
         product: {
+          stock: 999999,
           id: "1",
           name: "Asker T-shirt (Fanila)",
           category: "Tekstil",
@@ -50,6 +53,7 @@ const products = [
         count: 2,
       },
       {
+        stock: 999999,
         product: {
           id: "2",
           name: "Asker Donu",
@@ -91,51 +95,18 @@ const products = [
     ],
   },
   {
-    isSet: 0,
+    stock: 999999,
+    isSet: false,
     id: "2",
     name: "Asker Donu",
+    slug: "asker-donu",
     category: "Tekstil",
     price: "200₺",
+    description: "Komtan benim don sarı olmaz mı",
+    mainImage: "/images/products/clothes/asker_tshirt_fanila.webp",
     images: [
       "/images/products/clothes/asker_tshirt_fanila.webp",
-      "/images/products/clothes/asker_tshirt_fanila.webp",
-      "/images/products/clothes/asker_tshirt_fanila.webp",
-      "/images/products/clothes/asker_tshirt_fanila.webp",
-      "/images/products/clothes/asker_tshirt_fanila.webp",
-    ],
-    size: [
-      "30",
-      "31",
-      "32",
-      "33",
-      "34",
-      "35",
-      "36",
-      "37",
-      "38",
-      "39",
-      "40",
-      "41",
-      "42",
-      "43",
-      "44",
-      "45",
-      "46",
-      "47",
-      "48",
-      "49",
-      "50",
-    ],
-  },
-  {
-    isSet: 0,
-    id: "2",
-    name: "Asker Donu",
-    category: "Tekstil",
-    price: "200₺",
-    images: [
-      "/images/products/clothes/asker_tshirt_fanila.webp",
-      "/images/products/clothes/asker_tshirt_fanila.webp",
+      "/images/products/sets/asker_malzemeleri_18_parca_2_li_set.png",
       "/images/products/clothes/asker_tshirt_fanila.webp",
       "/images/products/clothes/asker_tshirt_fanila.webp",
       "/images/products/clothes/asker_tshirt_fanila.webp",

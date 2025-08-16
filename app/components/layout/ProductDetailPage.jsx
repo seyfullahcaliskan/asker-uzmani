@@ -13,33 +13,37 @@ import {
 import { TbShoppingBagPlus } from "react-icons/tb";
 import { MdOutlineTrendingDown } from "react-icons/md";
 
-export default function ProductDetailPage({ productData, isSet = false }) {
+export default function ProductDetailPage({ productData }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [currentSubImageIndex, setCurrentSubImageIndex] = useState(0);
 
+  const isSet = productData?.isSet;
+
   const getImageStructure = () => {
     if (isSet) {
       return {
-        mainImage: productData.mainImage,
-        products: productData.products.map((item) => ({
-          name: item.product.name,
+        mainImage: productData?.mainImage,
+        products: productData?.products?.map((item) => ({
+          name: item.product?.name,
           count: item.count,
-          images: item.product.images,
+          images: item.product?.images || [],
         })),
       };
     } else {
+      // Set olmayan ürünler için images array'ini oluştur
+      const images = productData?.images || [];
+      if (productData?.mainImage && !images.includes(productData.mainImage)) {
+        images.unshift(productData.mainImage);
+      }
       return {
         mainImage: null,
-        products: [
-          {
-            name: productData.name,
-            count: 1,
-            images: productData.images,
-          },
-        ],
+        products: [{
+          name: productData?.name,
+          images: images,
+        }]
       };
     }
   };
@@ -51,12 +55,12 @@ export default function ProductDetailPage({ productData, isSet = false }) {
       if (currentImageIndex === 0) {
         return imageStructure.mainImage;
       } else {
-        return imageStructure.products[currentProductIndex].images[
-          currentSubImageIndex
-        ];
+        const currentProduct = imageStructure.products[currentProductIndex];
+        return currentProduct?.images[currentSubImageIndex] || currentProduct?.images[0];
       }
     } else {
-      return imageStructure.products[0].images[currentImageIndex];
+      const currentProduct = imageStructure.products[0];
+      return currentProduct?.images[currentImageIndex] || currentProduct?.images[0];
     }
   };
 
@@ -74,49 +78,47 @@ export default function ProductDetailPage({ productData, isSet = false }) {
       setCurrentProductIndex(productIndex);
       setCurrentSubImageIndex(0);
     } else {
-      setCurrentImageIndex(productIndex);
+      setCurrentImageIndex(0);
     }
   };
 
-  const nextSubImage = () => {
+  const handleSubImageSelect = (productIndex, imageIndex) => {
+    if (isSet) {
+      setCurrentImageIndex(1);
+      setCurrentProductIndex(productIndex);
+      setCurrentSubImageIndex(imageIndex);
+    } else {
+      setCurrentImageIndex(imageIndex);
+    }
+  };
+
+  const nextImage = () => {
     if (isSet && currentImageIndex > 0) {
       const currentProduct = imageStructure.products[currentProductIndex];
       setCurrentSubImageIndex(
         (prev) => (prev + 1) % currentProduct.images.length
       );
-    }
-  };
-
-  const prevSubImage = () => {
-    if (isSet && currentImageIndex > 0) {
-      const currentProduct = imageStructure.products[currentProductIndex];
-      setCurrentSubImageIndex(
-        (prev) =>
-          (prev - 1 + currentProduct.images.length) %
-          currentProduct.images.length
-      );
-    }
-  };
-
-  const nextImage = () => {
-    if (!isSet) {
+    } else if (!isSet) {
+      const currentProduct = imageStructure.products[0];
       setCurrentImageIndex(
-        (prev) => (prev + 1) % imageStructure.products[0].images.length
+        (prev) => (prev + 1) % currentProduct.images.length
       );
-    } else {
-      nextSubImage();
     }
   };
 
   const prevImage = () => {
-    if (!isSet) {
+    if (isSet && currentImageIndex > 0) {
+      const currentProduct = imageStructure.products[currentProductIndex];
+      setCurrentSubImageIndex(
+        (prev) =>
+          (prev - 1 + currentProduct.images.length) % currentProduct.images.length
+      );
+    } else if (!isSet) {
+      const currentProduct = imageStructure.products[0];
       setCurrentImageIndex(
         (prev) =>
-          (prev - 1 + imageStructure.products[0].images.length) %
-          imageStructure.products[0].images.length
+          (prev - 1 + currentProduct.images.length) % currentProduct.images.length
       );
-    } else {
-      prevSubImage();
     }
   };
 
@@ -124,9 +126,8 @@ export default function ProductDetailPage({ productData, isSet = false }) {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`text-yellow-400 ${
-          i < rating ? "fas fa-star" : "far fa-star"
-        }`}
+        className={`text-yellow-400 ${i < rating ? "fas fa-star" : "far fa-star"
+          }`}
       ></span>
     ));
   };
@@ -170,27 +171,49 @@ export default function ProductDetailPage({ productData, isSet = false }) {
         "Aralık",
       ];
 
-      return `${date.getDate()} ${
-        months[date.getMonth()]
-      } ${date.getFullYear()} ${days[date.getDay()]}`;
+      return `${date.getDate()} ${months[date.getMonth()]
+        } ${date.getFullYear()} ${days[date.getDay()]}`;
     };
 
-    // Saat 14:00'dan önce ise bugün kargoda
     if (currentHour < 14) {
       return `Bugün Kargoda!`;
     }
 
-    // Saat 14:00'dan sonra
-    // Cumartesi (6) veya Pazar (0) ise pazartesi günü
     if (currentDay === 6 || currentDay === 0) {
       const monday = new Date(today);
-      const daysUntilMonday = currentDay === 6 ? 2 : 1; // Cumartesi ise 2 gün, Pazar ise 1 gün
+      const daysUntilMonday = currentDay === 6 ? 2 : 1;
       monday.setDate(today.getDate() + daysUntilMonday);
       return `${formatDate(monday)} Kargoda!`;
     }
 
-    // Hafta içi ise yarın kargoda
     return `${formatDate(tomorrow)} Kargoda!`;
+  };
+
+  const shouldShowImageNavigation = () => {
+    if (isSet) {
+      return currentImageIndex > 0 &&
+        imageStructure.products[currentProductIndex]?.images?.length > 1;
+    } else {
+      return imageStructure.products[0]?.images?.length > 1;
+    }
+  };
+
+  const getCurrentImageCount = () => {
+    if (isSet && currentImageIndex > 0) {
+      return imageStructure.products[currentProductIndex]?.images?.length || 0;
+    } else if (!isSet) {
+      return imageStructure.products[0]?.images?.length || 0;
+    }
+    return 0;
+  };
+
+  const getCurrentImagePosition = () => {
+    if (isSet && currentImageIndex > 0) {
+      return currentSubImageIndex + 1;
+    } else if (!isSet) {
+      return currentImageIndex + 1;
+    }
+    return 1;
   };
 
   return (
@@ -200,11 +223,10 @@ export default function ProductDetailPage({ productData, isSet = false }) {
           <div className="space-y-3">
             {isSet && (
               <div
-                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden ${
-                  currentImageIndex === 0
-                    ? "border-blue-500"
-                    : "border-gray-200"
-                }`}
+                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden ${currentImageIndex === 0
+                  ? "border-blue-500"
+                  : "border-gray-200"
+                  }`}
                 onClick={handleMainImageClick}
               >
                 <img
@@ -217,14 +239,11 @@ export default function ProductDetailPage({ productData, isSet = false }) {
             {imageStructure.products.map((product, productIndex) => (
               <div key={productIndex} className="space-y-1">
                 <div
-                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
-                    (!isSet && currentImageIndex === productIndex) ||
-                    (isSet &&
-                      currentImageIndex > 0 &&
-                      currentProductIndex === productIndex)
-                      ? "border-blue-500 shadow-lg"
-                      : "border-gray-200"
-                  }`}
+                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${(!isSet && currentImageIndex >= 0 && productIndex === 0) ||
+                    (isSet && currentImageIndex > 0 && currentProductIndex === productIndex)
+                    ? "border-blue-500 shadow-lg"
+                    : "border-gray-200"
+                    }`}
                   onClick={() => handleProductSelect(productIndex)}
                 >
                   <img
@@ -243,23 +262,14 @@ export default function ProductDetailPage({ productData, isSet = false }) {
                     {product.images.slice(1, 5).map((image, imageIndex) => (
                       <div
                         key={imageIndex}
-                        className={`relative cursor-pointer border rounded overflow-hidden transition-all duration-200 hover:shadow-sm ${
-                          isSet &&
-                          currentImageIndex > 0 &&
-                          currentProductIndex === productIndex &&
-                          currentSubImageIndex === imageIndex + 1
-                            ? "border-blue-400 shadow-md"
-                            : "border-gray-200"
-                        }`}
-                        onClick={() => {
-                          if (isSet) {
-                            setCurrentImageIndex(1);
-                            setCurrentProductIndex(productIndex);
-                            setCurrentSubImageIndex(imageIndex + 1);
-                          } else {
-                            setCurrentImageIndex(imageIndex + 1);
-                          }
-                        }}
+                        className={`relative cursor-pointer border rounded overflow-hidden transition-all duration-200 hover:shadow-sm ${(!isSet && currentImageIndex === imageIndex + 1) ||
+                          (isSet && currentImageIndex > 0 &&
+                            currentProductIndex === productIndex &&
+                            currentSubImageIndex === imageIndex + 1)
+                          ? "border-blue-400 shadow-md"
+                          : "border-gray-200"
+                          }`}
+                        onClick={() => handleSubImageSelect(productIndex, imageIndex + 1)}
                       >
                         <img
                           src={image}
@@ -281,6 +291,7 @@ export default function ProductDetailPage({ productData, isSet = false }) {
             ))}
           </div>
         </div>
+
         <div className="col-span-6">
           <div className="relative bg-transparent rounded-lg overflow-hidden">
             <img
@@ -288,11 +299,8 @@ export default function ProductDetailPage({ productData, isSet = false }) {
               alt="Ana ürün resmi"
               className="w-full h-[500px] object-contain"
             />
-            {((!isSet && imageStructure.products[0].images.length > 1) ||
-              (isSet &&
-                currentImageIndex > 0 &&
-                imageStructure.products[currentProductIndex].images.length >
-                  1)) && (
+
+            {shouldShowImageNavigation() && (
               <>
                 <button
                   onClick={prevImage}
@@ -309,53 +317,45 @@ export default function ProductDetailPage({ productData, isSet = false }) {
                 </button>
               </>
             )}
-            {((!isSet && imageStructure.products[0].images.length > 1) ||
-              (isSet &&
-                currentImageIndex > 0 &&
-                imageStructure.products[currentProductIndex].images.length >
-                  1)) && (
+
+            {shouldShowImageNavigation() && (
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 bg-transparent bg-opacity-30 px-3 py-2 rounded-full">
-                {(isSet
+                {(isSet && currentImageIndex > 0
                   ? imageStructure.products[currentProductIndex].images
                   : imageStructure.products[0].images
                 ).map((_, index) => (
                   <button
                     key={index}
-                    onClick={() =>
-                      isSet
-                        ? setCurrentSubImageIndex(index)
-                        : setCurrentImageIndex(index)
-                    }
-                    className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                      (isSet ? currentSubImageIndex : currentImageIndex) ===
-                      index
-                        ? "bg-green-500 scale-125"
-                        : "bg-white bg-opacity-70 hover:bg-opacity-90"
-                    }`}
+                    onClick={() => {
+                      if (isSet && currentImageIndex > 0) {
+                        setCurrentSubImageIndex(index);
+                      } else {
+                        setCurrentImageIndex(index);
+                      }
+                    }}
+                    className={`w-3 h-3 rounded-full transition-all duration-200 ${(isSet && currentImageIndex > 0 ? currentSubImageIndex : currentImageIndex) === index
+                      ? "bg-green-500 scale-125"
+                      : "bg-white bg-opacity-70 hover:bg-opacity-90"
+                      }`}
                   />
                 ))}
               </div>
             )}
-            {((!isSet && imageStructure.products[0].images.length > 1) ||
-              (isSet &&
-                currentImageIndex > 0 &&
-                imageStructure.products[currentProductIndex].images.length >
-                  1)) && (
+
+            {shouldShowImageNavigation() && (
               <div className="absolute top-4 right-4 bg-black bg-opacity-60 text-white px-2 py-1 rounded-full text-sm">
-                {isSet ? currentSubImageIndex + 1 : currentImageIndex + 1} /{" "}
-                {isSet
-                  ? imageStructure.products[currentProductIndex].images.length
-                  : imageStructure.products[0].images.length}
+                {getCurrentImagePosition()} / {getCurrentImageCount()}
               </div>
             )}
           </div>
         </div>
+
         <div className="col-span-6">
           <div className="space-y-4">
             <h1 className="text-2xl font-bold text-gray-800 border-b-1">
               {productData.name}
             </h1>
-            <div className="flex justify-between text-sm text-gray-600">
+            {/* <div className="flex justify-between text-sm text-gray-600">
               <span>• Ürün Kodu: {productData.productCode}</span>
               <span>• Görüntülenme: {productData.viewCount}</span>
             </div>
@@ -366,10 +366,10 @@ export default function ProductDetailPage({ productData, isSet = false }) {
               <span className="text-gray-600">
                 {productData.reviewCount} yorum
               </span>
-            </div>
+            </div> */}
             <div className="space-y-2">
               {productData.cartPrice &&
-              productData.cartPrice !== productData.price ? (
+                productData.cartPrice !== productData.price ? (
                 <div className="flex  justify-end items-center gap-5 space-y-2">
                   <div className="flex items-start gap-1">
                     <div className="text-3xl font-bold">
@@ -393,7 +393,7 @@ export default function ProductDetailPage({ productData, isSet = false }) {
                               .replace(/[^\d,]/g, "")
                               .replace(",", ".")
                           )) *
-                          100
+                        100
                       )}{" "}
                       <MdOutlineTrendingDown />
                     </div>
@@ -408,7 +408,7 @@ export default function ProductDetailPage({ productData, isSet = false }) {
                 </div>
               )}
             </div>
-            {!isSet && (
+            {/* {!isSet && (
               <div>
                 <h3 className="text-sm font-medium text-gray-700 mb-2">
                   Diğer Renk Seçenekleri:
@@ -428,7 +428,7 @@ export default function ProductDetailPage({ productData, isSet = false }) {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
 
             <div className="flex justify-end items-center space-x-4">
               <div className="flex border border-white rounded overflow-hidden w-24">
@@ -454,9 +454,6 @@ export default function ProductDetailPage({ productData, isSet = false }) {
                 <TbShoppingBagPlus />
                 Sepete Ekle
               </button>
-              {/* <button className="p-3 rounded-lg bg-green-200">
-                <IoHeartSharp className="text-red-600" />
-              </button> */}
             </div>
             <div className="bg-green-50 border border-green-200 rounded-lg p-3">
               <div className="flex gap-2 items-center text-green-700">
@@ -480,7 +477,7 @@ export default function ProductDetailPage({ productData, isSet = false }) {
               <div className="border-t pt-4">
                 <h3 className="text-gray-800 mb-3 font-bold">Set İçeriği</h3>
                 <div className="space-y-2">
-                  {productData.products.map((item, index) => (
+                  {productData?.products?.map((item, index) => (
                     <div
                       key={index}
                       className="flex items-center justify-between text-sm"
