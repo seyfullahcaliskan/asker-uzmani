@@ -5,6 +5,7 @@ import "./globals.css";
 
 import Header from "./components/layout/Header";
 import WhatsappButton from "./components/layout/WhatsappButton";
+import { CartProvider } from "./hooks/useCart";
 
 export const metadata = {
   title: "Özhan Asker Malzemeleri",
@@ -15,12 +16,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="tr">
       <body>
-        <Header />
-        <WhatsappButton />
-        <main className="min-h-screen z-0 container mx-auto py-12">
-          {children}
-        </main>
-        {/* <Footer /> */}
+        <CartProvider>
+          <Header />
+          <WhatsappButton />
+          <main className="min-h-screen z-0 container mx-auto py-12">
+            {children}
+          </main>
+          {/* <Footer /> */}
+        </CartProvider>
       </body>
     </html>
   );

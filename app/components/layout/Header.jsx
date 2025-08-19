@@ -9,6 +9,7 @@ import { RiUser6Line } from "react-icons/ri";
 import { MdOutlineFavorite } from "react-icons/md";
 import { RiShoppingBasketLine } from "react-icons/ri";
 import { navLinks } from "../../navLinks";
+import CartDropdown from "./cart/CartDropdown";
 
 export default function Header() {
   return (
@@ -79,10 +80,7 @@ export default function Header() {
               <span className="text-sm">Favorilerim</span>
             </div>
             <div>|</div>
-            <div className="flex items-center gap-2">
-              <RiShoppingBasketLine className="text-2xl" />
-              <span className="text-sm">Sepetim</span>
-            </div>
+            <CartDropdown />
           </div>
         </div>
 

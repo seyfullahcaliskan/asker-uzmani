@@ -26,7 +26,7 @@ const products = [
             "/images/products/clothes/asker_tshirt_fanila.webp",
             "/images/products/clothes/asker_tshirt_fanila.webp",
           ],
-          size: [
+          sizes: [
             "30",
             "31",
             "32",
@@ -66,7 +66,7 @@ const products = [
             "/images/products/clothes/asker_tshirt_fanila.webp",
             "/images/products/clothes/asker_tshirt_fanila.webp",
           ],
-          size: [
+          sizes: [
             "30",
             "31",
             "32",
@@ -111,7 +111,7 @@ const products = [
       "/images/products/clothes/asker_tshirt_fanila.webp",
       "/images/products/clothes/asker_tshirt_fanila.webp",
     ],
-    size: [
+    sizes: [
       "30",
       "31",
       "32",
