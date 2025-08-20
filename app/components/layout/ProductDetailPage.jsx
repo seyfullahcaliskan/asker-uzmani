@@ -2,17 +2,12 @@
 
 import { useState } from "react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
-import { IoHeartSharp } from "react-icons/io5";
-import { FaShop, FaTruckFast } from "react-icons/fa6";
-import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaPhone,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { FaTruckFast } from "react-icons/fa6";
+import { FaChevronLeft, FaChevronRight, FaWhatsapp } from "react-icons/fa";
 import { TbShoppingBagPlus } from "react-icons/tb";
 import { MdOutlineTrendingDown } from "react-icons/md";
 import { useCart } from "../../hooks/useCart";
+import Image from "next/image";
 
 export default function ProductDetailPage({ productData }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -25,7 +20,6 @@ export default function ProductDetailPage({ productData }) {
   const isSet = productData?.isSet;
   const { addToCart } = useCart();
 
-  // Beden seçimi gerekli mi kontrol et
   const needsSizeSelection = () => {
     if (productData.isSet) {
       return productData.products?.some(
@@ -35,7 +29,6 @@ export default function ProductDetailPage({ productData }) {
     return productData.sizes?.length > 0;
   };
 
-  // Beden seçimi ile sepete ekleme
   const handleAddToCartWithSize = () => {
     if (needsSizeSelection() && !canAddToCart()) {
       alert("Lütfen tüm ürünler için beden seçiniz!");
@@ -43,11 +36,9 @@ export default function ProductDetailPage({ productData }) {
     }
 
     if (productData.isSet) {
-      // Set ürün tek parça olarak sepete eklenecek
-      // selectedSizes objesi set içindeki ürünlerin bedenlerini tutacak
       const sizesForSet = {};
       productData.products.forEach((item, index) => {
-        const key = item.product.name; // veya başka benzersiz bir key
+        const key = item.product.name;
         sizesForSet[key] = selectedSizes[`product_${index}`] || null;
       });
 
@@ -59,23 +50,19 @@ export default function ProductDetailPage({ productData }) {
 
       addToCart(productToAdd, null, quantity);
     } else {
-      // Tekil ürün için
       const selectedSize = selectedSizes.single || null;
       addToCart(productData, selectedSize, quantity);
     }
   };
 
-  // Ana sepete ekle butonunun aktif olup olmadığını kontrol eder
   const isAddToCartDisabled = () => {
     return needsSizeSelection() && !canAddToCart();
   };
 
-  // Beden seçimi kontrolü
   const canAddToCart = () => {
     if (!needsSizeSelection()) return true;
 
     if (productData.isSet) {
-      // Set için: beden gerektiren tüm ürünlerin bedeni seçilmiş mi?
       return productData.products.every((item, index) => {
         if (item.product?.sizes?.length > 0) {
           return selectedSizes[`product_${index}`];
@@ -83,12 +70,10 @@ export default function ProductDetailPage({ productData }) {
         return true;
       });
     } else {
-      // Tekil ürün için: beden seçilmiş mi?
       return selectedSizes.single;
     }
   };
 
-  // Beden seçimi değiştirme
   const handleSizeChange = (key, sizes) => {
     console.log(key, sizes);
     setSelectedSizes((prev) => ({
@@ -97,7 +82,6 @@ export default function ProductDetailPage({ productData }) {
     }));
   };
 
-  // Set ürünleri için beden gerektiren ürünleri al
   const getProductsWithSizes = () => {
     if (!productData.isSet) return [];
     return productData.products.filter(
@@ -116,7 +100,6 @@ export default function ProductDetailPage({ productData }) {
         })),
       };
     } else {
-      // Set olmayan ürünler için images array'ini oluştur
       const images = productData?.images || [];
       if (productData?.mainImage && !images.includes(productData.mainImage)) {
         images.unshift(productData.mainImage);
@@ -325,11 +308,15 @@ export default function ProductDetailPage({ productData }) {
                   }`}
                   onClick={handleMainImageClick}
                 >
-                  <img
-                    src={imageStructure.mainImage}
-                    alt="Ana set resmi"
-                    className="w-full h-20 object-contain"
-                  />
+                  <div className="flex justify-center items-center">
+                    <Image
+                      src={imageStructure.mainImage || "/images/no_image.jpg"}
+                      alt="Ana set resmi"
+                      width={100}
+                      height={20}
+                      // className="w-full object-contain"
+                    />
+                  </div>
                 </div>
               )}
               {imageStructure.products.map((product, productIndex) => (
@@ -347,11 +334,16 @@ export default function ProductDetailPage({ productData }) {
                     }`}
                     onClick={() => handleProductSelect(productIndex)}
                   >
-                    <img
-                      src={product.images[0]}
-                      alt={`${product.name} thumbnail`}
-                      className="w-full h-20 object-contain"
-                    />
+                    <div className="flex justify-center items-center">
+                      <Image
+                        src={product.images?.[0] || "/images/no_image.jpg"}
+                        alt={`${product.name} thumbnail`}
+                        width={100}
+                        height={20}
+                        // className="w-full object-contain"
+                      />
+                    </div>
+
                     {getProductLabel(productIndex) && (
                       <div className="absolute bottom-1 left-1 text-green-800 text-xs px-1.5 py-0.5 rounded-full font-medium">
                         {getProductLabel(productIndex)}
@@ -376,11 +368,15 @@ export default function ProductDetailPage({ productData }) {
                             handleSubImageSelect(productIndex, imageIndex + 1)
                           }
                         >
-                          <img
-                            src={image}
-                            alt={`${product.name} resim ${imageIndex + 2}`}
-                            className="w-full h-8 object-contain"
-                          />
+                          <div className="flex justify-center items-center">
+                            <Image
+                              src={image || "/images/no_image.jpg"}
+                              alt={`${product.name} resim ${imageIndex + 2}`}
+                              width={100}
+                              height={80}
+                              className="w-full object-contain"
+                            />
+                          </div>
                           {imageIndex === 3 && product.images.length > 5 && (
                             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                               <span className="text-white text-xs font-medium">
@@ -399,12 +395,15 @@ export default function ProductDetailPage({ productData }) {
 
           <div className="col-span-6">
             <div className="relative bg-transparent rounded-lg overflow-hidden">
-              <img
-                src={getCurrentImage()}
-                alt="Ana ürün resmi"
-                className="w-full h-[500px] object-contain"
-              />
-
+              <div className="flex justify-center items-center">
+                <Image
+                  src={getCurrentImage() || "/images/no_image.jpg"}
+                  alt="Ana ürün resmi"
+                  width={300}
+                  height={60}
+                  // className="w-full object-contain"
+                />
+              </div>
               {shouldShowImageNavigation() && (
                 <>
                   <button
@@ -508,7 +507,6 @@ export default function ProductDetailPage({ productData }) {
                       })}
                     </div>
                   ) : (
-                    // Tekil ürün için beden seçimi
                     <div className="flex justify-end">
                       <div className="relative">
                         <select
@@ -616,10 +614,10 @@ export default function ProductDetailPage({ productData }) {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <button className="text-sm flex items-center justify-center border border-black text-black hover:bg-black hover:border-black hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md">
+                {/* <button className="text-sm flex items-center justify-center border border-black text-black hover:bg-black hover:border-black hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md">
                   <FaPhone />
                   Telefon ile Sipariş Ver
-                </button>
+                </button> */}
                 <button className="text-sm flex items-center justify-center border border-green-700 text-green-700 hover:bg-green-700 hover:border-green-700 hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md">
                   <FaWhatsapp />
                   WhatsApp ile Sipariş Ver

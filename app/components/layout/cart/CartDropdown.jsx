@@ -6,6 +6,7 @@ import { RiShoppingBasketLine, RiDeleteBin6Line } from "react-icons/ri";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { FiChevronDown } from "react-icons/fi";
 import { useCart } from "../../../hooks/useCart";
+import Image from "next/image";
 
 export default function CartDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,12 +84,38 @@ export default function CartDropdown() {
                       key={item.cartId}
                       className="flex items-center gap-3 py-3 border-b border-gray-100 last:border-b-0"
                     >
-                      <img
-                        src={item.mainImage || item.images?.[0]}
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() =>
+                            updateQuantity(item.cartId, item.quantity - 1)
+                          }
+                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                        >
+                          <AiOutlineMinus className="text-xs" />
+                        </button>
+                        <span className="text-sm font-medium">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() =>
+                            updateQuantity(item.cartId, item.quantity + 1)
+                          }
+                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                        >
+                          <AiOutlinePlus className="text-xs" />
+                        </button>
+                      </div>
+                      <Image
+                        src={
+                          item.mainImage ||
+                          item.images?.[0] ||
+                          "/images/no_image.jpg"
+                        }
                         alt={item.name}
-                        className="w-16 h-16 object-cover rounded"
+                        width={64}
+                        height={64}
+                        className="object-cover rounded"
                       />
-
                       <div className="flex-1">
                         <h4 className="font-medium text-sm line-clamp-2">
                           {item.name}
@@ -113,29 +140,7 @@ export default function CartDropdown() {
                             Beden: {item?.selectedSize}
                           </p>
                         )}
-                        <div className="flex items-center justify-between mt-2">
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.cartId, item.quantity - 1)
-                              }
-                              className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
-                            >
-                              <AiOutlineMinus className="text-xs" />
-                            </button>
-                            <span className="text-sm font-medium">
-                              {item.quantity}
-                            </span>
-                            <button
-                              onClick={() =>
-                                updateQuantity(item.cartId, item.quantity + 1)
-                              }
-                              className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
-                            >
-                              <AiOutlinePlus className="text-xs" />
-                            </button>
-                          </div>
-
+                        <div className="flex items-center justify-end gap-4 mt-2">
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-bold text-[#7F7B59]">
                               {formatPrice(item.cartPrice || item.price)}

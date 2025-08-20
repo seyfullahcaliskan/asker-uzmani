@@ -6,6 +6,7 @@ import { RiDeleteBin6Line, RiShoppingBasketLine } from "react-icons/ri";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { useCart } from "../hooks/useCart";
+import Image from "next/image";
 
 export default function CartPage() {
   const {
@@ -112,114 +113,111 @@ export default function CartPage() {
                 {cartItems.map((item) => (
                   <div
                     key={item.cartId}
-                    className="flex gap-4 p-4 border border-gray-200 rounded-lg"
+                    className="w-full flex items-center justify-between gap-4 p-4 border border-gray-200 rounded-lg "
                   >
-                    <img
-                      src={item.mainImage || item.images?.[0]}
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.cartId, item.quantity - 1)
+                        }
+                        className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                        disabled={item.quantity <= 1}
+                      >
+                        <AiOutlineMinus />
+                      </button>
+                      <span className="font-medium">{item.quantity}</span>
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.cartId, item.quantity + 1)
+                        }
+                        className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                      >
+                        <AiOutlinePlus />
+                      </button>
+                    </div>
+                    <Image
+                      src={
+                        item.mainImage ||
+                        item.images?.[0] ||
+                        "/images/no_image.jpg"
+                      }
                       alt={item.name}
-                      className="w-24 h-24 object-cover rounded"
+                      width={96}
+                      height={96}
+                      className="object-cover rounded"
                     />
-
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg mb-2">{item.name}</h3>
-
-                      {/* Beden seçimi */}
-                      {item.isSet ? (
-                        <div className="mb-3">
-                          <div className="space-y-3">
-                            {item.products?.map((p, idx) => {
-                              const productName = p.product.name;
-                              const currentSize =
-                                item.selectedSizes?.[productName] || "";
-                              return (
-                                <div
-                                  key={idx}
-                                  className="flex items-center gap-3"
+                    <h3 className="font-bold text-lg mb-2">{item.name}</h3>
+                    {item.isSet ? (
+                      <div className="mb-3">
+                        <div className="space-y-3">
+                          {item.products?.map((p, idx) => {
+                            const productName = p.product.name;
+                            const currentSize =
+                              item.selectedSizes?.[productName] || "";
+                            return (
+                              <div
+                                key={idx}
+                                className="flex items-center gap-3"
+                              >
+                                <span className="text-sm text-gray-600 min-w-[100px]">
+                                  {productName}:
+                                </span>
+                                <select
+                                  value={currentSize}
+                                  onChange={(e) =>
+                                    handleSetItemSizeChange(
+                                      item.cartId,
+                                      productName,
+                                      e.target.value,
+                                      item.selectedSizes
+                                    )
+                                  }
+                                  className="border border-gray-300 rounded px-3 py-1 text-sm"
                                 >
-                                  <span className="text-sm text-gray-600 min-w-[100px]">
-                                    {productName}:
-                                  </span>
-                                  <select
-                                    value={currentSize}
-                                    onChange={(e) =>
-                                      handleSetItemSizeChange(
-                                        item.cartId,
-                                        productName,
-                                        e.target.value,
-                                        item.selectedSizes
-                                      )
-                                    }
-                                    className="border border-gray-300 rounded px-3 py-1 text-sm"
-                                  >
-                                    <option value="">Beden Seçin</option>
-                                    {p.product.sizes.map((size) => (
-                                      <option key={size} value={size}>
-                                        {size}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              );
-                            })}
-                          </div>
+                                  <option value="">Beden Seçin</option>
+                                  {p.product.sizes.map((size) => (
+                                    <option key={size} value={size}>
+                                      {size}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            );
+                          })}
                         </div>
-                      ) : item.sizes && item.sizes.length > 0 ? (
-                        <div className="mb-3">
-                          <div className="flex items-center gap-3">
-                            <span className="text-sm text-gray-600">
-                              Beden:
-                            </span>
-                            <select
-                              value={item.selectedSize || ""}
-                              onChange={(e) =>
-                                handleSizeChange(item.cartId, e.target.value)
-                              }
-                              className="border border-gray-300 rounded px-3 py-1 text-sm"
-                            >
-                              <option value="">Beden Seçin</option>
-                              {item.sizes.map((size) => (
-                                <option key={size} value={size}>
-                                  {size}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-                      ) : null}
-
-                      <div className="flex items-center justify-between">
+                      </div>
+                    ) : item.sizes && item.sizes.length > 0 ? (
+                      <div className="mb-3">
                         <div className="flex items-center gap-3">
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.cartId, item.quantity - 1)
+                          <span className="text-sm text-gray-600">Beden:</span>
+                          <select
+                            value={item.selectedSize || ""}
+                            onChange={(e) =>
+                              handleSizeChange(item.cartId, e.target.value)
                             }
-                            className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
-                            disabled={item.quantity <= 1}
+                            className="border border-gray-300 rounded px-3 py-1 text-sm"
                           >
-                            <AiOutlineMinus />
-                          </button>
-                          <span className="font-medium">{item.quantity}</span>
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.cartId, item.quantity + 1)
-                            }
-                            className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
-                          >
-                            <AiOutlinePlus />
-                          </button>
+                            <option value="">Beden Seçin</option>
+                            {item.sizes.map((size) => (
+                              <option key={size} value={size}>
+                                {size}
+                              </option>
+                            ))}
+                          </select>
                         </div>
-
-                        <div className="flex items-center gap-4">
-                          <span className="font-bold text-lg text-[#7F7B59]">
-                            {formatPrice(item.cartPrice || item.price)}
-                          </span>
-                          <button
-                            onClick={() => removeFromCart(item.cartId)}
-                            className="text-red-500 hover:text-red-700 p-2"
-                          >
-                            <RiDeleteBin6Line className="text-xl" />
-                          </button>
-                        </div>
+                      </div>
+                    ) : null}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <span className="font-bold text-lg text-[#7F7B59]">
+                          {formatPrice(item.cartPrice || item.price)}
+                        </span>
+                        <button
+                          onClick={() => removeFromCart(item.cartId)}
+                          className="text-red-500 hover:text-red-700 p-2"
+                        >
+                          <RiDeleteBin6Line className="text-xl" />
+                        </button>
                       </div>
                     </div>
                   </div>

@@ -6,6 +6,8 @@ import { getProductCategorySlug } from "../../navLinks";
 import { useCart } from "../../hooks/useCart";
 import products from "./data/products";
 import { TbBasketPlus } from "react-icons/tb";
+import { AiOutlineSearch } from "react-icons/ai"; // 🔍 Search ikonunu ekledim
+import Image from "next/image";
 
 export default function ProductSearch() {
   const [query, setQuery] = useState("");
@@ -43,15 +45,19 @@ export default function ProductSearch() {
 
   return (
     <div className="relative w-full max-w-md">
-      <input
-        type="text"
-        placeholder="Tüm Ürünleri Arama"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setTimeout(() => setIsFocused(false), 150)}
-        className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Tüm Ürünleri Arama"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+          className="w-full border border-gray-300 rounded-lg p-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+        {/* 🔍 Search ikonu */}
+        <AiOutlineSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
+      </div>
 
       {isFocused && query && (
         <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 z-50">
@@ -62,7 +68,7 @@ export default function ProductSearch() {
               return (
                 <div
                   key={item.id}
-                  className="p-2 hover:bg-gray-200 hover:cursor-pointer hover:scale-105 transition-transform duration-200 grid grid-cols-10"
+                  className="p-2 hover:bg-gray-100 hover:cursor-pointer hover:scale-105 transition-transform duration-200 grid grid-cols-10"
                 >
                   <Link
                     className="col-span-9"
@@ -72,12 +78,12 @@ export default function ProductSearch() {
                   >
                     <div className="grid grid-cols-10 justify-center items-center">
                       <div className="col-span-2">
-                        <img
-                          src={imageOf(item)}
+                        <Image
+                          src={imageOf(item) || "/images/no_image.jpg"}
                           alt={item.name}
                           width={48}
                           height={48}
-                          className="rounded-md object-cover w-12 h-12"
+                          className="rounded-md object-cover"
                         />
                       </div>
                       <p className="col-span-5 text-sm font-medium truncate">

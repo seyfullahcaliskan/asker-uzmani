@@ -6,6 +6,7 @@ import { MdOutlineTrendingDown } from "react-icons/md";
 import { FiX } from "react-icons/fi";
 import { getProductCategorySlug } from "../../navLinks";
 import { useCart } from "../../hooks/useCart";
+import Image from "next/image";
 
 export default function ProductCard({ set }) {
   const [isAllHovered, setIsAllHovered] = useState(false);
@@ -93,9 +94,11 @@ export default function ProductCard({ set }) {
           onMouseEnter={() => setIsDetailHovered(true)}
           onMouseLeave={() => setIsDetailHovered(false)}
         >
-          <img
-            src={set.mainImage || set.images[0] || `/images/no_image.jpg`}
+          <Image
+            src={set.mainImage || set.images?.[0] || "/images/no_image.jpg"}
             alt={set.name}
+            width={500}
+            height={300}
             className="w-full h-100 object-cover rounded-lg transition-opacity duration-300"
             style={{
               opacity: isDetailHovered ? 0.7 : 1,
