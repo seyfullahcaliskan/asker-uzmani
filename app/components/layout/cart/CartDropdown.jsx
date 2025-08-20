@@ -30,7 +30,6 @@ export default function CartDropdown() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
   const formatPrice = (price) => {
     if (typeof price === "string") {
       return price;
@@ -52,7 +51,13 @@ export default function CartDropdown() {
             </span>
           )}
         </div>
-        <span className="text-sm">Sepetim</span>
+        <Link
+          href="/sepet"
+          className="text-md"
+          onClick={() => setIsOpen(false)}
+        >
+          Sepetim
+        </Link>
       </div>
 
       {isOpen && (
@@ -88,6 +93,21 @@ export default function CartDropdown() {
                         <h4 className="font-medium text-sm line-clamp-2">
                           {item.name}
                         </h4>
+                        {item.isSet && (
+                          <div>
+                            {item?.selectedSizes && (
+                              <div className="text-xs text-gray-500">
+                                {Object.entries(item.selectedSizes).map(
+                                  ([key, value], index) => (
+                                    <p key={index}>
+                                      {key}: {value}
+                                    </p>
+                                  )
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
                         {item.selectedSize && (
                           <p className="text-xs text-gray-500">
                             Beden: {item?.selectedSize}
@@ -139,23 +159,6 @@ export default function CartDropdown() {
                     <span className="font-bold text-lg text-[#7F7B59]">
                       {formatPrice(getTotalPrice())}
                     </span>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <Link
-                      href="/sepet"
-                      className="flex-1 bg-gray-100 text-center py-2 rounded hover:bg-gray-200 transition-colors text-sm"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Sepeti Görüntüle
-                    </Link>
-                    <Link
-                      href="/odeme"
-                      className="flex-1 bg-[#7F7B59] text-white text-center py-2 rounded hover:bg-[#6d6849] transition-colors text-sm"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Ödemeye Geç
-                    </Link>
                   </div>
                 </div>
               </>

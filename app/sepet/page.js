@@ -72,8 +72,8 @@ export default function CartPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center gap-4 mb-8">
+    <div className="container mx-auto">
+      <div className="flex flex-col items-start gap-4 mb-8">
         <Link
           href="/"
           className="flex items-center gap-2 text-[#7F7B59] hover:text-[#6d6849] transition-colors"

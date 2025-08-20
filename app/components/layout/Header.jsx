@@ -35,32 +35,32 @@ export default function Header() {
             >
               <div className="flex items-center gap-2">
                 <RiWhatsappFill className="text-2xl text-green-600" />
-                <span className="text-sm text-green-600 font-bold">
+                <span className="text-md text-green-600 font-bold">
                   0 538 682 01 12
                 </span>
               </div>
             </a>
 
             <div>|</div>
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-md">
               <span>Özhan Askeri Malzemeleri - Halil HAN</span>
             </div>
           </div>
           <div className="flex gap-2">
             <div className="flex items-center gap-2">
               <PiPackageFill className="text-2xl" />
-              <span className="text-sm">Sipariş Takip</span>
+              <span className="text-md">Sipariş Takip</span>
             </div>
             <div>|</div>
             <div className="flex items-center gap-2">
               <AiTwotoneBank className="text-2xl" />
 
-              <span className="text-sm">Banka Hesaplarımız</span>
+              <span className="text-md">Banka Hesaplarımız</span>
             </div>
             <div>|</div>
             <div className="flex items-center gap-2">
               <LiaLifeRingSolid className="text-2xl" />
-              <span className="text-sm">Bize Ulaşın</span>
+              <span className="text-md">Bize Ulaşın</span>
             </div>
           </div>
         </div>
@@ -72,12 +72,12 @@ export default function Header() {
           <div className="flex justify-end gap-2 items-center">
             <div className="flex items-center gap-2">
               <RiUser6Line className="text-2xl" />
-              <span className="text-sm">Giriş Yap</span>
+              <span className="text-md">Giriş Yap</span>
             </div>
             <div>|</div>
             <div className="flex items-center gap-2">
               <MdOutlineFavorite className="text-2xl" />
-              <span className="text-sm">Favorilerim</span>
+              <span className="text-md">Favorilerim</span>
             </div>
             <div>|</div>
             <CartDropdown />

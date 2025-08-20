@@ -16,7 +16,6 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // LocalStorage'dan sepeti yükle
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
@@ -29,14 +28,12 @@ export const CartProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  // Sepet değiştiğinde localStorage'a kaydet
   useEffect(() => {
     if (!isLoading) {
       localStorage.setItem("cart", JSON.stringify(cartItems));
     }
   }, [cartItems, isLoading]);
 
-  // Sepete ürün ekle
   const addToCart = (product, selectedSize = null, quantity = 1) => {
     setCartItems((prevItems) => {
       const existingItemIndex = prevItems.findIndex(
@@ -47,12 +44,10 @@ export const CartProvider = ({ children }) => {
       );
 
       if (existingItemIndex > -1) {
-        // Ürün zaten sepette varsa miktarını artır
         const updatedItems = [...prevItems];
         updatedItems[existingItemIndex].quantity += quantity;
         return updatedItems;
       } else {
-        // Yeni ürün ekle
         return [
           ...prevItems,
           {
@@ -66,14 +61,12 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Sepetten ürün çıkar
   const removeFromCart = (cartId) => {
     setCartItems((prevItems) =>
       prevItems.filter((item) => item.cartId !== cartId)
     );
   };
 
-  // Ürün miktarını güncelle
   const updateQuantity = (cartId, newQuantity) => {
     if (newQuantity <= 0) {
       removeFromCart(cartId);
@@ -87,7 +80,6 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Ürün bedenini güncelle
   const updateSize = (cartId, newSize) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
@@ -96,12 +88,10 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // Sepeti temizle
   const clearCart = () => {
     setCartItems([]);
   };
 
-  // Toplam fiyat hesapla
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
       const price = parseFloat(
@@ -113,23 +103,19 @@ export const CartProvider = ({ children }) => {
     }, 0);
   };
 
-  // Toplam ürün sayısı
   const getTotalItems = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
-  // Beden seçimi gereken ürünleri kontrol et
   const getItemsNeedingSize = () => {
     return cartItems.filter((item) => {
       if (item.isSet) {
-        // Set ürün için: her alt ürünün bedeni seçilmiş mi?
         return item.products?.some(
           (p) =>
             p.product?.sizes?.length > 0 &&
             !item.selectedSizes?.[p.product.name]
         );
       } else {
-        // Tekil ürün için
         return item.sizes?.length > 0 && !item.selectedSize;
       }
     });
@@ -151,13 +137,12 @@ export const CartProvider = ({ children }) => {
     removeFromCart,
     updateQuantity,
     updateSize,
-    updateItemSizes, // <-- buraya ekle
+    updateItemSizes,
     clearCart,
     getTotalPrice,
     getTotalItems,
     getItemsNeedingSize,
     isLoading,
   };
-  console.log(value);
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
