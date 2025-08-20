@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "./components/layout/Header";
 import WhatsappButton from "./components/layout/WhatsappButton";
 import { CartProvider } from "./hooks/useCart";
+import Footer from "./components/layout/Footer";
 
 export const metadata = {
   title: "Özhan Asker Malzemeleri",
@@ -22,7 +23,7 @@ export default function RootLayout({ children }) {
           <main className="min-h-screen z-0 container mx-auto py-12">
             {children}
           </main>
-          {/* <Footer /> */}
+          <Footer />
         </CartProvider>
       </body>
     </html>

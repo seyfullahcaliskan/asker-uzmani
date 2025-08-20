@@ -41,7 +41,7 @@ export default function Header() {
 
             <div className="text-gray-400 text-lg">|</div>
             <div className="flex items-center gap-2 text-[10px] ">
-              <span>Özhan Askeri Malzemeleri - Halil HAN</span>
+              <span>Özhan Asker Malzemeleri - Halil HAN</span>
             </div>
           </div>
 
@@ -65,7 +65,7 @@ export default function Header() {
 
         <div className="grid grid-cols-3 py-2 items-center">
           <div className="flex justify-start font-bold text-lg">
-            Özhan Askeri Malzemeleri
+            Özhan Asker Malzemeleri
           </div>
           <div className="flex justify-center">
             <ProductSearch />
