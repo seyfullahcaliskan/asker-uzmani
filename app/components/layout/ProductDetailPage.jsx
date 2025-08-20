@@ -489,7 +489,7 @@ export default function ProductDetailPage({ productData }) {
                                     e.target.value
                                   )
                                 }
-                                className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 min-w-[100px]"
+                                className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 min-w-[100px] hover:scale-110 transition-all duration-200"
                               >
                                 <option value="">Beden</option>
                                 {item.product.sizes.map((sizes) => (
@@ -514,7 +514,7 @@ export default function ProductDetailPage({ productData }) {
                           onChange={(e) => {
                             handleSizeChange("single", e.target.value);
                           }}
-                          className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-3 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 min-w-[100px] hover:scale-110 transition-all duration-200"
                         >
                           <option value="">Beden Seçin</option>
                           {productData.sizes.map((sizes) => (
@@ -580,23 +580,23 @@ export default function ProductDetailPage({ productData }) {
                   <div className="flex flex-col border-l border-white">
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="flex-1 flex items-center justify-center px-2 hover:bg-green-200"
+                      className="flex-1 flex items-center justify-center px-2 hover:bg-green-200 hover:scale-110 transition-all duration-200"
                     >
                       <FiChevronUp />
                     </button>
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="flex-1 flex items-center justify-center px-2 hover:bg-red-200 border-t border-white"
+                      className="flex-1 flex items-center justify-center px-2 hover:bg-red-200 border-t border-white hover:scale-110 transition-all duration-200"
                     >
                       <FiChevronDown />
                     </button>
                   </div>
                 </div>
                 <button
-                  className={`flex items-center gap-2 py-3 px-6 rounded-lg font-medium shadow-md transition-colors ${
+                  className={`flex items-center gap-2 py-3 px-6 rounded-lg font-medium shadow-md  ${
                     isAddToCartDisabled()
                       ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                      : "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer"
+                      : "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer hover:scale-110 transition-all duration-200"
                   }`}
                   onClick={handleAddToCartWithSize}
                   disabled={isAddToCartDisabled()}
@@ -618,7 +618,7 @@ export default function ProductDetailPage({ productData }) {
                   <FaPhone />
                   Telefon ile Sipariş Ver
                 </button> */}
-                <button className="text-sm flex items-center justify-center border border-green-700 text-green-700 hover:bg-green-700 hover:border-green-700 hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md">
+                <button className="text-sm flex items-center justify-center border border-green-700 text-green-700 hover:bg-green-700 hover:border-green-700 hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md hover:scale-110 transition-all duration-200">
                   <FaWhatsapp />
                   WhatsApp ile Sipariş Ver
                 </button>

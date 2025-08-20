@@ -7,6 +7,7 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { useCart } from "../hooks/useCart";
 import Image from "next/image";
+import { getProductCategorySlug } from "../navLinks";
 
 export default function CartPage() {
   const {
@@ -62,7 +63,7 @@ export default function CartPage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 bg-[#7F7B59] text-white px-6 py-3 rounded-lg hover:bg-[#6d6849] transition-colors"
+            className="inline-flex items-center gap-2 bg-[#7F7B59] text-white px-6 py-3 rounded-lg hover:bg-[#6d6849] hover:scale-110 transition-all duration-200"
           >
             <BiArrowBack />
             Alışverişe Devam Et
@@ -77,7 +78,7 @@ export default function CartPage() {
       <div className="flex flex-col items-start gap-4 mb-8">
         <Link
           href="/"
-          className="flex items-center gap-2 text-[#7F7B59] hover:text-[#6d6849] transition-colors"
+          className="flex items-center gap-2 text-[#7F7B59] hover:text-[#6d6849] hover:scale-110 transition-all duration-200"
         >
           <BiArrowBack className="text-xl" />
           Alışverişe Devam Et
@@ -88,13 +89,13 @@ export default function CartPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Sepet Ürünleri */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-sm border">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold">Sepetinizdeki Ürünler</h2>
                 <button
                   onClick={clearCart}
-                  className="text-red-500 hover:text-red-700 text-sm"
+                  className="text-red-500 text-md hover:text-lg hover:text-red-700 hover:cursor-pointer hover:scale-110 transition-all duration-200"
                 >
                   Sepeti Temizle
                 </button>
@@ -120,7 +121,7 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.cartId, item.quantity - 1)
                         }
-                        className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                        className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-red-200 hover:cursor-pointer hover:scale-110 transition-all duration-200"
                         disabled={item.quantity <= 1}
                       >
                         <AiOutlineMinus />
@@ -130,23 +131,34 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.cartId, item.quantity + 1)
                         }
-                        className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                        className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-green-200 hover:cursor-pointer hover:scale-110 transition-all duration-200"
                       >
                         <AiOutlinePlus />
                       </button>
                     </div>
-                    <Image
-                      src={
-                        item.mainImage ||
-                        item.images?.[0] ||
-                        "/images/no_image.jpg"
-                      }
-                      alt={item.name}
-                      width={96}
-                      height={96}
-                      className="object-cover rounded"
-                    />
-                    <h3 className="font-bold text-lg mb-2">{item.name}</h3>
+                    <Link
+                      href={`/${getProductCategorySlug(item)}/${item.slug}`}
+                    >
+                      <Image
+                        src={
+                          item.mainImage ||
+                          item.images?.[0] ||
+                          "/images/no_image.jpg"
+                        }
+                        alt={item.name}
+                        width={96}
+                        height={96}
+                        className="object-cover rounded hover:scale-110 transition-all duration-200"
+                      />
+                    </Link>
+
+                    <Link
+                      href={`/${getProductCategorySlug(item)}/${item.slug}`}
+                    >
+                      <h3 className="font-bold text-lg mb-2 hover:text-blue-700 hover:scale-110 transition-all duration-200">
+                        {item.name}
+                      </h3>
+                    </Link>
                     {item.isSet ? (
                       <div className="mb-3">
                         <div className="space-y-3">
@@ -172,7 +184,7 @@ export default function CartPage() {
                                       item.selectedSizes
                                     )
                                   }
-                                  className="border border-gray-300 rounded px-3 py-1 text-sm"
+                                  className="border border-gray-300 rounded px-3 py-1 text-sm hover:cursor-pointer hover:scale-110 transition-all duration-200"
                                 >
                                   <option value="">Beden Seçin</option>
                                   {p.product.sizes.map((size) => (
@@ -195,7 +207,7 @@ export default function CartPage() {
                             onChange={(e) =>
                               handleSizeChange(item.cartId, e.target.value)
                             }
-                            className="border border-gray-300 rounded px-3 py-1 text-sm"
+                            className="border border-gray-300 rounded px-3 py-1 text-sm hover:cursor-pointer hover:scale-110 transition-all duration-200"
                           >
                             <option value="">Beden Seçin</option>
                             {item.sizes.map((size) => (
@@ -214,7 +226,7 @@ export default function CartPage() {
                         </span>
                         <button
                           onClick={() => removeFromCart(item.cartId)}
-                          className="text-red-500 hover:text-red-700 p-2"
+                          className="text-red-500 hover:text-red-700 p-2 hover:cursor-pointer hover:scale-110 transition-all duration-200"
                         >
                           <RiDeleteBin6Line className="text-xl" />
                         </button>
@@ -229,7 +241,7 @@ export default function CartPage() {
 
         {/* Sipariş Özeti */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
             <h2 className="text-xl font-bold mb-6">Sipariş Özeti</h2>
 
             <div className="space-y-3 mb-6">
@@ -252,7 +264,7 @@ export default function CartPage() {
 
             <Link
               href={canProceedToCheckout() ? "/odeme" : "#"}
-              className={`w-full py-3 rounded-lg text-center font-bold transition-colors block ${
+              className={`w-full py-3 rounded-lg text-center font-bold transition-colors block hover:cursor-pointer hover:scale-105 duration-400 ${
                 canProceedToCheckout()
                   ? "bg-[#7F7B59] text-white hover:bg-[#6d6849]"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"

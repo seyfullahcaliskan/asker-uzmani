@@ -206,7 +206,7 @@ export default function CheckoutPage() {
         <div className="lg:col-span-2">
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-lg shadow-sm border p-6"
+            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
           >
             {/* Adım 1: Kişisel Bilgiler */}
             {currentStep === 1 && (
@@ -578,7 +578,7 @@ export default function CheckoutPage() {
 
         {/* Sipariş Özeti */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-4">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
             <h2 className="text-xl font-bold mb-6">Sipariş Özeti</h2>
 
             <div className="space-y-3 mb-6">

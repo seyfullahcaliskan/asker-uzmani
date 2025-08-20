@@ -25,7 +25,7 @@ export default function Header() {
 
       <div className="max-w-screen-xl mx-auto px-4 ">
         <div className="flex justify-between py-2 text-[10px]">
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center hover:cursor-pointer hover:scale-110 transition-all duration-200">
             <a
               href="https://wa.me/905386820112"
               target="_blank"
@@ -40,23 +40,23 @@ export default function Header() {
             </a>
 
             <div className="text-gray-400 text-lg">|</div>
-            <div className="flex items-center gap-2 text-[10px]">
+            <div className="flex items-center gap-2 text-[10px] ">
               <span>Özhan Askeri Malzemeleri - Halil HAN</span>
             </div>
           </div>
 
           <div className="flex gap-4 items-center">
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] transition">
+            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:cursor-pointer hover:scale-110 transition-all duration-200">
               <PiPackageFill className="text-2xl" />
               <span className="text-[10px]">Sipariş Takip</span>
             </div>
             <div className="text-gray-400 text-lg">|</div>
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] transition">
+            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:cursor-pointer hover:scale-110 transition-all duration-200">
               <AiTwotoneBank className="text-2xl" />
               <span className="text-[10px]">Banka Hesaplarımız</span>
             </div>
             <div className="text-gray-400 text-lg">|</div>
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] transition">
+            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:cursor-pointer hover:scale-110 transition-all duration-200">
               <LiaLifeRingSolid className="text-2xl" />
               <span className="text-[10px]">Bize Ulaşın</span>
             </div>
@@ -71,12 +71,12 @@ export default function Header() {
             <ProductSearch />
           </div>
           <div className="flex justify-end gap-4 items-center">
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] transition">
+            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:cursor-pointer hover:scale-110 transition-all duration-200">
               <RiUser6Line className="text-2xl" />
               <span className="text-[10px]">Giriş Yap</span>
             </div>
             <div className="text-gray-400 text-lg">|</div>
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] transition">
+            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:cursor-pointer hover:scale-110 transition-all duration-200">
               <MdOutlineFavorite className="text-2xl" />
               <span className="text-[10px]">Favorilerim</span>
             </div>

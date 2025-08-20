@@ -45,7 +45,7 @@ export default function ProductSearch() {
 
   return (
     <div className="relative w-full max-w-md">
-      <div className="relative">
+      <div className="relative ">
         <input
           type="text"
           placeholder="Tüm Ürünleri Arama"
@@ -53,14 +53,14 @@ export default function ProductSearch() {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 150)}
-          className="w-full border border-gray-300 rounded-lg p-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full border border-gray-300 rounded-lg p-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:cursor-pointer focus:scale-110 transition-all duration-200"
         />
         {/* 🔍 Search ikonu */}
         <AiOutlineSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-xl" />
       </div>
 
       {isFocused && query && (
-        <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 z-50">
+        <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 z-50">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((item) => {
               const categorySlug = getProductCategorySlug(item);
@@ -68,7 +68,7 @@ export default function ProductSearch() {
               return (
                 <div
                   key={item.id}
-                  className="p-2 hover:bg-gray-100 hover:cursor-pointer hover:scale-105 transition-transform duration-200 grid grid-cols-10"
+                  className="p-2 hover:bg-gray-100 hover:cursor-pointer hover:scale-105 transition-all duration-200 grid grid-cols-10"
                 >
                   <Link
                     className="col-span-9"
@@ -105,7 +105,7 @@ export default function ProductSearch() {
                   >
                     <button
                       onMouseDown={(e) => e.preventDefault()}
-                      className="text-4xl text-orange-600 hover:cursor-pointer hover:scale-110 transition-transform duration-200"
+                      className="text-4xl text-orange-600 hover:cursor-pointer hover:scale-110 transition-all duration-200"
                     >
                       <TbBasketPlus />
                     </button>

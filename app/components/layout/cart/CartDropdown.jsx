@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { RiShoppingBasketLine, RiDeleteBin6Line } from "react-icons/ri";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
-import { FiChevronDown } from "react-icons/fi";
 import { useCart } from "../../../hooks/useCart";
 import Image from "next/image";
 
@@ -41,7 +40,7 @@ export default function CartDropdown() {
   return (
     <div className="relative" ref={dropdownRef}>
       <div
-        className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] transition-colors"
+        className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:cursor-pointer hover:scale-110 transition-all duration-200"
         onMouseEnter={() => setIsOpen(true)}
       >
         <div className="relative">
@@ -54,7 +53,7 @@ export default function CartDropdown() {
         </div>
         <Link
           href="/sepet"
-          className="text-md"
+          className="text-[10px] "
           onClick={() => setIsOpen(false)}
         >
           Sepetim
@@ -89,7 +88,7 @@ export default function CartDropdown() {
                           onClick={() =>
                             updateQuantity(item.cartId, item.quantity - 1)
                           }
-                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:cursor-pointer hover:bg-red-200 hover:scale-110 transition-all duration-200"
                         >
                           <AiOutlineMinus className="text-xs" />
                         </button>
@@ -100,9 +99,9 @@ export default function CartDropdown() {
                           onClick={() =>
                             updateQuantity(item.cartId, item.quantity + 1)
                           }
-                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-gray-200"
+                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:cursor-pointer hover:bg-green-200 hover:scale-110 transition-all duration-200"
                         >
-                          <AiOutlinePlus className="text-xs" />
+                          <AiOutlinePlus className="text-xs " />
                         </button>
                       </div>
                       <Image
@@ -147,9 +146,9 @@ export default function CartDropdown() {
                             </span>
                             <button
                               onClick={() => removeFromCart(item.cartId)}
-                              className="text-red-500 hover:text-red-700"
+                              className="text-red-500 hover:cursor-pointer hover:text-red-700 transition-all duration-200"
                             >
-                              <RiDeleteBin6Line className="text-sm" />
+                              <RiDeleteBin6Line className="text-sm " />
                             </button>
                           </div>
                         </div>
