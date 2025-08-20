@@ -86,21 +86,21 @@ export default function Footer() {
                 >
                     <FaFacebook className="text-3xl" />
                 </a> */}
-        <a
+        {/* <a
           href="https://www.instagram.com/umermotors.tr"
           target="_blank"
           rel="noopener noreferrer"
         >
           <FaInstagram className="text-3xl" />
-        </a>
+        </a> */}
         <a
-          href="https://wa.me/905068607767"
+          href="https://wa.me/905386820112"
           target="_blank"
           rel="noopener noreferrer"
         >
           <FaWhatsapp className="text-3xl" />
         </a>
-        <a href="tel:+905068607767">
+        <a href="tel:+905386820112">
           <FaPhone className="text-2xl" />
         </a>
       </div>
@@ -138,7 +138,7 @@ export default function Footer() {
             >
               SPRTech
             </a>{" "}
-            tarafından hazırlanmıştır.
+            tarafından hazırlanmaktadır.
           </p>
         </div>
       </div>

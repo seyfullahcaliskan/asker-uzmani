@@ -5,8 +5,11 @@ import Link from "next/link";
 import { BiArrowBack, BiCheck } from "react-icons/bi";
 import { RiShoppingBasketLine } from "react-icons/ri";
 import { useCart } from "../hooks/useCart";
+import BankTransferCheckout from "../components/layout/BankTransferCheckout";
+import { onlinePayment } from "../config";
 
 export default function CheckoutPage() {
+
   const { cartItems, getTotalPrice, getTotalItems, clearCart } = useCart();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -42,6 +45,10 @@ export default function CheckoutPage() {
 
   const [errors, setErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
+
+  if (!onlinePayment) {
+    return <BankTransferCheckout />;
+  }
 
   const formatPrice = (price) => {
     if (typeof price === "string") {
@@ -171,30 +178,27 @@ export default function CheckoutPage() {
         {steps.map((step, index) => (
           <div key={step.number} className="flex items-center">
             <div
-              className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                step.completed
-                  ? "bg-green-500 border-green-500 text-white"
-                  : currentStep === step.number
+              className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${step.completed
+                ? "bg-green-500 border-green-500 text-white"
+                : currentStep === step.number
                   ? "bg-[#7F7B59] border-[#7F7B59] text-white"
                   : "border-gray-300 text-gray-300"
-              }`}
+                }`}
             >
               {step.completed ? <BiCheck /> : step.number}
             </div>
             <span
-              className={`ml-2 ${
-                currentStep === step.number
-                  ? "font-bold text-[#7F7B59]"
-                  : "text-gray-500"
-              }`}
+              className={`ml-2 ${currentStep === step.number
+                ? "font-bold text-[#7F7B59]"
+                : "text-gray-500"
+                }`}
             >
               {step.title}
             </span>
             {index < steps.length - 1 && (
               <div
-                className={`w-16 h-0.5 mx-4 ${
-                  step.completed ? "bg-green-500" : "bg-gray-300"
-                }`}
+                className={`w-16 h-0.5 mx-4 ${step.completed ? "bg-green-500" : "bg-gray-300"
+                  }`}
               />
             )}
           </div>
@@ -222,9 +226,8 @@ export default function CheckoutPage() {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className={`w-full p-3 border rounded-lg ${
-                        errors.firstName ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full p-3 border rounded-lg ${errors.firstName ? "border-red-500" : "border-gray-300"
+                        }`}
                     />
                     {errors.firstName && (
                       <p className="text-red-500 text-sm mt-1">
@@ -242,9 +245,8 @@ export default function CheckoutPage() {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className={`w-full p-3 border rounded-lg ${
-                        errors.lastName ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full p-3 border rounded-lg ${errors.lastName ? "border-red-500" : "border-gray-300"
+                        }`}
                     />
                     {errors.lastName && (
                       <p className="text-red-500 text-sm mt-1">
@@ -262,9 +264,8 @@ export default function CheckoutPage() {
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className={`w-full p-3 border rounded-lg ${
-                        errors.email ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full p-3 border rounded-lg ${errors.email ? "border-red-500" : "border-gray-300"
+                        }`}
                     />
                     {errors.email && (
                       <p className="text-red-500 text-sm mt-1">
@@ -282,9 +283,8 @@ export default function CheckoutPage() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className={`w-full p-3 border rounded-lg ${
-                        errors.phone ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full p-3 border rounded-lg ${errors.phone ? "border-red-500" : "border-gray-300"
+                        }`}
                     />
                     {errors.phone && (
                       <p className="text-red-500 text-sm mt-1">
@@ -310,9 +310,8 @@ export default function CheckoutPage() {
                       value={formData.address}
                       onChange={handleInputChange}
                       rows="3"
-                      className={`w-full p-3 border rounded-lg ${
-                        errors.address ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full p-3 border rounded-lg ${errors.address ? "border-red-500" : "border-gray-300"
+                        }`}
                     />
                     {errors.address && (
                       <p className="text-red-500 text-sm mt-1">
@@ -331,9 +330,8 @@ export default function CheckoutPage() {
                         name="city"
                         value={formData.city}
                         onChange={handleInputChange}
-                        className={`w-full p-3 border rounded-lg ${
-                          errors.city ? "border-red-500" : "border-gray-300"
-                        }`}
+                        className={`w-full p-3 border rounded-lg ${errors.city ? "border-red-500" : "border-gray-300"
+                          }`}
                       />
                       {errors.city && (
                         <p className="text-red-500 text-sm mt-1">
@@ -351,9 +349,8 @@ export default function CheckoutPage() {
                         name="district"
                         value={formData.district}
                         onChange={handleInputChange}
-                        className={`w-full p-3 border rounded-lg ${
-                          errors.district ? "border-red-500" : "border-gray-300"
-                        }`}
+                        className={`w-full p-3 border rounded-lg ${errors.district ? "border-red-500" : "border-gray-300"
+                          }`}
                       />
                       {errors.district && (
                         <p className="text-red-500 text-sm mt-1">
@@ -371,11 +368,10 @@ export default function CheckoutPage() {
                         name="postalCode"
                         value={formData.postalCode}
                         onChange={handleInputChange}
-                        className={`w-full p-3 border rounded-lg ${
-                          errors.postalCode
-                            ? "border-red-500"
-                            : "border-gray-300"
-                        }`}
+                        className={`w-full p-3 border rounded-lg ${errors.postalCode
+                          ? "border-red-500"
+                          : "border-gray-300"
+                          }`}
                       />
                       {errors.postalCode && (
                         <p className="text-red-500 text-sm mt-1">
@@ -446,11 +442,10 @@ export default function CheckoutPage() {
                         value={formData.cardNumber}
                         onChange={handleInputChange}
                         placeholder="1234 5678 9012 3456"
-                        className={`w-full p-3 border rounded-lg ${
-                          errors.cardNumber
-                            ? "border-red-500"
-                            : "border-gray-300"
-                        }`}
+                        className={`w-full p-3 border rounded-lg ${errors.cardNumber
+                          ? "border-red-500"
+                          : "border-gray-300"
+                          }`}
                       />
                       {errors.cardNumber && (
                         <p className="text-red-500 text-sm mt-1">
@@ -468,9 +463,8 @@ export default function CheckoutPage() {
                         name="cardName"
                         value={formData.cardName}
                         onChange={handleInputChange}
-                        className={`w-full p-3 border rounded-lg ${
-                          errors.cardName ? "border-red-500" : "border-gray-300"
-                        }`}
+                        className={`w-full p-3 border rounded-lg ${errors.cardName ? "border-red-500" : "border-gray-300"
+                          }`}
                       />
                       {errors.cardName && (
                         <p className="text-red-500 text-sm mt-1">
@@ -490,11 +484,10 @@ export default function CheckoutPage() {
                           value={formData.expiryDate}
                           onChange={handleInputChange}
                           placeholder="MM/YY"
-                          className={`w-full p-3 border rounded-lg ${
-                            errors.expiryDate
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          }`}
+                          className={`w-full p-3 border rounded-lg ${errors.expiryDate
+                            ? "border-red-500"
+                            : "border-gray-300"
+                            }`}
                         />
                         {errors.expiryDate && (
                           <p className="text-red-500 text-sm mt-1">
@@ -513,9 +506,8 @@ export default function CheckoutPage() {
                           value={formData.cvv}
                           onChange={handleInputChange}
                           placeholder="123"
-                          className={`w-full p-3 border rounded-lg ${
-                            errors.cvv ? "border-red-500" : "border-gray-300"
-                          }`}
+                          className={`w-full p-3 border rounded-lg ${errors.cvv ? "border-red-500" : "border-gray-300"
+                            }`}
                         />
                         {errors.cvv && (
                           <p className="text-red-500 text-sm mt-1">
