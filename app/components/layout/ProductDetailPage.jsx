@@ -463,56 +463,9 @@ export default function ProductDetailPage({ productData }) {
               <h1 className="text-2xl font-bold text-gray-800 border-b-1">
                 {productData.name}
               </h1>
-              <div className="space-y-2">
-                {productData.cartPrice &&
-                productData.cartPrice !== productData.price ? (
-                  <div className="flex  justify-end items-center gap-5 space-y-2">
-                    <div className="flex items-start gap-1">
-                      <div className="text-3xl font-bold">
-                        {productData.cartPrice}
-                      </div>{" "}
-                      <div className="flex items-center gap-2 text-red-500 text-lg px-3 rounded-full font-medium">
-                        %
-                        {Math.round(
-                          ((parseFloat(
-                            productData.price
-                              .replace(/[^\d,]/g, "")
-                              .replace(",", ".")
-                          ) -
-                            parseFloat(
-                              productData.cartPrice
-                                .replace(/[^\d,]/g, "")
-                                .replace(",", ".")
-                            )) /
-                            parseFloat(
-                              productData.price
-                                .replace(/[^\d,]/g, "")
-                                .replace(",", ".")
-                            )) *
-                            100
-                        )}{" "}
-                        <MdOutlineTrendingDown />
-                      </div>
-                      <div className="text-lg text-gray-500 line-through">
-                        {productData.price}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-end text-3xl font-bold">
-                    {productData.price}
-                  </div>
-                )}
-              </div>
-
-              {/* Beden Seçimi Alanı */}
               {needsSizeSelection() && (
                 <div className="space-y-3">
-                  <h4 className="text-sm font-medium text-gray-700">
-                    Beden Seçimi
-                  </h4>
                   {productData.isSet ? (
-                    // Set ürünleri için beden seçimi
                     <div className="space-y-3">
                       {getProductsWithSizes().map((item, index) => {
                         const productIndex = productData.products.findIndex(
@@ -580,7 +533,47 @@ export default function ProductDetailPage({ productData }) {
                   )}
                 </div>
               )}
-
+              <div className="space-y-2">
+                {productData.cartPrice &&
+                productData.cartPrice !== productData.price ? (
+                  <div className="flex  justify-end items-center gap-5 space-y-2">
+                    <div className="flex items-start gap-1">
+                      <div className="text-3xl font-bold">
+                        {productData.cartPrice}
+                      </div>{" "}
+                      <div className="flex items-center gap-2 text-red-500 text-lg px-3 rounded-full font-medium">
+                        %
+                        {Math.round(
+                          ((parseFloat(
+                            productData.price
+                              .replace(/[^\d,]/g, "")
+                              .replace(",", ".")
+                          ) -
+                            parseFloat(
+                              productData.cartPrice
+                                .replace(/[^\d,]/g, "")
+                                .replace(",", ".")
+                            )) /
+                            parseFloat(
+                              productData.price
+                                .replace(/[^\d,]/g, "")
+                                .replace(",", ".")
+                            )) *
+                            100
+                        )}{" "}
+                        <MdOutlineTrendingDown />
+                      </div>
+                      <div className="text-lg text-gray-500 line-through">
+                        {productData.price}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-end text-3xl font-bold">
+                    {productData.price}
+                  </div>
+                )}
+              </div>
               <div className="flex justify-end items-center space-x-4">
                 <div className="flex border border-white rounded overflow-hidden w-24">
                   <div className="flex-1 flex items-center justify-center bg-gray-50">

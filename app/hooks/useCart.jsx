@@ -44,9 +44,11 @@ export const CartProvider = ({ children }) => {
       );
 
       if (existingItemIndex > -1) {
-        const updatedItems = [...prevItems];
-        updatedItems[existingItemIndex].quantity += quantity;
-        return updatedItems;
+        return prevItems.map((item, idx) =>
+          idx === existingItemIndex
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
       } else {
         return [
           ...prevItems,

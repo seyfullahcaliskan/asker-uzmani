@@ -10,6 +10,7 @@ import { MdOutlineFavorite } from "react-icons/md";
 import { RiShoppingBasketLine } from "react-icons/ri";
 import { navLinks } from "../../navLinks";
 import CartDropdown from "./cart/CartDropdown";
+import ProductSearch from "./ProductSearch";
 
 export default function Header() {
   return (
@@ -68,7 +69,9 @@ export default function Header() {
         {/*Alt-Orta satır */}
         <div className="grid grid-cols-3 py-2 items-center">
           <div className="flex justify-start">Özhan Askeri Malzemeleri</div>
-          <div className="flex justify-center">Tüm Ürünleri Arama</div>
+          <div className="flex justify-center">
+            <ProductSearch />
+          </div>
           <div className="flex justify-end gap-2 items-center">
             <div className="flex items-center gap-2">
               <RiUser6Line className="text-2xl" />
