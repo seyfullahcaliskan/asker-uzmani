@@ -165,7 +165,18 @@ export default function CartDropdown() {
                     </span>
                   </div>
                 </div>
+                <div className="flex justify-center">
+                  <Link
+                    onClick={() => setIsOpen(false)}
+                    href="/sepet"
+                    className="border border-orange-500 text-orange-500 text-md px-4 py-2 rounded-lg hover:bg-orange-500 hover:text-white"
+                  >
+                    Ödemeye Geç
+                  </Link>
+                </div>
+
               </>
+
             )}
           </div>
         </div>

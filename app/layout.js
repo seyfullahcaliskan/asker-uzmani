@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
         <CartProvider>
           <Header />
           <WhatsappButton />
-          <main className="min-h-screen z-0 container mx-auto py-12">
+          <main className="min-h-screen z-0 container mx-auto py-4 md:py-12">
             {children}
           </main>
           <Footer />

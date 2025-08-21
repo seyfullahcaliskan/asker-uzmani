@@ -127,7 +127,7 @@ export default function Footer() {
           <p>© 2025 Özhan Asker Malzemeleri </p>
         </div>
 
-        <div className="flex justify-center text-md text-gray-600 pb-6">
+        <div className="flex justify-center md:text-md text-gray-600 pb-6">
           <p>
             Bu web sitesi{" "}
             <a

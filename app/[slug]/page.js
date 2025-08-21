@@ -65,7 +65,7 @@ export default function CategoryPage() {
       </h1>
 
       {/* Mobil ve Tablet: Filtreler üstte */}
-      <div className="block lg:hidden mb-6">
+      {/* <div className="block lg:hidden mb-6">
         <div className="bg-gray-50 p-4 rounded-lg shadow">
           <h3 className="font-bold text-lg mb-4">Filtreler</h3>
           <PriceFilter
@@ -77,7 +77,7 @@ export default function CategoryPage() {
             {filteredProducts.length} ürün bulundu
           </p>
         </div>
-      </div>
+      </div> */}
 
       {/* Desktop Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -97,7 +97,7 @@ export default function CategoryPage() {
         </div>
 
         <div className="col-span-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
               <ProductCard key={product.slug} set={product} />
             ))}

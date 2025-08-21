@@ -141,6 +141,8 @@ export default function BankTransferCheckout() {
 
                     {/* WhatsApp ve Manuel Mesaj */}
                     <div className="space-y-2">
+                        <p className="text-xs text-red-500 text-center">
+                            Lütfen whatsapptan siparişinizi iletmeden önce ödemenizi tamamlayın !                        </p>
                         <a
                             href={whatsappLink}
                             target="_blank"
