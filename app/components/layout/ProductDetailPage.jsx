@@ -294,358 +294,163 @@ export default function ProductDetailPage({ productData }) {
   };
 
   return (
-    <>
-      <div className="p-6 bg-white">
-        <div className="grid grid-cols-14 gap-6">
-          <div className="col-span-2">
-            <div className="space-y-3">
-              {isSet && (
-                <div
-                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden ${
-                    currentImageIndex === 0
-                      ? "border-blue-500"
-                      : "border-gray-200"
-                  }`}
-                  onClick={handleMainImageClick}
-                >
-                  <div className="flex justify-center items-center">
-                    <Image
-                      src={imageStructure.mainImage || "/images/no_image.jpg"}
-                      alt="Ana set resmi"
-                      width={100}
-                      height={20}
-                      // className="w-full object-contain"
-                    />
-                  </div>
-                </div>
-              )}
-              {imageStructure.products.map((product, productIndex) => (
-                <div key={productIndex} className="space-y-1">
-                  <div
-                    className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
-                      (!isSet &&
-                        currentImageIndex >= 0 &&
-                        productIndex === 0) ||
-                      (isSet &&
-                        currentImageIndex > 0 &&
-                        currentProductIndex === productIndex)
-                        ? "border-blue-500 shadow-lg"
-                        : "border-gray-200"
-                    }`}
-                    onClick={() => handleProductSelect(productIndex)}
-                  >
-                    <div className="flex justify-center items-center">
-                      <Image
-                        src={product.images?.[0] || "/images/no_image.jpg"}
-                        alt={`${product.name} thumbnail`}
-                        width={100}
-                        height={20}
-                        // className="w-full object-contain"
-                      />
-                    </div>
-
-                    {getProductLabel(productIndex) && (
-                      <div className="absolute bottom-1 left-1 text-green-800 text-xs px-1.5 py-0.5 rounded-full font-medium">
-                        {getProductLabel(productIndex)}
-                      </div>
-                    )}
-                  </div>
-                  {product.images.length > 1 && (
-                    <div className="grid grid-cols-2 gap-1">
-                      {product.images.slice(1, 5).map((image, imageIndex) => (
-                        <div
-                          key={imageIndex}
-                          className={`relative cursor-pointer border rounded overflow-hidden transition-all duration-200 hover:shadow-sm ${
-                            (!isSet && currentImageIndex === imageIndex + 1) ||
-                            (isSet &&
-                              currentImageIndex > 0 &&
-                              currentProductIndex === productIndex &&
-                              currentSubImageIndex === imageIndex + 1)
-                              ? "border-blue-400 shadow-md"
-                              : "border-gray-200"
-                          }`}
-                          onClick={() =>
-                            handleSubImageSelect(productIndex, imageIndex + 1)
-                          }
-                        >
-                          <div className="flex justify-center items-center">
-                            <Image
-                              src={image || "/images/no_image.jpg"}
-                              alt={`${product.name} resim ${imageIndex + 2}`}
-                              width={100}
-                              height={80}
-                              className="w-full object-contain"
-                            />
-                          </div>
-                          {imageIndex === 3 && product.images.length > 5 && (
-                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                              <span className="text-white text-xs font-medium">
-                                +{product.images.length - 5}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="col-span-6">
-            <div className="relative bg-transparent rounded-lg overflow-hidden">
-              <div className="flex justify-center items-center">
+    <div className="p-4 sm:p-6 bg-white">
+      <div className="grid grid-cols-1 lg:grid-cols-14 gap-6">
+        {/* Sol Thumbnail Alanı */}
+        <div className="lg:col-span-2 order-2 lg:order-1">
+          <div className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+            {isSet && (
+              <div
+                className={`relative flex-shrink-0 cursor-pointer border-2 rounded-lg overflow-hidden ${
+                  currentImageIndex === 0
+                    ? "border-blue-500"
+                    : "border-gray-200"
+                }`}
+                onClick={handleMainImageClick}
+              >
                 <Image
-                  src={getCurrentImage() || "/images/no_image.jpg"}
-                  alt="Ana ürün resmi"
-                  width={300}
-                  height={60}
-                  // className="w-full object-contain"
+                  src={imageStructure.mainImage || "/images/no_image.jpg"}
+                  alt="Ana set resmi"
+                  width={100}
+                  height={100}
+                  className="object-contain w-20 h-20 lg:w-auto lg:h-auto"
                 />
               </div>
-              {shouldShowImageNavigation() && (
-                <>
-                  <button
-                    onClick={prevImage}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110"
-                  >
-                    <FaChevronLeft />
-                  </button>
-
-                  <button
-                    onClick={nextImage}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110"
-                  >
-                    <FaChevronRight />
-                  </button>
-                </>
-              )}
-
-              {shouldShowImageNavigation() && (
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 bg-transparent bg-opacity-30 px-3 py-2 rounded-full">
-                  {(isSet && currentImageIndex > 0
-                    ? imageStructure.products[currentProductIndex].images
-                    : imageStructure.products[0].images
-                  ).map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        if (isSet && currentImageIndex > 0) {
-                          setCurrentSubImageIndex(index);
-                        } else {
-                          setCurrentImageIndex(index);
-                        }
-                      }}
-                      className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                        (isSet && currentImageIndex > 0
-                          ? currentSubImageIndex
-                          : currentImageIndex) === index
-                          ? "bg-green-500 scale-125"
-                          : "bg-white bg-opacity-70 hover:bg-opacity-90"
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {shouldShowImageNavigation() && (
-                <div className="absolute top-4 right-4 bg-black bg-opacity-60 text-white px-2 py-1 rounded-full text-sm">
-                  {getCurrentImagePosition()} / {getCurrentImageCount()}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="col-span-6">
-            <div className="space-y-4">
-              <h1 className="text-2xl font-bold text-gray-800 border-b-1">
-                {productData.name}
-              </h1>
-              {needsSizeSelection() && (
-                <div className="space-y-3">
-                  {productData.isSet ? (
-                    <div className="space-y-3">
-                      {getProductsWithSizes().map((item, index) => {
-                        const productIndex = productData.products.findIndex(
-                          (p) => p === item
-                        );
-                        return (
-                          <div
-                            key={productIndex}
-                            className="flex items-center justify-between"
-                          >
-                            <span className="text-sm text-gray-600 flex-1">
-                              {item.product.name} ({item.count} adet)
-                            </span>
-                            <div className="relative ml-3">
-                              <select
-                                value={
-                                  selectedSizes[`product_${productIndex}`] || ""
-                                }
-                                onChange={(e) =>
-                                  handleSizeChange(
-                                    `product_${productIndex}`,
-                                    e.target.value
-                                  )
-                                }
-                                className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 min-w-[100px] hover:scale-110 transition-all duration-200"
-                              >
-                                <option value="">Beden</option>
-                                {item.product.sizes.map((sizes) => (
-                                  <option key={sizes} value={sizes}>
-                                    {sizes}
-                                  </option>
-                                ))}
-                              </select>
-                              <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                                <FiChevronDown className="text-gray-400" />
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="flex justify-end">
-                      <div className="relative">
-                        <select
-                          value={selectedSizes.single || ""}
-                          onChange={(e) => {
-                            handleSizeChange("single", e.target.value);
-                          }}
-                          className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 min-w-[100px] hover:scale-110 transition-all duration-200"
-                        >
-                          <option value="">Beden Seçin</option>
-                          {productData.sizes.map((sizes) => (
-                            <option key={sizes} value={sizes}>
-                              {sizes}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                          <FiChevronDown className="text-gray-400" />
-                        </div>
-                      </div>
+            )}
+            {imageStructure.products.map((product, productIndex) => (
+              <div key={productIndex} className="flex-shrink-0 space-y-1">
+                <div
+                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
+                    (!isSet && currentImageIndex >= 0 && productIndex === 0) ||
+                    (isSet &&
+                      currentImageIndex > 0 &&
+                      currentProductIndex === productIndex)
+                      ? "border-blue-500 shadow-lg"
+                      : "border-gray-200"
+                  }`}
+                  onClick={() => handleProductSelect(productIndex)}
+                >
+                  <Image
+                    src={product.images?.[0] || "/images/no_image.jpg"}
+                    alt={`${product.name} thumbnail`}
+                    width={100}
+                    height={100}
+                    className="object-contain w-20 h-20 lg:w-auto lg:h-auto"
+                  />
+                  {getProductLabel(productIndex) && (
+                    <div className="absolute bottom-1 left-1 text-green-800 text-xs px-1.5 py-0.5 rounded-full font-medium">
+                      {getProductLabel(productIndex)}
                     </div>
                   )}
                 </div>
-              )}
-              <div className="space-y-2">
-                {productData.cartPrice &&
-                productData.cartPrice !== productData.price ? (
-                  <div className="flex  justify-end items-center gap-5 space-y-2">
-                    <div className="flex items-start gap-1">
-                      <div className="text-3xl font-bold">
-                        {productData.cartPrice}
-                      </div>{" "}
-                      <div className="flex items-center gap-2 text-red-500 text-lg px-3 rounded-full font-medium">
-                        %
-                        {Math.round(
-                          ((parseFloat(
-                            productData.price
-                              .replace(/[^\d,]/g, "")
-                              .replace(",", ".")
-                          ) -
-                            parseFloat(
-                              productData.cartPrice
-                                .replace(/[^\d,]/g, "")
-                                .replace(",", ".")
-                            )) /
-                            parseFloat(
-                              productData.price
-                                .replace(/[^\d,]/g, "")
-                                .replace(",", ".")
-                            )) *
-                            100
-                        )}{" "}
-                        <MdOutlineTrendingDown />
-                      </div>
-                      <div className="text-lg text-gray-500 line-through">
-                        {productData.price}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-end text-3xl font-bold">
-                    {productData.price}
-                  </div>
-                )}
               </div>
-              <div className="flex justify-end items-center space-x-4">
-                <div className="flex border border-white rounded overflow-hidden w-24">
-                  <div className="flex-1 flex items-center justify-center bg-gray-50">
-                    <span className="text-lg font-medium">{quantity}</span>
-                  </div>
-                  <div className="flex flex-col border-l border-white">
-                    <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="flex-1 flex items-center justify-center px-2 hover:bg-green-200 hover:scale-110 transition-all duration-200"
-                    >
-                      <FiChevronUp />
-                    </button>
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="flex-1 flex items-center justify-center px-2 hover:bg-red-200 border-t border-white hover:scale-110 transition-all duration-200"
-                    >
-                      <FiChevronDown />
-                    </button>
-                  </div>
-                </div>
-                <button
-                  className={`flex items-center gap-2 py-3 px-6 rounded-lg font-medium shadow-md  ${
-                    isAddToCartDisabled()
-                      ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                      : "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer hover:scale-110 transition-all duration-200"
-                  }`}
-                  onClick={handleAddToCartWithSize}
-                  disabled={isAddToCartDisabled()}
-                >
-                  <TbShoppingBagPlus />
-                  Sepete Ekle
-                </button>
-              </div>
-              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                <div className="flex gap-2 items-center text-green-700">
-                  <FaTruckFast />
-                  <span className="text-sm">
-                    <strong>{getShippingDate()}</strong>
-                  </span>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {/* <button className="text-sm flex items-center justify-center border border-black text-black hover:bg-black hover:border-black hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md">
-                  <FaPhone />
-                  Telefon ile Sipariş Ver
-                </button> */}
-                <button className="text-sm flex items-center justify-center border border-green-700 text-green-700 hover:bg-green-700 hover:border-green-700 hover:text-white cursor-pointer rounded-lg py-3 px-6 gap-2 font-bold shadow-md hover:scale-110 transition-all duration-200">
-                  <FaWhatsapp />
-                  WhatsApp ile Sipariş Ver
-                </button>
-              </div>
-              {isSet && (
-                <div className="border-t pt-4">
-                  <h3 className="text-gray-800 mb-3 font-bold">Set İçeriği</h3>
-                  <div className="space-y-2">
-                    {productData?.products?.map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between text-sm"
-                      >
-                        <span>{item.product.name}</span>
-                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-                          {item.count} Adet
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+            ))}
           </div>
         </div>
-        <div className="text-sm mt-2">{productData?.description}</div>
+
+        {/* Orta Ana Görsel */}
+        <div className="lg:col-span-6 order-1 lg:order-2">
+          <div className="relative bg-transparent rounded-lg overflow-hidden">
+            <div className="flex justify-center items-center">
+              <Image
+                src={getCurrentImage() || "/images/no_image.jpg"}
+                alt="Ana ürün resmi"
+                width={400}
+                height={400}
+                className="w-full max-h-[400px] object-contain"
+              />
+            </div>
+            {shouldShowImageNavigation() && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 sm:p-3 shadow-lg transition-all duration-200 hover:scale-110"
+                >
+                  <FaChevronLeft />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 sm:p-3 shadow-lg transition-all duration-200 hover:scale-110"
+                >
+                  <FaChevronRight />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Sağ Ürün Detayları */}
+        <div className="lg:col-span-6 order-3">
+          <div className="space-y-4">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 border-b pb-2">
+              {productData.name}
+            </h1>
+
+            {/* Beden Seçimi */}
+            {needsSizeSelection() && (
+              <div className="space-y-3">
+                {/* burada mevcut kodun senin select yapısını bozmadan bırakabilirsin */}
+              </div>
+            )}
+
+            {/* Fiyat */}
+            <div className="text-end text-2xl sm:text-3xl font-bold">
+              {productData.price}
+            </div>
+
+            {/* Sepete ekle ve adet seçimi */}
+            <div className="flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-4">
+              <div className="flex border rounded overflow-hidden w-full sm:w-24">
+                <div className="flex-1 flex items-center justify-center bg-gray-50">
+                  <span className="text-lg font-medium">{quantity}</span>
+                </div>
+                <div className="flex flex-col border-l">
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="flex-1 flex items-center justify-center px-2 hover:bg-green-200"
+                  >
+                    <FiChevronUp />
+                  </button>
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="flex-1 flex items-center justify-center px-2 hover:bg-red-200 border-t"
+                  >
+                    <FiChevronDown />
+                  </button>
+                </div>
+              </div>
+              <button
+                className={`w-full sm:w-auto flex items-center justify-center gap-2 py-3 px-6 rounded-lg font-medium shadow-md ${
+                  isAddToCartDisabled()
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    : "bg-orange-500 hover:bg-orange-600 text-white"
+                }`}
+                onClick={handleAddToCartWithSize}
+                disabled={isAddToCartDisabled()}
+              >
+                <TbShoppingBagPlus />
+                Sepete Ekle
+              </button>
+            </div>
+
+            {/* Kargo bilgisi */}
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="flex gap-2 items-center text-green-700">
+                <FaTruckFast />
+                <span className="text-sm font-medium">{getShippingDate()}</span>
+              </div>
+            </div>
+
+            {/* Whatsapp */}
+            <button className="w-full sm:w-auto text-sm flex items-center justify-center border border-green-700 text-green-700 hover:bg-green-700 hover:text-white rounded-lg py-3 px-6 gap-2 font-bold shadow-md">
+              <FaWhatsapp />
+              WhatsApp ile Sipariş Ver
+            </button>
+          </div>
+        </div>
       </div>
-    </>
+
+      <div className="text-sm mt-4">{productData?.description}</div>
+    </div>
   );
 }

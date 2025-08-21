@@ -59,20 +59,38 @@ export default function CategoryPage() {
   }, [selectedPriceRange, categoryProducts]);
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">{categoryInfo.label}</h1>
+    <div className="px-4 lg:px-0">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center lg:text-left">
+        {categoryInfo.label}
+      </h1>
 
-      <div className="grid grid-cols-4 gap-8">
-        <div className="col-span-1">
-          <div className="bg-gray-50 p-4 rounded-lg">
+      {/* Mobil ve Tablet: Filtreler üstte */}
+      <div className="block lg:hidden mb-6">
+        <div className="bg-gray-50 p-4 rounded-lg shadow">
+          <h3 className="font-bold text-lg mb-4">Filtreler</h3>
+          <PriceFilter
+            priceRanges={priceRanges}
+            onFilterChange={setSelectedPriceRange}
+            selectedRange={selectedPriceRange}
+          />
+          <p className="text-gray-600 mt-2 text-right">
+            {filteredProducts.length} ürün bulundu
+          </p>
+        </div>
+      </div>
+
+      {/* Desktop Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Sol Menü - Sadece Desktop */}
+        <div className="hidden lg:block col-span-1">
+          <div className="bg-gray-50 p-4 rounded-lg shadow">
             <h3 className="font-bold text-lg mb-4">Filtreler</h3>
-
             <PriceFilter
               priceRanges={priceRanges}
               onFilterChange={setSelectedPriceRange}
               selectedRange={selectedPriceRange}
             />
-            <p className="text-gray-600 mb-4 text-end">
+            <p className="text-gray-600 mt-2 text-right">
               {filteredProducts.length} ürün bulundu
             </p>
           </div>

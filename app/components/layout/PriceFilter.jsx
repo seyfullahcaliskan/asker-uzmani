@@ -14,16 +14,19 @@ export default function PriceFilter({
   };
 
   return (
-    <div className="relative mb-6">
+    <div className="relative mb-6 w-full">
+      {/* Seçim Butonu */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-white border border-gray-300 rounded px-4 py-2 flex items-center justify-between min-w-[200px] hover:border-gray-400 transition"
+        className="bg-white border border-gray-300 rounded px-4 py-2 flex items-center justify-between w-full lg:min-w-[200px] hover:border-gray-400 transition"
       >
-        <span>
+        <span className="truncate text-sm md:text-base">
           {selectedRange ? selectedRange.label : "Fiyat Aralığı Seçin"}
         </span>
         <svg
-          className={`w-4 h-4 transition-all ${isOpen ? "rotate-180" : ""}`}
+          className={`w-4 h-4 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -37,11 +40,18 @@ export default function PriceFilter({
         </svg>
       </button>
 
+      {/* Seçim Listesi */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded shadow-lg z-20 min-w-[200px]">
+        <div
+          className={`
+            absolute lg:top-full lg:left-0 mt-1 
+            bg-white border border-gray-300 rounded shadow-lg z-20
+            w-full lg:min-w-[200px]
+          `}
+        >
           <button
             onClick={() => handleRangeSelect(null)}
-            className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
+            className="w-full text-left px-4 py-2 hover:bg-gray-100 transition text-sm md:text-base"
           >
             Tümü
           </button>
@@ -49,7 +59,7 @@ export default function PriceFilter({
             <button
               key={index}
               onClick={() => handleRangeSelect(range)}
-              className="w-full text-left px-4 py-2 hover:bg-gray-100 transition border-t border-gray-100"
+              className="w-full text-left px-4 py-2 hover:bg-gray-100 transition border-t border-gray-100 text-sm md:text-base"
             >
               {range.label}
             </button>
