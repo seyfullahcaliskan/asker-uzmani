@@ -3,7 +3,7 @@ const products = [
     category: "Tekstil",
     id: 3,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 18 Parça 2'Li Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 18 Parça 2'Li Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-18-parca-2-li-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -775,7 +775,7 @@ const products = [
     category: "Tekstil",
     id: 31,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 21 Parça 3'lü Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 21 Parça 3'lü Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-21-parca-3-lu-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -1093,7 +1093,7 @@ const products = [
     category: "Tekstil",
     id: 36,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 30 Parça 6'lı Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 30 Parça 6'lı Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-30-parca-6-li-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -1363,7 +1363,7 @@ const products = [
     category: "Tekstil",
     id: 37,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 39 Parça 9'lu Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 39 Parça 9'lu Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-39-parca-9-lu-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -1633,7 +1633,7 @@ const products = [
     category: "Tekstil",
     id: 38,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 48 Parça 12'li Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 48 Parça 12'li Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-48-parca-12-li-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -1903,7 +1903,7 @@ const products = [
     category: "Tekstil",
     id: 39,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 66 Parça 18'li Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 66 Parça 18'li Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-66-parca-18-li-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -2173,7 +2173,7 @@ const products = [
     category: "Tekstil",
     id: 35,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 26 Parça 2'li Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 26 Parça 2'li Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-26-parca-2-li-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -2524,7 +2524,7 @@ const products = [
     category: "Tekstil",
     id: 40,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 29 Parça 3'lü Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 29 Parça 3'lü Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-29-parca-3-lu-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -2875,7 +2875,7 @@ const products = [
     category: "Tekstil",
     id: 41,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 38 Parça 6'lı Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 38 Parça 6'lı Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-38-parca-6-li-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -3226,7 +3226,7 @@ const products = [
     category: "Tekstil",
     id: 42,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 47 Parça 9'lu Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 47 Parça 9'lu Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-47-parca-9-li-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",
@@ -3577,7 +3577,7 @@ const products = [
     category: "Tekstil",
     id: 43,
     isSet: true,
-    name: "Acemi & Bedelli Ekonomik Asker Seti - Asker Malzemeleri 56 Parça 12'li Set",
+    name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 56 Parça 12'li Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-56-parca-12-li-set",
     description:
       "Bedelli veya acemi birlik görevine eksiksiz hazırlanmak isteyenler için özel olarak hazırlanan Acemi Bedelli Asker Seti, temel ihtiyaçlarınızı pratik ve ekonomik şekilde karşılar.",

@@ -37,39 +37,41 @@ export default function BankTransferCheckout() {
   const cargoFee = getCargoFee();
   const totalWithCargo = getTotalWithCargo();
 
+  // 📝 Mesaj formatlama
   const formatMessage = () => {
-    let msg = `📝 Sipariş Bilgilerim:%0A`;
-    msg += `Ad Soyad: ${userInfo.firstName} ${userInfo.lastName}%0A`;
-    msg += `Telefon: ${userInfo.phone}%0A`;
-    msg += `TC: ${userInfo.tc}%0A`;
-    msg += `Adres: ${userInfo.address}%0A`;
-    msg += `--------------------%0AÜrünler:%0A`;
+    let msg = `📝 Sipariş Bilgilerim:\n`;
+    msg += `Ad Soyad: ${userInfo.firstName} ${userInfo.lastName}\n`;
+    msg += `Telefon: ${userInfo.phone}\n`;
+    msg += `TC: ${userInfo.tc}\n`;
+    msg += `Adres: ${userInfo.address}\n`;
+    msg += `--------------------\nÜrünler:\n`;
 
     cartItems.forEach((item) => {
       if (item.isSet) {
-        msg += `- ${item.name} x${item.quantity}%0A`;
+        msg += `- ${item.name} x${item.quantity}\n`;
         Object.entries(item.selectedSizes || {}).forEach(([p, s]) => {
-          msg += `   (${p}: ${s})%0A`;
+          msg += `   (${p}: ${s})\n`;
         });
       } else {
-        msg += `- ${item.name} (${item.selectedSize || "-"}) x${
-          item.quantity
-        }%0A`;
+        msg += `- ${item.name} (${item.selectedSize || "-"}) x${item.quantity}\n`;
       }
     });
 
-    msg += `--------------------%0A`;
-    msg += `Ürün Toplamı: ${formatPrice(productTotal)}%0A`;
-    msg += `Kargo: ${cargoFee === 0 ? "Ücretsiz" : formatPrice(cargoFee)}%0A`;
+    msg += `--------------------\n`;
+    msg += `Ürün Toplamı: ${formatPrice(productTotal)}\n`;
+    msg += `Kargo: ${cargoFee === 0 ? "Ücretsiz" : formatPrice(cargoFee)}\n`;
     msg += `Toplam: ${formatPrice(totalWithCargo)}`;
     return msg;
   };
 
-  const whatsappLink = `https://wa.me/905386820112?text=${formatMessage()}`;
+  const whatsappLink = `https://wa.me/905386820112?text=${encodeURIComponent(
+    formatMessage()
+  )}`;
 
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(formatMessage());
   };
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -115,11 +117,10 @@ export default function BankTransferCheckout() {
           />
           <button
             onClick={() => isInfoComplete() && setStep(2)}
-            className={`mt-4 px-6 py-3 rounded text-white ${
-              isInfoComplete()
+            className={`mt-4 px-6 py-3 rounded text-white ${isInfoComplete()
                 ? "bg-[#7F7B59]"
                 : "bg-gray-400 cursor-not-allowed"
-            }`}
+              }`}
           >
             Devam Et
           </button>
@@ -245,7 +246,7 @@ export default function BankTransferCheckout() {
               kopyalayabilirsiniz.
             </p>
             <button
-              onClick={() => handleCopy(decodeURIComponent(formatMessage()))}
+              onClick={handleCopy}
               className="w-full px-6 py-3 bg-gray-500 text-white rounded-lg"
             >
               Mesajı Kopyala

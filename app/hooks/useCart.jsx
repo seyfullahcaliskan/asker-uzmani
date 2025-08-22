@@ -16,8 +16,6 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // generalData'dan kargo ayarlarını al (artık obje olarak)
   const freeCargo = generalData?.freeCargo ?? false;
   const freeCargoPrice = generalData?.freeCargoPrice ?? 3000;
   const cargoPrice = generalData?.cargoPrice ?? 100;
@@ -104,8 +102,8 @@ export const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => {
       const price = parseFloat(
         item.cartPrice?.replace(/[₺,]/g, "") ||
-          item.price?.replace(/[₺,]/g, "") ||
-          0
+        item.price?.replace(/[₺,]/g, "") ||
+        0
       );
       return total + price * item.quantity;
     }, 0);
