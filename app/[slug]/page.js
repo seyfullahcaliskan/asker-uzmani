@@ -1,117 +1,46 @@
-"use client";
-
-import { useState, useMemo } from "react";
-import { useParams } from "next/navigation";
-import PriceFilter from "../components/layout/PriceFilter";
-import ProductCard from "../components/layout/ProductCard";
-import products from "../components/layout/data/products";
 import { getCategoryBySlug } from "../navLinks";
+import CategoryPageClient from "./CategoryPageClient"; // client tarafı
 
-export default function CategoryPage() {
-  const params = useParams();
-  const slug = params?.slug;
-  const [selectedPriceRange, setSelectedPriceRange] = useState(null);
-
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
   const categoryInfo = getCategoryBySlug(slug);
 
-  const priceRanges = [
-    { label: "0₺ - 500₺", min: 0, max: 500 },
-    { label: "500₺ - 1000₺", min: 500, max: 1000 },
-    { label: "1000₺ - 2000₺", min: 1000, max: 2000 },
-    { label: "2000₺ ve üzeri", min: 2000, max: Infinity },
-  ];
-
-  const parsePrice = (priceString) => {
-    return parseInt(priceString.replace(/[₺,]/g, ""));
-  };
-
   if (!categoryInfo) {
-    return (
-      <div className="container mx-auto py-12 px-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            Kategori bulunamadı
-          </h1>
-          <p className="text-gray-600">Aradığınız kategori mevcut değil.</p>
-        </div>
-      </div>
-    );
+    return {
+      title: "Kategori Bulunamadı - Özhan Asker Malzemeleri",
+      description: "Aradığınız kategori mevcut değil.",
+      robots: { index: false, follow: false },
+    };
   }
 
-  const categoryProducts = useMemo(() => {
-    if (categoryInfo.filterBy === "isSet") {
-      return products.filter((p) => p.isSet);
-    } else if (categoryInfo.filterBy === "category") {
-      return products.filter(
-        (p) => p.category === categoryInfo.category && !p.isSet
-      );
-    }
-    return [];
-  }, [categoryInfo]);
+  return {
+    title: `${categoryInfo.label} - Özhan Asker Malzemeleri`,
+    description: `${categoryInfo.label} kategorisindeki en kaliteli ürünler. Uygun fiyatlarla hızlı kargo fırsatı!`,
+    keywords: `${
+      categoryInfo.label
+    }, asker malzemeleri, ucuz ${categoryInfo.label.toLowerCase()}, askerlik alışverişi`,
+    openGraph: {
+      title: `${categoryInfo.label} - Özhan Asker Malzemeleri`,
+      description: `${categoryInfo.label} kategorisindeki ürünleri inceleyin.`,
+      url: `https://askeruzmani.com.tr/${slug}`,
+      siteName: "Özhan Asker Malzemeleri",
+      images: [
+        {
+          url: "https://askeruzmani.com.tr/default-category.jpg",
+          width: 1200,
+          height: 630,
+          alt: `${categoryInfo.label} ürünleri`,
+        },
+      ],
+      locale: "tr_TR",
+      type: "website",
+    },
+    alternates: {
+      canonical: `https://askeruzmani.com.tr/${slug}`,
+    },
+  };
+}
 
-  const filteredProducts = useMemo(() => {
-    if (!selectedPriceRange) return categoryProducts;
-
-    return categoryProducts.filter((product) => {
-      const price = parsePrice(product.price);
-      return price >= selectedPriceRange.min && price <= selectedPriceRange.max;
-    });
-  }, [selectedPriceRange, categoryProducts]);
-
-  return (
-    <div className="px-4 lg:px-0">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center lg:text-left">
-        {categoryInfo.label}
-      </h1>
-
-      {/* Mobil ve Tablet: Filtreler üstte */}
-      {/* <div className="block lg:hidden mb-6">
-        <div className="bg-gray-50 p-4 rounded-lg shadow">
-          <h3 className="font-bold text-lg mb-4">Filtreler</h3>
-          <PriceFilter
-            priceRanges={priceRanges}
-            onFilterChange={setSelectedPriceRange}
-            selectedRange={selectedPriceRange}
-          />
-          <p className="text-gray-600 mt-2 text-right">
-            {filteredProducts.length} ürün bulundu
-          </p>
-        </div>
-      </div> */}
-
-      {/* Desktop Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Sol Menü - Sadece Desktop */}
-        <div className="hidden lg:block col-span-1">
-          <div className="bg-gray-50 p-4 rounded-lg shadow">
-            <h3 className="font-bold text-lg mb-4">Filtreler</h3>
-            <PriceFilter
-              priceRanges={priceRanges}
-              onFilterChange={setSelectedPriceRange}
-              selectedRange={selectedPriceRange}
-            />
-            <p className="text-gray-600 mt-2 text-right">
-              {filteredProducts.length} ürün bulundu
-            </p>
-          </div>
-        </div>
-
-        <div className="col-span-3">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.slug} set={product} />
-            ))}
-          </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">
-                Bu kategoride ürün bulunamadı.
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+export default function CategoryPage({ params }) {
+  return <CategoryPageClient slug={params.slug} />;
 }
