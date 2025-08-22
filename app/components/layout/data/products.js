@@ -38,7 +38,7 @@ const products = [
         product: {
           stock: 999999,
           isSet: false,
-          id: "3",
+          id: 99,
           name: "Nano Yeşil Askeri Boxer",
           slug: "nano-yesil-askeri-boxer",
           category: "Tekstil",
@@ -289,7 +289,7 @@ const products = [
   {
     stock: 999999,
     isSet: false,
-    id: "3",
+    id: 98,
     name: "Nano Yeşil Askeri Boxer",
     slug: "nano-yesil-askeri-boxer",
     category: "Tekstil",
