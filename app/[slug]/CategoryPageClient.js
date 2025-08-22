@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useParams } from "next/navigation";
 import PriceFilter from "../components/layout/PriceFilter";
 import ProductCard from "../components/layout/ProductCard";
 import products from "../components/layout/data/products";

@@ -5,9 +5,7 @@ import ProductDetailPage from "../../components/layout/ProductDetailPage";
 import { getCategoryBySlug } from "../../navLinks";
 
 export default function ProductDetailClient({ params }) {
-  // params.value içindeki stringi JSON'a çevir
-  const parsedParams = JSON.parse(params.value);
-  const { slug, productSlug } = parsedParams;
+  const { slug, productSlug } = params;
 
   const categoryInfo = getCategoryBySlug(slug);
   const product = products.find((p) => p.slug === productSlug);

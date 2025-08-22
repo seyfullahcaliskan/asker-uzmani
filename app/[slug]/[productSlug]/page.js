@@ -3,7 +3,8 @@ import { getCategoryBySlug } from "../../navLinks";
 import ProductDetailClient from "./ProductDetail";
 
 export async function generateMetadata({ params }) {
-  const { slug, productSlug } = await params;
+  const p = await params;
+  const { slug, productSlug } = p;
 
   const categoryInfo = getCategoryBySlug(slug);
   const product = products.find((p) => p.slug === productSlug);
@@ -22,6 +23,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function ProductDetail({ params }) {
-  return <ProductDetailClient params={params} />;
+export default async function ProductDetail({ params }) {
+  const p = await params;
+  return <ProductDetailClient params={p} />;
 }
