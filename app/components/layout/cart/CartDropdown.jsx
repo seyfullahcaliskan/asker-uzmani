@@ -14,33 +14,36 @@ export default function CartDropdown() {
     cartItems,
     removeFromCart,
     updateQuantity,
-    updateItemSize,
     getTotalPrice,
     getTotalItems,
+    getCargoFee,
+    getTotalWithCargo,
+    freeCargoPrice,
   } = useCart();
-  console.log(cartItems);
-  // Dropdown dışına tıklandığında kapat
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   const formatPrice = (price) => {
-    if (typeof price === "string") {
-      return price;
-    }
+    if (typeof price === "string") return price;
     return `${price.toLocaleString("tr-TR")}₺`;
   };
+
+  const productTotal = getTotalPrice();
+  const cargoFee = getCargoFee();
+  const totalWithCargo = getTotalWithCargo();
 
   return (
     <div className="relative" ref={dropdownRef}>
       <div
-        className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:cursor-pointer hover:scale-110 transition-all duration-200"
+        className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200"
         onMouseEnter={() => setIsOpen(true)}
       >
         <div className="relative">
@@ -53,7 +56,7 @@ export default function CartDropdown() {
         </div>
         <Link
           href="/sepet"
-          className="text-[10px] "
+          className="text-[10px]"
           onClick={() => setIsOpen(false)}
         >
           Sepetim
@@ -88,7 +91,7 @@ export default function CartDropdown() {
                           onClick={() =>
                             updateQuantity(item.cartId, item.quantity - 1)
                           }
-                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:cursor-pointer hover:bg-red-200 hover:scale-110 transition-all duration-200"
+                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-red-200 hover:scale-110 transition-all"
                         >
                           <AiOutlineMinus className="text-xs" />
                         </button>
@@ -99,9 +102,9 @@ export default function CartDropdown() {
                           onClick={() =>
                             updateQuantity(item.cartId, item.quantity + 1)
                           }
-                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:cursor-pointer hover:bg-green-200 hover:scale-110 transition-all duration-200"
+                          className="w-6 h-6 flex items-center justify-center bg-gray-100 rounded hover:bg-green-200 hover:scale-110 transition-all"
                         >
-                          <AiOutlinePlus className="text-xs " />
+                          <AiOutlinePlus className="text-xs" />
                         </button>
                       </div>
                       <Image
@@ -119,18 +122,14 @@ export default function CartDropdown() {
                         <h4 className="font-medium text-sm line-clamp-2">
                           {item.name}
                         </h4>
-                        {item.isSet && (
-                          <div>
-                            {item?.selectedSizes && (
-                              <div className="text-xs text-gray-500">
-                                {Object.entries(item.selectedSizes).map(
-                                  ([key, value], index) => (
-                                    <p key={index}>
-                                      {key}: {value}
-                                    </p>
-                                  )
-                                )}
-                              </div>
+                        {item.isSet && item?.selectedSizes && (
+                          <div className="text-xs text-gray-500">
+                            {Object.entries(item.selectedSizes).map(
+                              ([key, value], index) => (
+                                <p key={index}>
+                                  {key}: {value}
+                                </p>
+                              )
                             )}
                           </div>
                         )}
@@ -146,9 +145,9 @@ export default function CartDropdown() {
                             </span>
                             <button
                               onClick={() => removeFromCart(item.cartId)}
-                              className="text-red-500 hover:cursor-pointer hover:text-red-700 transition-all duration-200"
+                              className="text-red-500 hover:text-red-700 transition-all"
                             >
-                              <RiDeleteBin6Line className="text-sm " />
+                              <RiDeleteBin6Line className="text-sm" />
                             </button>
                           </div>
                         </div>
@@ -157,26 +156,49 @@ export default function CartDropdown() {
                   ))}
                 </div>
 
-                <div className="border-t border-gray-200 pt-4 mt-4">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="font-bold">Toplam:</span>
-                    <span className="font-bold text-lg text-[#7F7B59]">
-                      {formatPrice(getTotalPrice())}
+                {/* Sipariş Özeti */}
+                <div className="border-t border-gray-200 pt-4 mt-4 text-sm">
+                  <div className="flex justify-between mb-1">
+                    <span>Ürün Toplamı:</span>
+                    <span>{formatPrice(productTotal)}</span>
+                  </div>
+                  <div className="flex justify-between mb-1">
+                    <span>Kargo:</span>
+                    <span
+                      className={
+                        cargoFee === 0 ? "text-green-600" : "text-red-600"
+                      }
+                    >
+                      {cargoFee === 0 ? "Ücretsiz" : formatPrice(cargoFee)}
+                    </span>
+                  </div>
+
+                  {cargoFee > 0 && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formatPrice(freeCargoPrice - productTotal)} daha
+                      alışveriş yaparsanız kargo ücretsiz!
+                    </p>
+                  )}
+
+                  <hr className="my-2" />
+                  <div className="flex justify-between font-bold text-base">
+                    <span>Toplam:</span>
+                    <span className="text-[#7F7B59]">
+                      {formatPrice(totalWithCargo)}
                     </span>
                   </div>
                 </div>
-                <div className="flex justify-center">
+
+                <div className="flex justify-center mt-4">
                   <Link
                     onClick={() => setIsOpen(false)}
                     href="/sepet"
-                    className="border border-orange-500 text-orange-500 text-md px-4 py-2 rounded-lg hover:bg-orange-500 hover:text-white"
+                    className="border border-[#7F7B59] text-[#7F7B59] px-4 py-2 rounded-lg hover:bg-[#7F7B59] hover:text-white transition-all"
                   >
-                    Ödemeye Geç
+                    Sepeti Görüntüle
                   </Link>
                 </div>
-
               </>
-
             )}
           </div>
         </div>

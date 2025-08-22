@@ -11,7 +11,7 @@ import { AiTwotoneBank } from "react-icons/ai";
 import { LiaLifeRingSolid } from "react-icons/lia";
 import { MdOutlineFavorite } from "react-icons/md";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
-import { navLinks } from "../../navLinks";
+import { generalData, navLinks } from "../../navLinks";
 import CartDropdown from "./cart/CartDropdown";
 import ProductSearch from "./ProductSearch";
 import { useCart } from "../../hooks/useCart";
@@ -20,17 +20,19 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { getTotalItems } = useCart();
-
   return (
     <header className="sticky top-0 z-50 bg-white shadow">
       {/* Kampanya Bandı */}
       <div
-        className="flex justify-center items-center font-bold text-base md:text-2xl py-2 md:py-3 bg-center text-white"
+        className="flex flex-col justify-center items-center font-bold text-base md:text-2xl py-2 md:py-3 bg-center text-white text-center"
         style={{ backgroundImage: "url('/images/kamuflaj_desen.png')" }}
       >
         <span className="animate-blink-white text-sm md:text-lg">
-          Açılışa Özel Kampanyalı Fiyatlar ve 3000₺ Üzeri Alışverişlerde KARGO
-          ÜCRETSİZ
+          Açılışa Özel Kampanyalı Fiyatlar
+        </span>
+        <span className="animate-blink-white text-sm md:text-lg mt-1 md:mt-2">
+          {generalData?.freeCargoPrice}₺ ve Üzeri Alışverişlerde{" "}
+          <span className="underline">KARGO ÜCRETSİZ</span>
         </span>
       </div>
 

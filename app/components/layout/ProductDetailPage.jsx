@@ -75,7 +75,6 @@ export default function ProductDetailPage({ productData }) {
   };
 
   const handleSizeChange = (key, sizes) => {
-    console.log(key, sizes);
     setSelectedSizes((prev) => ({
       ...prev,
       [key]: sizes,
@@ -199,8 +198,9 @@ export default function ProductDetailPage({ productData }) {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`text-yellow-400 ${i < rating ? "fas fa-star" : "far fa-star"
-          }`}
+        className={`text-yellow-400 ${
+          i < rating ? "fas fa-star" : "far fa-star"
+        }`}
       ></span>
     ));
   };
@@ -244,8 +244,9 @@ export default function ProductDetailPage({ productData }) {
         "Aralık",
       ];
 
-      return `${date.getDate()} ${months[date.getMonth()]
-        } ${date.getFullYear()} ${days[date.getDay()]}`;
+      return `${date.getDate()} ${
+        months[date.getMonth()]
+      } ${date.getFullYear()} ${days[date.getDay()]}`;
     };
 
     if (currentHour < 14) {
@@ -300,10 +301,11 @@ export default function ProductDetailPage({ productData }) {
             <div className="space-y-3">
               {isSet && (
                 <div
-                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden ${currentImageIndex === 0
+                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden ${
+                    currentImageIndex === 0
                       ? "border-blue-500"
                       : "border-gray-200"
-                    }`}
+                  }`}
                   onClick={handleMainImageClick}
                 >
                   <div className="flex justify-center items-center">
@@ -319,15 +321,16 @@ export default function ProductDetailPage({ productData }) {
               {imageStructure.products.map((product, productIndex) => (
                 <div key={productIndex} className="space-y-1">
                   <div
-                    className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${(!isSet &&
+                    className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
+                      (!isSet &&
                         currentImageIndex >= 0 &&
                         productIndex === 0) ||
-                        (isSet &&
-                          currentImageIndex > 0 &&
-                          currentProductIndex === productIndex)
+                      (isSet &&
+                        currentImageIndex > 0 &&
+                        currentProductIndex === productIndex)
                         ? "border-blue-500 shadow-lg"
                         : "border-gray-200"
-                      }`}
+                    }`}
                     onClick={() => handleProductSelect(productIndex)}
                   >
                     <div className="flex justify-center items-center">
@@ -350,14 +353,15 @@ export default function ProductDetailPage({ productData }) {
                       {product.images.slice(1, 5).map((image, imageIndex) => (
                         <div
                           key={imageIndex}
-                          className={`relative cursor-pointer border rounded overflow-hidden transition-all duration-200 hover:shadow-sm ${(!isSet && currentImageIndex === imageIndex + 1) ||
-                              (isSet &&
-                                currentImageIndex > 0 &&
-                                currentProductIndex === productIndex &&
-                                currentSubImageIndex === imageIndex + 1)
+                          className={`relative cursor-pointer border rounded overflow-hidden transition-all duration-200 hover:shadow-sm ${
+                            (!isSet && currentImageIndex === imageIndex + 1) ||
+                            (isSet &&
+                              currentImageIndex > 0 &&
+                              currentProductIndex === productIndex &&
+                              currentSubImageIndex === imageIndex + 1)
                               ? "border-blue-400 shadow-md"
                               : "border-gray-200"
-                            }`}
+                          }`}
                           onClick={() =>
                             handleSubImageSelect(productIndex, imageIndex + 1)
                           }
@@ -395,16 +399,19 @@ export default function ProductDetailPage({ productData }) {
                 <div className="flex overflow-x-auto space-x-2 pb-2">
                   {isSet && (
                     <div
-                      className={`flex-shrink-0 cursor-pointer border-2 rounded-lg overflow-hidden ${currentImageIndex === 0
+                      className={`flex-shrink-0 cursor-pointer border-2 rounded-lg overflow-hidden ${
+                        currentImageIndex === 0
                           ? "border-blue-500"
                           : "border-gray-200"
-                        }`}
+                      }`}
                       onClick={handleMainImageClick}
                       style={{ minWidth: "80px", height: "80px" }}
                     >
                       <div className="flex justify-center items-center h-full">
                         <Image
-                          src={imageStructure.mainImage || "/images/no_image.jpg"}
+                          src={
+                            imageStructure.mainImage || "/images/no_image.jpg"
+                          }
                           alt="Ana set resmi"
                           width={80}
                           height={80}
@@ -416,15 +423,16 @@ export default function ProductDetailPage({ productData }) {
                   {imageStructure.products.map((product, productIndex) => (
                     <div key={productIndex} className="flex-shrink-0">
                       <div
-                        className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${(!isSet &&
+                        className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
+                          (!isSet &&
                             currentImageIndex >= 0 &&
                             productIndex === 0) ||
-                            (isSet &&
-                              currentImageIndex > 0 &&
-                              currentProductIndex === productIndex)
+                          (isSet &&
+                            currentImageIndex > 0 &&
+                            currentProductIndex === productIndex)
                             ? "border-blue-500 shadow-lg"
                             : "border-gray-200"
-                          }`}
+                        }`}
                         onClick={() => handleProductSelect(productIndex)}
                         style={{ minWidth: "80px", height: "80px" }}
                       >
@@ -493,12 +501,13 @@ export default function ProductDetailPage({ productData }) {
                           setCurrentImageIndex(index);
                         }
                       }}
-                      className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-200 ${(isSet && currentImageIndex > 0
+                      className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-200 ${
+                        (isSet && currentImageIndex > 0
                           ? currentSubImageIndex
                           : currentImageIndex) === index
                           ? "bg-green-500 scale-125"
                           : "bg-white bg-opacity-70 hover:bg-opacity-90"
-                        }`}
+                      }`}
                     />
                   ))}
                 </div>
@@ -589,7 +598,7 @@ export default function ProductDetailPage({ productData }) {
               )}
               <div className="space-y-2">
                 {productData.cartPrice &&
-                  productData.cartPrice !== productData.price ? (
+                productData.cartPrice !== productData.price ? (
                   <div className="flex flex-col md:flex-row md:justify-end items-start md:items-center gap-2 md:gap-5 space-y-2">
                     <div className="flex items-start gap-1">
                       <div className="text-2xl md:text-3xl font-bold">
@@ -613,7 +622,7 @@ export default function ProductDetailPage({ productData }) {
                                 .replace(/[^\d,]/g, "")
                                 .replace(",", ".")
                             )) *
-                          100
+                            100
                         )}{" "}
                         <MdOutlineTrendingDown />
                       </div>
@@ -649,10 +658,11 @@ export default function ProductDetailPage({ productData }) {
                   </div>
                 </div>
                 <button
-                  className={`flex items-center gap-2 py-3 px-4 md:px-6 rounded-lg font-medium shadow-md w-full md:w-auto justify-center ${isAddToCartDisabled()
+                  className={`flex items-center gap-2 py-3 px-4 md:px-6 rounded-lg font-medium shadow-md w-full md:w-auto justify-center ${
+                    isAddToCartDisabled()
                       ? "bg-gray-400 text-gray-200 cursor-not-allowed"
                       : "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer hover:scale-105 transition-all duration-200"
-                    }`}
+                  }`}
                   onClick={handleAddToCartWithSize}
                   disabled={isAddToCartDisabled()}
                 >

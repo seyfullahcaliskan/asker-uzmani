@@ -1,8 +1,8 @@
-export const generalData = [
-  { freeCargo: false },
-  { freeCargoPrice: 3000 },
-  { cargoPrice: 100 },
-];
+export const generalData = {
+  freeCargo: false,
+  freeCargoPrice: 3000,
+  cargoPrice: 100,
+};
 
 // Geçici veri - Gelecekte veritabanından çekilecek
 export const navLinks = [

@@ -7,7 +7,7 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { useCart } from "../hooks/useCart";
 import Image from "next/image";
-import { generalData, getProductCategorySlug } from "../navLinks";
+import { getProductCategorySlug } from "../navLinks";
 
 export default function CartPage() {
   const {
@@ -17,24 +17,17 @@ export default function CartPage() {
     updateSize,
     updateItemSizes,
     getTotalPrice,
+    getCargoFee,
+    getTotalWithCargo,
     getTotalItems,
     getItemsNeedingSize,
     clearCart,
+    freeCargoPrice,
   } = useCart();
 
-  const freeCargoPrice =
-    generalData.find((d) => d.freeCargoPrice !== undefined)?.freeCargoPrice ||
-    3000;
-  const freeCargo =
-    generalData.find((d) => d.freeCargo !== undefined)?.freeCargo || false;
-
   const productTotal = getTotalPrice();
-
-  // Kargo ücreti hesaplama
-  const cargoFee = productTotal < freeCargoPrice ? 100 : 0;
-
-  // Toplam tutar (ürün toplamı + kargo)
-  const totalPriceWithCargo = productTotal + cargoFee;
+  const cargoFee = getCargoFee();
+  const totalPriceWithCargo = getTotalWithCargo();
 
   const formatPrice = (price) => {
     if (typeof price === "string") {
@@ -291,6 +284,15 @@ export default function CartPage() {
                   {cargoFee === 0 ? "Ücretsiz" : formatPrice(cargoFee)}
                 </span>
               </div>
+
+              {/* Kargo ücretsiz bilgilendirmesi */}
+              {cargoFee > 0 && (
+                <p className="text-xs sm:text-sm text-gray-600 mt-2">
+                  {formatPrice(freeCargoPrice - productTotal)} daha alışveriş
+                  yaparsanız kargo ücretsiz!
+                </p>
+              )}
+
               <hr />
               <div className="flex justify-between font-bold text-base sm:text-lg">
                 <span>Toplam:</span>

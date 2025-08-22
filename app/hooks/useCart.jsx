@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useContext, createContext } from "react";
+import { generalData } from "../navLinks";
 
 const CartContext = createContext();
 
@@ -15,6 +16,11 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // generalData'dan kargo ayarlarını al (artık obje olarak)
+  const freeCargo = generalData?.freeCargo ?? false;
+  const freeCargoPrice = generalData?.freeCargoPrice ?? 3000;
+  const cargoPrice = generalData?.cargoPrice ?? 100;
 
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
@@ -105,6 +111,18 @@ export const CartProvider = ({ children }) => {
     }, 0);
   };
 
+  const getCargoFee = () => {
+    const productTotal = getTotalPrice();
+    if (freeCargo && productTotal >= freeCargoPrice) {
+      return 0;
+    }
+    return productTotal >= freeCargoPrice ? 0 : cargoPrice;
+  };
+
+  const getTotalWithCargo = () => {
+    return getTotalPrice() + getCargoFee();
+  };
+
   const getTotalItems = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
@@ -142,9 +160,15 @@ export const CartProvider = ({ children }) => {
     updateItemSizes,
     clearCart,
     getTotalPrice,
+    getCargoFee,
+    getTotalWithCargo,
     getTotalItems,
     getItemsNeedingSize,
     isLoading,
+    freeCargo,
+    freeCargoPrice,
+    cargoPrice,
   };
+
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

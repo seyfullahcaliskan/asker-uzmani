@@ -7,7 +7,6 @@ export default async function ProductDetail({ params }) {
 
   const categoryInfo = getCategoryBySlug(slug);
   const product = products.find((p) => {
-    console.log(p.slug, productSlug);
     return p.slug === productSlug;
   });
 
