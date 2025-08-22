@@ -1066,9 +1066,9 @@ const products = [
     cartPrice: null,
     description: "",
     mainImage:
-      "https://productimages.hepsiburada.net/s/777/424-600/110000813934761",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcvSqXCyniCTeiaCwtl9MUqK0b09jP2OZu8w&s",
     images: [
-      "https://productimages.hepsiburada.net/s/777/424-600/110000813934761",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcvSqXCyniCTeiaCwtl9MUqK0b09jP2OZu8w&s",
     ],
     sizes: null,
   },
