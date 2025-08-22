@@ -20,20 +20,8 @@ export default function CategoryPageClient({ slug }) {
   const parsePrice = (priceString) =>
     parseInt(priceString.replace(/[₺,]/g, ""));
 
-  if (!categoryInfo) {
-    return (
-      <div className="container mx-auto py-12 px-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            Kategori bulunamadı
-          </h1>
-          <p className="text-gray-600">Aradığınız kategori mevcut değil.</p>
-        </div>
-      </div>
-    );
-  }
-
   const categoryProducts = useMemo(() => {
+    if (!categoryInfo) return [];
     if (categoryInfo.filterBy === "isSet") {
       return products.filter((p) => p.isSet);
     } else if (categoryInfo.filterBy === "category") {
@@ -54,41 +42,54 @@ export default function CategoryPageClient({ slug }) {
 
   return (
     <div className="px-4 lg:px-0">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center lg:text-left">
-        {categoryInfo.label}
-      </h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div className="hidden lg:block col-span-1">
-          <div className="bg-gray-50 p-4 rounded-lg shadow">
-            <h3 className="font-bold text-lg mb-4">Filtreler</h3>
-            <PriceFilter
-              priceRanges={priceRanges}
-              onFilterChange={setSelectedPriceRange}
-              selectedRange={selectedPriceRange}
-            />
-            <p className="text-gray-600 mt-2 text-right">
-              {filteredProducts.length} ürün bulundu
-            </p>
+      {!categoryInfo ? (
+        <div className="container mx-auto py-12 px-4">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+              Kategori bulunamadı
+            </h1>
+            <p className="text-gray-600">Aradığınız kategori mevcut değil.</p>
           </div>
         </div>
+      ) : (
+        <>
+          <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center lg:text-left">
+            {categoryInfo.label}
+          </h1>
 
-        <div className="col-span-3">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.slug} set={product} />
-            ))}
-          </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">
-                Bu kategoride ürün bulunamadı.
-              </p>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="hidden lg:block col-span-1">
+              <div className="bg-gray-50 p-4 rounded-lg shadow">
+                <h3 className="font-bold text-lg mb-4">Filtreler</h3>
+                <PriceFilter
+                  priceRanges={priceRanges}
+                  onFilterChange={setSelectedPriceRange}
+                  selectedRange={selectedPriceRange}
+                />
+                <p className="text-gray-600 mt-2 text-right">
+                  {filteredProducts.length} ürün bulundu
+                </p>
+              </div>
             </div>
-          )}
-        </div>
-      </div>
+
+            <div className="col-span-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.slug} set={product} />
+                ))}
+              </div>
+
+              {filteredProducts.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 text-lg">
+                    Bu kategoride ürün bulunamadı.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
