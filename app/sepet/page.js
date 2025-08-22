@@ -7,7 +7,7 @@ import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { useCart } from "../hooks/useCart";
 import Image from "next/image";
-import { getProductCategorySlug } from "../navLinks";
+import { generalData, getProductCategorySlug } from "../navLinks";
 
 export default function CartPage() {
   const {
@@ -21,6 +21,20 @@ export default function CartPage() {
     getItemsNeedingSize,
     clearCart,
   } = useCart();
+
+  const freeCargoPrice =
+    generalData.find((d) => d.freeCargoPrice !== undefined)?.freeCargoPrice ||
+    3000;
+  const freeCargo =
+    generalData.find((d) => d.freeCargo !== undefined)?.freeCargo || false;
+
+  const productTotal = getTotalPrice();
+
+  // Kargo ücreti hesaplama
+  const cargoFee = productTotal < freeCargoPrice ? 100 : 0;
+
+  // Toplam tutar (ürün toplamı + kargo)
+  const totalPriceWithCargo = productTotal + cargoFee;
 
   const formatPrice = (price) => {
     if (typeof price === "string") {
@@ -149,13 +163,18 @@ export default function CartPage() {
                         </Link>
 
                         {/* Beden seçimi */}
-                        {item.isSet ? (
+                        {item.isSet &&
+                        item.products?.some(
+                          (p) => p?.product?.sizes?.length > 0
+                        ) ? (
                           <div className="space-y-2">
                             {item.products?.map((p, idx) => {
                               const productName = p.product.name;
                               const currentSize =
                                 item.selectedSizes?.[productName] || "";
-                              return (
+                              const hasSizes = p?.product?.sizes?.length > 0;
+
+                              return hasSizes ? (
                                 <div
                                   key={idx}
                                   className="flex items-center gap-2 text-xs sm:text-sm"
@@ -176,17 +195,17 @@ export default function CartPage() {
                                     className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm"
                                   >
                                     <option value="">Beden Seçin</option>
-                                    {p.product.sizes.map((size) => (
+                                    {p?.product?.sizes?.map((size) => (
                                       <option key={size} value={size}>
                                         {size}
                                       </option>
                                     ))}
                                   </select>
                                 </div>
-                              );
+                              ) : null;
                             })}
                           </div>
-                        ) : item.sizes && item.sizes.length > 0 ? (
+                        ) : !item.isSet && item.sizes?.length > 0 ? (
                           <div className="flex items-center gap-2 mt-1 text-xs sm:text-sm">
                             <span className="text-gray-600">Beden:</span>
                             <select
@@ -262,27 +281,32 @@ export default function CartPage() {
             <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6 text-sm sm:text-base">
               <div className="flex justify-between">
                 <span>Ürün Toplamı:</span>
-                <span>{formatPrice(getTotalPrice())}</span>
+                <span>{formatPrice(productTotal)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Kargo:</span>
-                <span className="text-green-600">Ücretsiz</span>
+                <span
+                  className={cargoFee === 0 ? "text-green-600" : "text-red-600"}
+                >
+                  {cargoFee === 0 ? "Ücretsiz" : formatPrice(cargoFee)}
+                </span>
               </div>
               <hr />
               <div className="flex justify-between font-bold text-base sm:text-lg">
                 <span>Toplam:</span>
                 <span className="text-[#7F7B59]">
-                  {formatPrice(getTotalPrice())}
+                  {formatPrice(totalPriceWithCargo)}
                 </span>
               </div>
             </div>
 
             <Link
               href={canProceedToCheckout() ? "/odeme" : "#"}
-              className={`w-full py-3 rounded-lg text-center font-bold transition-colors block hover:scale-105 duration-400 text-sm sm:text-base ${canProceedToCheckout()
+              className={`w-full py-3 rounded-lg text-center font-bold transition-colors block hover:scale-105 duration-400 text-sm sm:text-base ${
+                canProceedToCheckout()
                   ? "bg-[#7F7B59] text-white hover:bg-[#6d6849]"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
+              }`}
               onClick={(e) => {
                 if (!canProceedToCheckout()) {
                   e.preventDefault();

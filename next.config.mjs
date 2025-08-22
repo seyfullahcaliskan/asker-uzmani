@@ -7,6 +7,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "encrypted-tbn0.gstatic.com",
       },
+      {
+        protocol: "https",
+        hostname: "files.cdn-files-a.com",
+      },
+      {
+        protocol: "https",
+        hostname: "productimages.hepsiburada.net",
+      },
     ],
   },
 };

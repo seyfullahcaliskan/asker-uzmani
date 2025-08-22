@@ -19,9 +19,7 @@ import { useCart } from "../../hooks/useCart";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const {
-    getTotalItems,
-  } = useCart();
+  const { getTotalItems } = useCart();
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow">
@@ -31,7 +29,8 @@ export default function Header() {
         style={{ backgroundImage: "url('/images/kamuflaj_desen.png')" }}
       >
         <span className="animate-blink-white text-sm md:text-lg">
-          Açılışa Özel Kampanyalı Fiyatlar
+          Açılışa Özel Kampanyalı Fiyatlar ve 3000₺ Üzeri Alışverişlerde KARGO
+          ÜCRETSİZ
         </span>
       </div>
 
@@ -156,8 +155,6 @@ export default function Header() {
             </div>
           ))}
         </div>
-
-
       </div>
     </header>
   );

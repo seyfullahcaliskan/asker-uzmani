@@ -6,7 +6,10 @@ export default async function ProductDetail({ params }) {
   const { slug, productSlug } = await params;
 
   const categoryInfo = getCategoryBySlug(slug);
-  const product = products.find((p) => p.slug === productSlug);
+  const product = products.find((p) => {
+    console.log(p.slug, productSlug);
+    return p.slug === productSlug;
+  });
 
   if (!categoryInfo) {
     return (
