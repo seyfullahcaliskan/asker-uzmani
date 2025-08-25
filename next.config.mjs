@@ -27,6 +27,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "productimages.hepsiburada.net",
       },
+      {
+        protocol: "https",
+        hostname: "akbanklab.com",
+      },
     ],
   },
 };

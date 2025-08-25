@@ -65,10 +65,13 @@ export default function Header() {
               <span className="text-[10px]">Sipariş Takip</span>
             </div>
             <div className="text-gray-400 text-lg">|</div>
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
-              <AiTwotoneBank className="text-xl" />
-              <span className="text-[10px]">Banka Hesaplarımız</span>
-            </div>
+            <Link
+              href="/banka-hesaplarimiz"
+            >
+              <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
+                <AiTwotoneBank className="text-xl" />
+                <span className="text-[10px]">Banka Hesaplarımız</span></div>
+            </Link>
             <div className="text-gray-400 text-lg">|</div>
             <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
               <LiaLifeRingSolid className="text-xl" />

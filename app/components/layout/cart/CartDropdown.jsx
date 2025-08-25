@@ -46,21 +46,22 @@ export default function CartDropdown() {
         className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200"
         onMouseEnter={() => setIsOpen(true)}
       >
-        <div className="relative">
-          <RiShoppingBasketLine className="text-2xl" />
-          {getTotalItems() > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {getTotalItems()}
-            </span>
-          )}
-        </div>
         <Link
           href="/sepet"
-          className="text-[10px]"
+          className="relative flex flex-row gap-2 items-center text-[10px]"
           onClick={() => setIsOpen(false)}
         >
-          Sepetim
+          <div className="relative">
+            <RiShoppingBasketLine className="text-2xl" />
+            {getTotalItems() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {getTotalItems()}
+              </span>
+            )}
+          </div>
+          <span>Sepetim</span>
         </Link>
+
       </div>
 
       {isOpen && (

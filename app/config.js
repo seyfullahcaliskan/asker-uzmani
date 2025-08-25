@@ -1,4 +1,4 @@
-export const onlinePayment = false; // true -> kredi kartı, false -> iban & whatsapp
+export const onlinePayment = false;
 
 export const bankAccounts = [
     {
@@ -7,10 +7,11 @@ export const bankAccounts = [
         holder: "Talip HAN",
         bank: "AKBANK",
     },
-    // {
-    //     iban: "TR120006200123456789012345",
-    //     displayIban: "TR12 0006 2001 2345 6789 0123 45",
-    //     holder: "Mehmet YILMAZ",
-    //     bank: "ZİRAAT BANKASI",
-    // },
 ];
+
+export const bankLogo = [
+    {
+        bank: "AKBANK",
+        bankLogo: "https://www.akbanklab.com/uploads/20170905160844774.jpg"
+    }
+]

@@ -70,7 +70,7 @@ export default function CartPage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 bg-[#7F7B59] text-white px-6 py-3 rounded-lg hover:bg-[#6d6849] hover:scale-110 transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-[#7F7B59] text-white px-6 py-3 rounded-lg hover:bg-[#6d6849] hover:scale-110 hover:cursor-pointer transition-all duration-200"
           >
             <BiArrowBack />
             Alışverişe Devam Et
@@ -86,7 +86,7 @@ export default function CartPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
         <Link
           href="/"
-          className="flex items-center gap-2 text-[#7F7B59] hover:text-[#6d6849] hover:scale-110 transition-all duration-200 text-sm sm:text-base"
+          className="flex items-center gap-2 text-[#7F7B59] hover:text-[#6d6849] hover:scale-110 transition-all hover:cursor-pointer duration-200 text-sm sm:text-base"
         >
           <BiArrowBack className="text-lg sm:text-xl" />
           Alışverişe Devam Et
@@ -107,7 +107,7 @@ export default function CartPage() {
                 </h2>
                 <button
                   onClick={clearCart}
-                  className="text-red-500 text-sm sm:text-md hover:text-red-700 hover:scale-110 transition-all duration-200"
+                  className="text-red-500 text-sm sm:text-md hover:text-red-700 hover:scale-110 hover:cursor-pointer transition-all duration-200"
                 >
                   Sepeti Temizle
                 </button>
@@ -143,23 +143,23 @@ export default function CartPage() {
                           alt={item.name}
                           width={80}
                           height={80}
-                          className="object-cover rounded w-20 h-20 sm:w-24 sm:h-24 hover:scale-110 transition-all duration-200"
+                          className="object-cover rounded w-20 h-20 sm:w-24 sm:h-24 hover:scale-110 hover:cursor-pointer transition-all duration-200"
                         />
                       </Link>
                       <div className="flex flex-col">
                         <Link
                           href={`/${getProductCategorySlug(item)}/${item.slug}`}
                         >
-                          <h3 className="font-bold text-base sm:text-lg mb-1 hover:text-blue-700 transition-all duration-200">
+                          <h3 className="font-bold text-base sm:text-lg mb-1 hover:text-blue-800 hover:scale-105 transition-all duration-200">
                             {item.name}
                           </h3>
                         </Link>
 
                         {/* Beden seçimi */}
                         {item.isSet &&
-                        item.products?.some(
-                          (p) => p?.product?.sizes?.length > 0
-                        ) ? (
+                          item.products?.some(
+                            (p) => p?.product?.sizes?.length > 0
+                          ) ? (
                           <div className="space-y-2">
                             {item.products?.map((p, idx) => {
                               const productName = p.product.name;
@@ -185,7 +185,7 @@ export default function CartPage() {
                                         item.selectedSizes
                                       )
                                     }
-                                    className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm"
+                                    className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm hover:scale-110 transition-all duration-200 hover:cursor-pointer"
                                   >
                                     <option value="">Beden Seçin</option>
                                     {p?.product?.sizes?.map((size) => (
@@ -206,7 +206,7 @@ export default function CartPage() {
                               onChange={(e) =>
                                 handleSizeChange(item.cartId, e.target.value)
                               }
-                              className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm"
+                              className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm hover:scale-110 transition-all duration-200"
                             >
                               <option value="">Beden Seçin</option>
                               {item.sizes.map((size) => (
@@ -228,7 +228,7 @@ export default function CartPage() {
                           onClick={() =>
                             updateQuantity(item.cartId, item.quantity - 1)
                           }
-                          className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-red-200 transition-all duration-200"
+                          className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-red-200 hover:scale-110 hover:cursor-pointer transition-all duration-200"
                           disabled={item.quantity <= 1}
                         >
                           <AiOutlineMinus />
@@ -238,7 +238,7 @@ export default function CartPage() {
                           onClick={() =>
                             updateQuantity(item.cartId, item.quantity + 1)
                           }
-                          className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-green-200 transition-all duration-200"
+                          className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded hover:bg-green-200 hover:scale-110 hover:cursor-pointer transition-all duration-200"
                         >
                           <AiOutlinePlus />
                         </button>
@@ -251,7 +251,7 @@ export default function CartPage() {
                         </span>
                         <button
                           onClick={() => removeFromCart(item.cartId)}
-                          className="text-red-500 hover:text-red-700 p-2 transition-all duration-200"
+                          className="text-red-500 hover:text-red-700 p-2 hover:scale-110 hover:cursor-pointer transition-all duration-200"
                         >
                           <RiDeleteBin6Line className="text-lg sm:text-xl" />
                         </button>
@@ -304,11 +304,10 @@ export default function CartPage() {
 
             <Link
               href={canProceedToCheckout() ? "/odeme" : "#"}
-              className={`w-full py-3 rounded-lg text-center font-bold transition-colors block hover:scale-105 duration-400 text-sm sm:text-base ${
-                canProceedToCheckout()
-                  ? "bg-[#7F7B59] text-white hover:bg-[#6d6849]"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+              className={`w-full py-3 rounded-lg text-center font-bold transition-colors block hover:scale-110 hover:cursor-pointer duration-200 text-sm sm:text-base ${canProceedToCheckout()
+                ? "bg-[#7F7B59] text-white hover:bg-[#6d6849]"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
               onClick={(e) => {
                 if (!canProceedToCheckout()) {
                   e.preventDefault();
