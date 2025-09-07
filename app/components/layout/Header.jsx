@@ -11,15 +11,18 @@ import { AiTwotoneBank } from "react-icons/ai";
 import { LiaLifeRingSolid } from "react-icons/lia";
 import { MdOutlineFavorite } from "react-icons/md";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
-import { generalData, navLinks } from "../../navLinks";
 import CartDropdown from "./cart/CartDropdown";
 import ProductSearch from "./ProductSearch";
 import { useCart } from "../../hooks/useCart";
+import { getGeneralSettings, getNavLinks } from "../../utils/axiosInstance";
 
+  const navLinks = await getNavLinks();
+const generalData = await getGeneralSettings();
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { getTotalItems } = useCart();
+
   return (
     <header className="sticky top-0 z-50 bg-white shadow">
       {/* Kampanya Bandı */}

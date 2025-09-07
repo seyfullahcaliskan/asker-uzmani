@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useContext, createContext } from "react";
-import { generalData } from "../navLinks";
+import { getGeneralSettings } from "../utils/axiosInstance";
 
 const CartContext = createContext();
-
+const generalData = await getGeneralSettings();
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {

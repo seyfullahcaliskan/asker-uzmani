@@ -1,6 +1,7 @@
 import { FaImage, FaPlus, FaTrash } from "react-icons/fa";
-import { navLinks } from "../../navLinks";
+import { getNavLinks } from "../../utils/axiosInstance";
 
+const navLinks = await getNavLinks();
 const categories = navLinks.map(link => link.category).filter(c => c !== null);
 
 export default function ProductManagerDetailView({

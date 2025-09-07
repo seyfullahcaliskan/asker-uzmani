@@ -1,7 +1,10 @@
 "use client";
 import React from "react";
-import { bankAccounts, bankLogo } from "../config";
 import { FiCopy } from "react-icons/fi";
+import { getAccounts, getBanks } from "../utils/axiosInstance";
+
+const banks = await getBanks();
+const bankAccounts = await getAccounts();
 
 export default function BankAccounts() {
     const handleCopy = (text) => {
@@ -14,7 +17,8 @@ export default function BankAccounts() {
             <h1 className="text-2xl font-bold mb-6">Banka Hesap Bilgilerimiz</h1>
             <div className="space-y-4">
                 {bankAccounts.map((acc, index) => {
-                    const logo = bankLogo.find((b) => b.bank === acc.bank)?.bankLogo;
+                    const bank = banks.find((b) => b.id === acc.bankId);
+
                     return (
                         <div
                             key={index}
@@ -22,14 +26,14 @@ export default function BankAccounts() {
                         >
                             {/* Banka adı + logo */}
                             <div className="flex items-center gap-3 mb-3">
-                                {logo && (
+                                {bank?.logoUrl && (
                                     <img
-                                        src={logo}
-                                        alt={acc.bank}
+                                        src={bank.logoUrl}
+                                        alt={bank.name}
                                         className="w-14 h-14 object-contain"
                                     />
                                 )}
-                                <p className="font-semibold text-lg">{acc.bank}</p>
+                                <p className="font-semibold text-lg">{bank?.name}</p>
                             </div>
 
                             {/* Hesap Sahibi */}
