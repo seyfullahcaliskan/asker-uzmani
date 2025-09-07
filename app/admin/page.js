@@ -41,19 +41,19 @@ export default function AdminPage() {
     <div className="p-6 max-w-7xl mx-auto font-sans">
       <h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
       <div className="mb-6 border-b border-gray-300">
-        <button
-          className={`mr-4 pb-2 ${activeTab === "products" ? "border-b-2 border-blue-600 font-semibold" : ""}`}
-          onClick={() => setActiveTab("products")}
-          type="button"
-        >
-          Ürünler
-        </button>
-        <button
-          className={`pb-2 ${activeTab === "settings" ? "border-b-2 border-blue-600 font-semibold" : ""}`}
+         <button
+          className={`mr-4 pb-2 ${activeTab === "settings" ? "border-b-2 border-blue-600 font-semibold" : ""}`}
           onClick={() => setActiveTab("settings")}
           type="button"
         >
           Genel Ayarlar
+        </button>
+        <button
+          className={`pb-2 ${activeTab === "products" ? "border-b-2 border-blue-600 font-semibold" : ""}`}
+          onClick={() => setActiveTab("products")}
+          type="button"
+        >
+          Ürünler
         </button>
       </div>
 
