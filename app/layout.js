@@ -1,12 +1,8 @@
-import "primereact/resources/themes/lara-light-blue/theme.css"; // Tema
-import "primereact/resources/primereact.min.css"; // PrimeReact ana stiller
-import "primeicons/primeicons.css"; // PrimeIcons ikonlar
+import "primereact/resources/themes/lara-light-blue/theme.css"; 
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 import "./globals.css";
-
-import Header from "./components/layout/Header";
-import WhatsappButton from "./components/layout/WhatsappButton";
-import { CartProvider } from "./hooks/useCart";
-import Footer from "./components/layout/Footer";
+import RootClient from "./RootClient";
 
 export const metadata = {
   title: "Özhan Asker Malzemeleri",
@@ -17,14 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="tr">
       <body>
-        <CartProvider>
-          <Header />
-          <WhatsappButton />
-          <main className="min-h-screen z-0 container mx-auto py-4 md:py-12">
-            {children}
-          </main>
-          <Footer />
-        </CartProvider>
+        <RootClient>{children}</RootClient>
       </body>
     </html>
   );

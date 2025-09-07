@@ -1,8 +1,8 @@
 const products = [
   {
-    category: "Tekstil",
+    category: "Tekstil", //++
     id: 3,
-    isSet: true,
+    isSet: true, //++
     name: "Acemi / Bedelli Ekonomik Asker Seti-Asker Malzemeleri 18 Parça 2'Li Set",
     slug: "acemi-bedelli-ekonomik-asker-seti-asker-malzemeleri-18-parca-2-li-set",
     description:
