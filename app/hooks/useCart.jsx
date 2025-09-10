@@ -44,7 +44,7 @@ export const CartProvider = ({ children }) => {
         (item) =>
           item.id === product.id &&
           item.selectedSize === selectedSize &&
-          item.isSet === product.isSet
+          item.isSet === product.isSet.id === 1
       );
 
       if (existingItemIndex > -1) {
@@ -100,11 +100,9 @@ export const CartProvider = ({ children }) => {
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
-      const price = parseFloat(
-        item.cartPrice?.replace(/[₺,]/g, "") ||
-        item.price?.replace(/[₺,]/g, "") ||
-        0
-      );
+      const price = 
+        (item.cartPrice) || (item.price) || 0;
+   
       return total + price * item.quantity;
     }, 0);
   };
@@ -127,7 +125,7 @@ export const CartProvider = ({ children }) => {
 
   const getItemsNeedingSize = () => {
     return cartItems.filter((item) => {
-      if (item.isSet) {
+      if (item.isSet.id === 1) {
         return item.products?.some(
           (p) =>
             p.product?.sizes?.length > 0 &&

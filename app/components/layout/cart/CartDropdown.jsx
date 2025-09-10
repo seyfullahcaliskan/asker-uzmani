@@ -110,7 +110,7 @@ export default function CartDropdown() {
                       </div>
                       <Image
                         src={
-                          item.mainImage ||
+                          item.mainImagePath ||
                           item.images?.[0] ||
                           "/images/no_image.jpg"
                         }
@@ -123,7 +123,7 @@ export default function CartDropdown() {
                         <h4 className="font-medium text-sm line-clamp-2">
                           {item.name}
                         </h4>
-                        {item.isSet && item?.selectedSizes && (
+                        {item.isSet.id ===1 && item?.selectedSizes && (
                           <div className="text-xs text-gray-500">
                             {Object.entries(item.selectedSizes).map(
                               ([key, value], index) => (

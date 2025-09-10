@@ -1,5 +1,6 @@
 import { getCategoryBySlug } from "../navLinks";
-import CategoryPageClient from "./CategoryPageClient"; // client tarafı
+import { getProducts } from "../utils/axiosInstance";
+import CategoryPageClient from "./CategoryPageClient";
 
 export async function generateMetadata({ params }) {
   const p = await params;
@@ -23,5 +24,7 @@ export async function generateMetadata({ params }) {
 
 export default async function CategoryPage({ params }) {
   const p = await params;
-  return <CategoryPageClient slug={p.slug} />;
+  const products = await getProducts(); // Server tarafında products verisi çağırılıyor
+  
+  return <CategoryPageClient slug={p.slug} products={products} />;
 }

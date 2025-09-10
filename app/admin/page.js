@@ -2,11 +2,10 @@
 import { useState, useEffect } from "react";
 import ProductManager from "../components/admin/ProductManager";
 import GeneralSettings from "../components/admin/GeneralSettings";
-import products from "../components/layout/data/products";
 import { onlinePayment } from "../config";
-import { getGeneralSettings, getNavLinks, getBanks, getAccounts } from "../utils/axiosInstance";
+import { getGeneralSettings, getNavLinks, getBanks, getAccounts, getProducts } from "../utils/axiosInstance";
 
-const initialProducts = products;
+const initialProducts = await getProducts();
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("products");
@@ -21,15 +20,19 @@ export default function AdminPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const general = await getGeneralSettings();
-      const nav = await getNavLinks();
-      const banksData = await getBanks();
-      const accountsData = await getAccounts();
+      try {
+        const general = await getGeneralSettings();
+        const nav = await getNavLinks();
+        const banksData = await getBanks();
+        const accountsData = await getAccounts();
 
-      setGeneralData(general);
-      setNavLinks(nav);
-      setBanks(banksData);
-      setBankAccounts(accountsData);
+        setGeneralData(general);
+        setNavLinks(nav);
+        setBanks(banksData);
+        setBankAccounts(accountsData);
+      } catch (error) {
+        console.error("Veri çekilirken hata oluştu:", error);
+      }
     }
 
     fetchData();
@@ -41,7 +44,7 @@ export default function AdminPage() {
     <div className="p-6 max-w-7xl mx-auto font-sans">
       <h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
       <div className="mb-6 border-b border-gray-300">
-         <button
+        <button
           className={`mr-4 pb-2 ${activeTab === "settings" ? "border-b-2 border-blue-600 font-semibold" : ""}`}
           onClick={() => setActiveTab("settings")}
           type="button"
@@ -58,7 +61,11 @@ export default function AdminPage() {
       </div>
 
       {activeTab === "products" && (
-        <ProductManager products={products} setProducts={setProducts} />
+        <ProductManager
+          products={products}
+          setProducts={setProducts}
+          allProducts={initialProducts}
+        />
       )}
 
       {activeTab === "settings" && (

@@ -23,10 +23,10 @@ export default function ProductSearch() {
       : [];
 
   const imageOf = (item) =>
-    item.isSet ? item.mainImage : item.images?.[0] || "/images/no_image.jpg";
+    item.isSet.id === 1 ? item.mainImagePath : item.images?.[0] || "/images/no_image.jpg";
 
   const needsSizeSelection = (item) => {
-    if (item.isSet) {
+    if (item.isSet.id === 1) {
       return item.product?.some((x) => x.product?.sizes?.length > 0);
     }
     return item.sizes?.length > 0;

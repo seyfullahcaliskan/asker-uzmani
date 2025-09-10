@@ -1,5 +1,5 @@
-import products from "../../components/layout/data/products";
 import { getCategoryBySlug } from "../../navLinks";
+import { getProducts } from "../../utils/axiosInstance";
 import ProductDetailClient from "./ProductDetail";
 
 export async function generateMetadata({ params }) {
@@ -7,6 +7,7 @@ export async function generateMetadata({ params }) {
   const { slug, productSlug } = p;
 
   const categoryInfo = getCategoryBySlug(slug);
+  const products = await getProducts(); // server tarafında ürünleri çağır
   const product = products.find((p) => p.slug === productSlug);
 
   if (!categoryInfo || !product) {
@@ -25,5 +26,6 @@ export async function generateMetadata({ params }) {
 
 export default async function ProductDetail({ params }) {
   const p = await params;
-  return <ProductDetailClient params={p} />;
+  const products = await getProducts(); // ürünler server tarafında çekiliyor
+  return <ProductDetailClient params={p} products={products} />;
 }

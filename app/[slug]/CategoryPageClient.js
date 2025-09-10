@@ -3,10 +3,10 @@
 import { useState, useMemo } from "react";
 import PriceFilter from "../components/layout/PriceFilter";
 import ProductCard from "../components/layout/ProductCard";
-import products from "../components/layout/data/products";
 import { getCategoryBySlug } from "../navLinks";
 
-export default function CategoryPageClient({ slug }) {
+export default function CategoryPageClient({ slug, products }) {
+  console.log(slug,products);
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
   const categoryInfo = getCategoryBySlug(slug);
 
@@ -21,16 +21,17 @@ export default function CategoryPageClient({ slug }) {
     parseInt(priceString.replace(/[₺,]/g, ""));
 
   const categoryProducts = useMemo(() => {
+    console.log(categoryInfo)
     if (!categoryInfo) return [];
     if (categoryInfo.filterBy === "isSet") {
-      return products.filter((p) => p.isSet);
+      return products.filter((p) => p.isSet.id === 1);
     } else if (categoryInfo.filterBy === "category") {
       return products.filter(
-        (p) => p.category === categoryInfo.category && !p.isSet
+        (p) => p.category === categoryInfo.category && p.isSet.id !== 1
       );
     }
     return [];
-  }, [categoryInfo]);
+  }, [categoryInfo, products]); // products dependency eklendi
 
   const filteredProducts = useMemo(() => {
     if (!selectedPriceRange) return categoryProducts;

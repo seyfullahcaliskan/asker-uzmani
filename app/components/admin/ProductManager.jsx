@@ -13,12 +13,12 @@ const emptyProduct = {
   price: "",
   cartPrice: "",
   description: "",
-  mainImage: "",
-  images: [],   // çoklu resimler için
+  mainImagePath: "",
+  images: [],
   stock: 0,
   isSet: false,
-  sizes: [],    // bedenler için
-  products: [], // alt ürünler için
+  sizes: [],
+  subProducts: [],  // Alt ürünler
 };
 
 const emptySubProduct = {
@@ -45,7 +45,6 @@ export default function ProductManager({ products, setProducts, allProducts }) {
   const [form, setForm] = useState(null);
   const [imagePreviews, setImagePreviews] = useState({});
 
-  // Set olmayan ürünler (alt ürün seçimi için)
   const nonSetProducts = allProducts?.filter((p) => !p.isSet) || [];
 
   const onSelect = (i) => {
@@ -53,8 +52,8 @@ export default function ProductManager({ products, setProducts, allProducts }) {
     const selectedProduct = { ...products[i] };
     setForm(selectedProduct);
 
-    if (selectedProduct.mainImage) {
-      setImagePreviews({ main: selectedProduct.mainImage });
+    if (selectedProduct.mainImagePath) {
+      setImagePreviews({ main: selectedProduct.mainImagePath });
     }
   };
 
@@ -107,8 +106,7 @@ export default function ProductManager({ products, setProducts, allProducts }) {
     console.log("Ürün silindi:", deleted);
   };
 
-  // === RESİM YÖNETİMİ ===
-  const handleImageUpload = (e, type, index = null) => {
+  const handleImageUpload = (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -117,7 +115,7 @@ export default function ProductManager({ products, setProducts, allProducts }) {
       const imageUrl = event.target.result;
 
       if (type === "main") {
-        setForm((f) => ({ ...f, mainImage: imageUrl }));
+        setForm((f) => ({ ...f, mainImagePath: imageUrl }));
         setImagePreviews((prev) => ({ ...prev, main: imageUrl }));
       }
     };
@@ -146,7 +144,6 @@ export default function ProductManager({ products, setProducts, allProducts }) {
     });
   };
 
-  // === BEDEN YÖNETİMİ ===
   const addSize = (size) => {
     setForm((f) => ({
       ...f,
@@ -162,38 +159,37 @@ export default function ProductManager({ products, setProducts, allProducts }) {
     });
   };
 
-  // === ALT ÜRÜN YÖNETİMİ ===
   const addSubProduct = () => {
     setForm((f) => ({
       ...f,
-      products: [...(f.products || []), { ...emptySubProduct }],
+      subProducts: [...(f.subProducts || []), { ...emptySubProduct }],
     }));
   };
 
   const removeSubProduct = (index) => {
     setForm((f) => {
-      const updatedProducts = [...f.products];
-      updatedProducts.splice(index, 1);
-      return { ...f, products: updatedProducts };
+      const updatedSubProducts = [...f.subProducts];
+      updatedSubProducts.splice(index, 1);
+      return { ...f, subProducts: updatedSubProducts };
     });
   };
 
   const updateSubProduct = (index, field, value) => {
     setForm((f) => {
-      const updatedProducts = [...f.products];
+      const updatedSubProducts = [...f.subProducts];
       if (field === "product") {
-        updatedProducts[index] = {
-          ...updatedProducts[index],
+        updatedSubProducts[index] = {
+          ...updatedSubProducts[index],
           product: value,
           count: 1,
         };
       } else {
-        updatedProducts[index] = {
-          ...updatedProducts[index],
+        updatedSubProducts[index] = {
+          ...updatedSubProducts[index],
           [field]: value,
         };
       }
-      return { ...f, products: updatedProducts };
+      return { ...f, subProducts: updatedSubProducts };
     });
   };
 
@@ -211,9 +207,7 @@ export default function ProductManager({ products, setProducts, allProducts }) {
           <div
             key={p.id}
             onClick={() => onSelect(i)}
-            className={`cursor-pointer p-2 rounded mb-1 ${
-              selectedIndex === i ? "bg-blue-100" : "hover:bg-gray-100"
-            }`}
+            className={`cursor-pointer p-2 rounded mb-1 ${selectedIndex === i ? "bg-blue-100" : "hover:bg-gray-100"}`}
           >
             <strong>{p.name}</strong> <br />
             <small>
@@ -238,8 +232,8 @@ export default function ProductManager({ products, setProducts, allProducts }) {
               addSubProduct={addSubProduct}
               removeSubProduct={removeSubProduct}
               updateSubProduct={updateSubProduct}
+              products = {products}
             />
-
             <div className="flex gap-3 mt-6">
               <button
                 onClick={onSave}

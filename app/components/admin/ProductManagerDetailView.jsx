@@ -16,7 +16,10 @@ export default function ProductManagerDetailView({
   updateSubProduct,
   addSubProduct,
   removeSubProduct,
+  products
 }) {
+  const isSet = form.isSet?.id === 1;
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       {/* Ürün bilgileri */}
@@ -24,9 +27,9 @@ export default function ProductManagerDetailView({
         {/* Sol taraf: Görsel */}
         <div>
           <label className="block font-semibold mb-2">Ana Resim</label>
-          {form.mainImage ? (
+          {form.mainImagePath ? (
             <img
-              src={form.mainImage}
+              src={form.mainImagePath}
               alt="Ana Resim"
               className="w-full h-64 object-cover rounded border mb-3"
             />
@@ -112,7 +115,7 @@ export default function ProductManagerDetailView({
             <input
               type="checkbox"
               name="isSet"
-              checked={form.isSet}
+              checked={isSet}
               onChange={onChange}
               className="mr-2"
             />
@@ -121,17 +124,17 @@ export default function ProductManagerDetailView({
         </div>
       </div>
 
-      {/* Normal ürünler: Çoklu resim + beden */}
-      {!form.isSet && (
+      {/* Normal ürünler */}
+      {!isSet && (
         <>
           {/* Çoklu resim */}
           <div>
             <h3 className="font-semibold text-lg mb-2">Ek Resimler</h3>
             <div className="flex gap-2 flex-wrap">
               {form.images?.map((img, idx) => (
-                <div key={idx} className="relative">
+                <div key={img.id || idx} className="relative">
                   <img
-                    src={img}
+                    src={img.path}
                     className="w-24 h-24 object-cover border rounded"
                   />
                   <button
@@ -161,10 +164,10 @@ export default function ProductManagerDetailView({
             <div className="flex flex-wrap gap-2 mb-2">
               {form.sizes?.map((size, idx) => (
                 <span
-                  key={idx}
+                  key={size.id || idx}
                   className="flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
                 >
-                  {size}
+                  {size.value}
                   <button
                     onClick={() => removeSize(idx)}
                     className="text-red-600 font-bold"
@@ -190,8 +193,8 @@ export default function ProductManagerDetailView({
         </>
       )}
 
-      {/* Set ürünler: alt ürün seçimi */}
-      {form.isSet && (
+      {/* Set ürünler */}
+      {isSet && (
         <div>
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-semibold text-lg">Alt Ürünler</h3>
@@ -205,59 +208,80 @@ export default function ProductManagerDetailView({
           </div>
 
           <div className="space-y-4">
-            {form.products.map((subProduct, index) => {
-              // sadece aynı kategorideki set olmayan ürünler
-              const availableProducts = nonSetProducts.filter(
-                (p) => p.category === form.category
+  <div className="space-y-4">
+  {form.subProducts?.map((subProduct, index) => {
+    // 1) Seçili ürün ID'sini string yap
+    const selectedProductId = subProduct.product
+      ? (typeof subProduct.product === "object"
+          ? String(subProduct.product.id)
+          : String(subProduct.product))
+      : "";
+
+    // 2) Alt ürün seçim listesi: sadece set olmayan ürünler
+    let availableProducts = products.filter((p) => p.isSet?.id === 0);
+
+    // 3) Eğer seçili ürün listede yoksa, onu bulup ekle
+    if (
+      selectedProductId &&
+      !availableProducts.some((p) => String(p.id) === selectedProductId)
+    ) {
+      const selectedFromAll = products.find(
+        (p) => String(p.id) === selectedProductId
+      );
+      if (selectedFromAll) {
+        availableProducts = [selectedFromAll, ...availableProducts];
+      }
+    }
+
+    return (
+      <div key={index} className="border rounded p-3 bg-gray-50">
+        <div className="flex items-center gap-3">
+          <select
+            value={selectedProductId}
+            onChange={(e) => {
+              const selected = products.find(
+                (p) => String(p.id) === e.target.value
               );
+              updateSubProduct(index, "product", selected || e.target.value);
+            }}
+            className="border rounded p-2 flex-1"
+          >
+            <option value="">Ürün Seçin</option>
+            {availableProducts.map((p) => (
+              <option key={p.id} value={String(p.id)}>
+                {p.name}
+              </option>
+            ))}
+          </select>
 
-              return (
-                <div key={index} className="border rounded p-3 bg-gray-50">
-                  <div className="flex items-center gap-3">
-                    <select
-                      value={subProduct.product?.id || ""}
-                      onChange={(e) => {
-                        const selected = availableProducts.find(
-                          (p) => p.id.toString() === e.target.value
-                        );
-                        updateSubProduct(index, "product", selected);
-                      }}
-                      className="border rounded p-2 flex-1"
-                    >
-                      <option value="">Ürün Seçin</option>
-                      {availableProducts.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
+          <input
+            type="number"
+            min="1"
+            value={subProduct.count}
+            onChange={(e) =>
+              updateSubProduct(
+                index,
+                "count",
+                parseInt(e.target.value) || 1
+              )
+            }
+            className="border rounded p-2 w-20"
+          />
 
-                    <input
-                      type="number"
-                      min="1"
-                      value={subProduct.count}
-                      onChange={(e) =>
-                        updateSubProduct(
-                          index,
-                          "count",
-                          parseInt(e.target.value) || 1
-                        )
-                      }
-                      className="border rounded p-2 w-20"
-                    />
+          <button
+            onClick={() => removeSubProduct(index)}
+            className="text-red-600 hover:text-red-800"
+            type="button"
+          >
+            <FaTrash />
+          </button>
+        </div>
+      </div>
+    );
+  })}
+</div>
 
-                    <button
-                      onClick={() => removeSubProduct(index)}
-                      className="text-red-600 hover:text-red-800"
-                      type="button"
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+</div>
         </div>
       )}
     </div>

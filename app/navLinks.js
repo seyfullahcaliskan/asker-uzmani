@@ -1,4 +1,4 @@
-import { getNavLinks } from "./utils/axiosInstance";
+import { getNavLinks, getProducts } from "./utils/axiosInstance";
   const navLinks = await getNavLinks();
 
 // Kategori bilgilerini almak için yardımcı fonksiyonlar
@@ -13,7 +13,7 @@ export const getNavigationLinks = () => {
 // Ürünün kategorisine göre doğru slug'ı bul
 export const getProductCategorySlug = (product) => {
   // Eğer ürün bir set ise, askerlik-setleri kategorisine yönlendir
-  if (product.isSet) {
+  if (product.isSet.id === 1) {
     return "askerlik-setleri";
   }
 

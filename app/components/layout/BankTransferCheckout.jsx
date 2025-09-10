@@ -47,7 +47,7 @@ export default function BankTransferCheckout() {
     msg += `--------------------\nÜrünler:\n`;
 
     cartItems.forEach((item) => {
-      if (item.isSet) {
+      if (item.isSet.id === 1) {
         msg += `- ${item.name} x${item.quantity}\n`;
         Object.entries(item.selectedSizes || {}).forEach(([p, s]) => {
           msg += `   (${p}: ${s})\n`;
@@ -153,7 +153,7 @@ export default function BankTransferCheckout() {
           <ul className="space-y-2 font-mono text-sm">
             {cartItems.map((item) => (
               <li key={item.cartId}>
-                {item.isSet ? (
+                {item.isSet.id === 1 ? (
                   <>
                     <span>
                       - {item.name} x{item.quantity}

@@ -17,12 +17,12 @@ export default function ProductDetailPage({ productData }) {
   const [currentSubImageIndex, setCurrentSubImageIndex] = useState(0);
   const [selectedSizes, setSelectedSizes] = useState({});
 
-  const isSet = productData?.isSet;
+  const isSet = productData?.isSet.id === 1;
   const { addToCart } = useCart();
 
   const needsSizeSelection = () => {
-    if (productData.isSet) {
-      return productData.products?.some(
+    if (isSet) {
+      return productData.subProducts?.some(
         (item) => item.product?.sizes?.length > 0
       );
     }
@@ -35,9 +35,9 @@ export default function ProductDetailPage({ productData }) {
       return;
     }
 
-    if (productData.isSet) {
+    if (isSet) {
       const sizesForSet = {};
-      productData.products.forEach((item, index) => {
+      productData.subProducts.forEach((item, index) => {
         const key = item.product.name;
         sizesForSet[key] = selectedSizes[`product_${index}`] || null;
       });
@@ -62,8 +62,8 @@ export default function ProductDetailPage({ productData }) {
   const canAddToCart = () => {
     if (!needsSizeSelection()) return true;
 
-    if (productData.isSet) {
-      return productData.products.every((item, index) => {
+    if (isSet) {
+      return productData.subProducts.every((item, index) => {
         if (item.product?.sizes?.length > 0) {
           return selectedSizes[`product_${index}`];
         }
@@ -74,16 +74,16 @@ export default function ProductDetailPage({ productData }) {
     }
   };
 
-  const handleSizeChange = (key, sizes) => {
+  const handleSizeChange = (key, size) => {
     setSelectedSizes((prev) => ({
       ...prev,
-      [key]: sizes,
+      [key]: size,
     }));
   };
 
   const getProductsWithSizes = () => {
-    if (!productData.isSet) return [];
-    return productData.products.filter(
+    if (!isSet) return [];
+    return productData.subProducts.filter(
       (item) => item.product?.sizes?.length > 0
     );
   };
@@ -91,17 +91,17 @@ export default function ProductDetailPage({ productData }) {
   const getImageStructure = () => {
     if (isSet) {
       return {
-        mainImage: productData?.mainImage,
-        products: productData?.products?.map((item) => ({
+        mainImage: productData?.mainImagePath,
+        products: productData?.subProducts?.map((item) => ({
           name: item.product?.name,
           count: item.count,
-          images: item.product?.images || [],
+          images: item.product?.images?.map(img => img.path) || [],
         })),
       };
     } else {
-      const images = productData?.images || [];
-      if (productData?.mainImage && !images.includes(productData.mainImage)) {
-        images.unshift(productData.mainImage);
+      const images = productData?.images?.map(img => img.path) || [];
+      if (productData?.mainImagePath && !images.includes(productData.mainImagePath)) {
+        images.unshift(productData.mainImagePath);
       }
       return {
         mainImage: null,
@@ -291,7 +291,7 @@ export default function ProductDetailPage({ productData }) {
     }
     return 1;
   };
-
+  
   return (
     <>
       <div className="p-4 md:p-6 bg-white">
@@ -354,7 +354,7 @@ export default function ProductDetailPage({ productData }) {
                         <div
                           key={imageIndex}
                           className={`relative cursor-pointer border rounded overflow-hidden transition-all duration-200 hover:shadow-sm ${
-                            (!isSet && currentImageIndex === imageIndex + 1) ||
+                            (isSet && currentImageIndex === imageIndex + 1) ||
                             (isSet &&
                               currentImageIndex > 0 &&
                               currentProductIndex === productIndex &&
@@ -397,7 +397,7 @@ export default function ProductDetailPage({ productData }) {
               {/* Mobile Thumbnails - Horizontal scroll */}
               <div className="md:hidden mb-4">
                 <div className="flex overflow-x-auto space-x-2 pb-2">
-                  {isSet && (
+                  {isSet&& (
                     <div
                       className={`flex-shrink-0 cursor-pointer border-2 rounded-lg overflow-hidden ${
                         currentImageIndex === 0
@@ -424,7 +424,7 @@ export default function ProductDetailPage({ productData }) {
                     <div key={productIndex} className="flex-shrink-0">
                       <div
                         className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
-                          (!isSet &&
+                          (isSet &&
                             currentImageIndex >= 0 &&
                             productIndex === 0) ||
                           (isSet &&
@@ -462,8 +462,8 @@ export default function ProductDetailPage({ productData }) {
                 <Image
                   src={getCurrentImage() || "/images/no_image.jpg"}
                   alt="Ana ürün resmi"
-                  width={500}
-                  height={500}
+                  width={200}
+                  height={200}
                   className="w-full h-auto object-contain"
                 />
               </div>
@@ -529,10 +529,10 @@ export default function ProductDetailPage({ productData }) {
               </h1>
               {needsSizeSelection() && (
                 <div className="space-y-3">
-                  {productData.isSet ? (
+                  {isSet ? (
                     <div className="space-y-3">
                       {getProductsWithSizes().map((item, index) => {
-                        const productIndex = productData.products.findIndex(
+                        const productIndex = productData.subProducts.findIndex(
                           (p) => p === item
                         );
                         return (
@@ -541,7 +541,7 @@ export default function ProductDetailPage({ productData }) {
                             className="flex flex-col md:flex-row md:items-center justify-between gap-2"
                           >
                             <span className="text-sm text-gray-600">
-                              {item.product.name} ({item.count} adet)
+                             {item.count}x - {item.product.name} 
                             </span>
                             <div className="relative">
                               <select
@@ -557,9 +557,9 @@ export default function ProductDetailPage({ productData }) {
                                 className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 w-full md:min-w-[100px] hover:scale-105 transition-all duration-200"
                               >
                                 <option value="">Beden</option>
-                                {item.product.sizes.map((sizes) => (
-                                  <option key={sizes} value={sizes}>
-                                    {sizes}
+                                {item.product.sizes.map((size) => (
+                                  <option key={size.id} value={size.value}>
+                                    {size.value}
                                   </option>
                                 ))}
                               </select>
@@ -582,9 +582,9 @@ export default function ProductDetailPage({ productData }) {
                           className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 w-full md:min-w-[100px] hover:scale-105 transition-all duration-200"
                         >
                           <option value="">Beden Seçin</option>
-                          {productData.sizes.map((sizes) => (
-                            <option key={sizes} value={sizes}>
-                              {sizes}
+                          {productData.sizes.map((size) => (
+                            <option key={size.id} value={size.value}>
+                              {size.value}
                             </option>
                           ))}
                         </select>
@@ -602,38 +602,25 @@ export default function ProductDetailPage({ productData }) {
                   <div className="flex flex-col md:flex-row md:justify-end items-start md:items-center gap-2 md:gap-5 space-y-2">
                     <div className="flex items-start gap-1">
                       <div className="text-2xl md:text-3xl font-bold">
-                        {productData.cartPrice}
-                      </div>{" "}
+                        {productData.cartPrice} ₺
+                      </div>
                       <div className="flex items-center gap-1 md:gap-2 text-red-500 text-base md:text-lg px-2 md:px-3 rounded-full font-medium">
                         %
                         {Math.round(
-                          ((parseFloat(
-                            productData.price
-                              .replace(/[^\d,]/g, "")
-                              .replace(",", ".")
-                          ) -
-                            parseFloat(
-                              productData.cartPrice
-                                .replace(/[^\d,]/g, "")
-                                .replace(",", ".")
-                            )) /
-                            parseFloat(
-                              productData.price
-                                .replace(/[^\d,]/g, "")
-                                .replace(",", ".")
-                            )) *
+                          ((productData.price - productData.cartPrice) /
+                            productData.price) *
                             100
                         )}{" "}
                         <MdOutlineTrendingDown />
                       </div>
                       <div className="text-base md:text-lg text-gray-500 line-through">
-                        {productData.price}
+                        {productData.price} ₺
                       </div>
                     </div>
                   </div>
                 ) : (
                   <div className="text-end text-2xl md:text-3xl font-bold">
-                    {productData.price}
+                    {productData.price} ₺
                   </div>
                 )}
               </div>
@@ -688,7 +675,7 @@ export default function ProductDetailPage({ productData }) {
                 <div className="border-t pt-4">
                   <h3 className="text-gray-800 mb-3 font-bold">Set İçeriği</h3>
                   <div className="space-y-2">
-                    {productData?.products?.map((item, index) => (
+                    {productData?.subProducts?.map((item, index) => (
                       <div
                         key={index}
                         className="flex items-center justify-between text-sm"

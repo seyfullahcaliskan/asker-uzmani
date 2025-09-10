@@ -136,7 +136,7 @@ export default function CartPage() {
                       >
                         <Image
                           src={
-                            item.mainImage ||
+                            item.mainImagePath ||
                             item.images?.[0] ||
                             "/images/no_image.jpg"
                           }
@@ -156,7 +156,7 @@ export default function CartPage() {
                         </Link>
 
                         {/* Beden seçimi */}
-                        {item.isSet &&
+                        {item.isSet.id === 1 &&
                           item.products?.some(
                             (p) => p?.product?.sizes?.length > 0
                           ) ? (
@@ -198,7 +198,7 @@ export default function CartPage() {
                               ) : null;
                             })}
                           </div>
-                        ) : !item.isSet && item.sizes?.length > 0 ? (
+                        ) : !item.isSet.id === 1 && item.sizes?.length > 0 ? (
                           <div className="flex items-center gap-2 mt-1 text-xs sm:text-sm">
                             <span className="text-gray-600">Beden:</span>
                             <select

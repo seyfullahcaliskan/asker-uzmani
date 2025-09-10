@@ -1,10 +1,9 @@
 "use client";
 
-import products from "../../components/layout/data/products";
 import ProductDetailPage from "../../components/layout/ProductDetailPage";
 import { getCategoryBySlug } from "../../navLinks";
 
-export default function ProductDetailClient({ params }) {
+export default function ProductDetailClient({ params, products }) {
   const { slug, productSlug } = params;
 
   const categoryInfo = getCategoryBySlug(slug);
@@ -19,9 +18,9 @@ export default function ProductDetailClient({ params }) {
   }
 
   const belongsToCategory = () => {
-    if (categoryInfo.filterBy === "isSet") return product.isSet;
+    if (categoryInfo.filterBy === "isSet") return product.isSet.id === 1;
     if (categoryInfo.filterBy === "category")
-      return product.category === categoryInfo.category && !product.isSet;
+      return product.category === categoryInfo.category && product.isSet.id !== 1;
     return false;
   };
 
