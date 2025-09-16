@@ -1,9 +1,9 @@
-// components/ProductManager.js
 "use client";
 
 import { useState } from "react";
-import { FaTrash, FaPlus } from "react-icons/fa";
+import { FaTrash, FaPlus, FaEdit } from "react-icons/fa";
 import ProductManagerDetailView from "./ProductManagerDetailView";
+import Modal from "../layout/ui/Modal";
 
 const emptyProduct = {
   id: "",
@@ -18,12 +18,7 @@ const emptyProduct = {
   stock: 0,
   isSet: false,
   sizes: [],
-  subProducts: [],  // Alt ürünler
-};
-
-const emptySubProduct = {
-  product: null,
-  count: 1,
+  subProducts: [],
 };
 
 function slugify(text) {
@@ -41,34 +36,29 @@ function slugify(text) {
 }
 
 export default function ProductManager({ products, setProducts, allProducts }) {
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  console.log(products)
   const [form, setForm] = useState(null);
-  const [imagePreviews, setImagePreviews] = useState({});
+  const [editIndex, setEditIndex] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const nonSetProducts = allProducts?.filter((p) => !p.isSet) || [];
 
-  const onSelect = (i) => {
-    setSelectedIndex(i);
-    const selectedProduct = { ...products[i] };
-    setForm(selectedProduct);
-
-    if (selectedProduct.mainImagePath) {
-      setImagePreviews({ main: selectedProduct.mainImagePath });
-    }
-  };
-
-  const onChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((f) => ({
-      ...f,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const onAdd = () => {
+  const openAddModal = () => {
     setForm({ ...emptyProduct });
-    setSelectedIndex(null);
-    setImagePreviews({});
+    setEditIndex(null);
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (i) => {
+    setForm({ ...products[i] });
+    setEditIndex(i);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setForm(null);
+    setEditIndex(null);
+    setIsModalOpen(false);
   };
 
   const onSave = () => {
@@ -80,183 +70,94 @@ export default function ProductManager({ products, setProducts, allProducts }) {
     const slug = slugify(form.name);
     const newProduct = { ...form, slug };
 
-    if (selectedIndex === null) {
+    if (editIndex === null) {
       newProduct.id = Date.now().toString();
       setProducts((p) => [...p, newProduct]);
       console.log("Yeni ürün eklendi:", newProduct);
     } else {
       const updated = [...products];
-      updated[selectedIndex] = newProduct;
+      updated[editIndex] = newProduct;
       setProducts(updated);
       console.log("Ürün güncellendi:", newProduct);
     }
 
-    setForm(null);
-    setSelectedIndex(null);
-    setImagePreviews({});
+    closeModal();
   };
 
-  const onDelete = () => {
-    if (selectedIndex === null) return;
-    const deleted = products[selectedIndex];
-    setProducts((p) => p.filter((_, i) => i !== selectedIndex));
-    setForm(null);
-    setSelectedIndex(null);
-    setImagePreviews({});
+  const onDelete = (i) => {
+    const deleted = products[i];
+    setProducts((p) => p.filter((_, idx) => idx !== i));
     console.log("Ürün silindi:", deleted);
   };
 
-  const handleImageUpload = (e, type) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const imageUrl = event.target.result;
-
-      if (type === "main") {
-        setForm((f) => ({ ...f, mainImagePath: imageUrl }));
-        setImagePreviews((prev) => ({ ...prev, main: imageUrl }));
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const addImage = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const imageUrl = event.target.result;
-      setForm((f) => ({
-        ...f,
-        images: [...(f.images || []), imageUrl],
-      }));
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const removeImage = (index) => {
-    setForm((f) => {
-      const newImages = [...(f.images || [])];
-      newImages.splice(index, 1);
-      return { ...f, images: newImages };
-    });
-  };
-
-  const addSize = (size) => {
-    setForm((f) => ({
-      ...f,
-      sizes: [...(f.sizes || []), size],
-    }));
-  };
-
-  const removeSize = (index) => {
-    setForm((f) => {
-      const newSizes = [...(f.sizes || [])];
-      newSizes.splice(index, 1);
-      return { ...f, sizes: newSizes };
-    });
-  };
-
-  const addSubProduct = () => {
-    setForm((f) => ({
-      ...f,
-      subProducts: [...(f.subProducts || []), { ...emptySubProduct }],
-    }));
-  };
-
-  const removeSubProduct = (index) => {
-    setForm((f) => {
-      const updatedSubProducts = [...f.subProducts];
-      updatedSubProducts.splice(index, 1);
-      return { ...f, subProducts: updatedSubProducts };
-    });
-  };
-
-  const updateSubProduct = (index, field, value) => {
-    setForm((f) => {
-      const updatedSubProducts = [...f.subProducts];
-      if (field === "product") {
-        updatedSubProducts[index] = {
-          ...updatedSubProducts[index],
-          product: value,
-          count: 1,
-        };
-      } else {
-        updatedSubProducts[index] = {
-          ...updatedSubProducts[index],
-          [field]: value,
-        };
-      }
-      return { ...f, subProducts: updatedSubProducts };
-    });
-  };
-
   return (
-    <div className="flex gap-6">
-      <div className="w-1/3 border p-4 rounded max-h-[600px] overflow-auto">
+    <div className="space-y-4">
+      {/* Üst buton */}
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">Ürün Yönetimi</h2>
         <button
-          onClick={onAdd}
-          className="mb-4 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 flex items-center gap-2"
-          type="button"
+          onClick={openAddModal}
+          className="bg-green-600 text-white px-3 py-2 rounded flex items-center gap-2"
         >
           <FaPlus /> Yeni Ürün Ekle
         </button>
-        {products.map((p, i) => (
-          <div
-            key={p.id}
-            onClick={() => onSelect(i)}
-            className={`cursor-pointer p-2 rounded mb-1 ${selectedIndex === i ? "bg-blue-100" : "hover:bg-gray-100"}`}
-          >
-            <strong>{p.name}</strong> <br />
-            <small>
-              {p.category} - {p.price} {p.isSet && "(Set)"}
-            </small>
-          </div>
-        ))}
       </div>
 
-      <div className="flex-1 border p-4 rounded max-h-[600px] overflow-auto">
-        {form ? (
-          <>
-            <ProductManagerDetailView
-              form={form}
-              onChange={onChange}
-              handleImageUpload={handleImageUpload}
-              addImage={addImage}
-              removeImage={removeImage}
-              addSize={addSize}
-              removeSize={removeSize}
-              nonSetProducts={nonSetProducts}
-              addSubProduct={addSubProduct}
-              removeSubProduct={removeSubProduct}
-              updateSubProduct={updateSubProduct}
-              products = {products}
-            />
-            <div className="flex gap-3 mt-6">
-              <button
-                onClick={onSave}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                type="button"
-              >
-                Kaydet
-              </button>
-              {selectedIndex !== null && (
+      {/* Ürün tablosu */}
+      <table className="w-full border-collapse border text-sm">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="border p-2">Güncelle</th>
+            <th className="border p-2">Sil</th>
+            <th className="border p-2">Adı</th>
+            <th className="border p-2">Kategori</th>
+            <th className="border p-2">Fiyat</th>
+            <th className="border p-2">Stok</th>
+            <th className="border p-2">Tip</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((p, i) => (
+            <tr key={p.id} className="hover:bg-gray-50">
+              <td className="border p-2 text-center">
                 <button
-                  onClick={onDelete}
-                  className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center gap-2"
-                  type="button"
+                  onClick={() => openEditModal(i)}
+                  className="text-blue-600 hover:text-blue-800"
                 >
-                  <FaTrash /> Sil
+                  <FaEdit />
                 </button>
-              )}
-            </div>
-          </>
-        ) : (
-          <p>Bir ürün seçin veya yeni ürün ekleyin.</p>
+              </td>
+              <td className="border p-2 text-center">
+                <button
+                  onClick={() => onDelete(i)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  <FaTrash />
+                </button>
+              </td>
+              <td className="border p-2">{p.name}</td>
+              <td className="border p-2">{p.category}</td>
+              <td className="border p-2">{p.price}</td>
+              <td className="border p-2">{p.stock}</td>
+              <td className="border p-2">{p.isSet ? "Set" : "Ürün"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Modal */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {form && (
+          <ProductManagerDetailView
+            form={form}
+            setForm={setForm}
+            nonSetProducts={nonSetProducts}
+            products={products}
+            onClose={closeModal}
+            onSave={onSave}
+          />
         )}
-      </div>
+      </Modal>
     </div>
   );
 }

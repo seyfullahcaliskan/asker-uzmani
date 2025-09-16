@@ -1,289 +1,315 @@
-import { FaImage, FaPlus, FaTrash } from "react-icons/fa";
-import { getNavLinks } from "../../utils/axiosInstance";
+"use client";
 
-const navLinks = await getNavLinks();
-const categories = navLinks.map(link => link.category).filter(c => c !== null);
+import { useState } from "react";
+import { FaTrash, FaPlus } from "react-icons/fa";
 
 export default function ProductManagerDetailView({
   form,
-  onChange,
-  handleImageUpload,
-  addImage,
-  removeImage,
-  addSize,
-  removeSize,
+  setForm,
+  onClose,
+  onSave,
+  products,
   nonSetProducts,
-  updateSubProduct,
-  addSubProduct,
-  removeSubProduct,
-  products
 }) {
-  const isSet = form.isSet?.id === 1;
+  const [tab, setTab] = useState("general"); // general | images | sizes | subproducts
+
+  const isSet = form.isSet || false;
+
+  // Genel input değişimi
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm((f) => ({
+      ...f,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  // Alt ürün güncelleme
+  const updateSubProduct = (index, key, value) => {
+    const updatedSubs = [...(form.subProducts || [])];
+    updatedSubs[index] = { ...updatedSubs[index], [key]: value };
+    setForm((f) => ({ ...f, subProducts: updatedSubs }));
+  };
+
+  // Alt ürün ekleme
+  const addSubProduct = () => {
+    setForm((f) => ({
+      ...f,
+      subProducts: [...(f.subProducts || []), { product: "", count: 1 }],
+    }));
+  };
+
+  // Alt ürün silme
+  const removeSubProduct = (index) => {
+    const updated = [...(form.subProducts || [])];
+    updated.splice(index, 1);
+    setForm((f) => ({ ...f, subProducts: updated }));
+  };
+
+  // Beden ekleme
+  const addSize = (value) => {
+    if (!value) return;
+    setForm((f) => ({ ...f, sizes: [...(f.sizes || []), { value }] }));
+  };
+
+  const removeSize = (index) => {
+    const updated = [...(form.sizes || [])];
+    updated.splice(index, 1);
+    setForm((f) => ({ ...f, sizes: updated }));
+  };
+
+  // Görsel ekleme
+  const addImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const path = URL.createObjectURL(file);
+    setForm((f) => ({ ...f, images: [...(f.images || []), { path }] }));
+  };
+
+  const removeImage = (index) => {
+    const updated = [...(form.images || [])];
+    updated.splice(index, 1);
+    setForm((f) => ({ ...f, images: updated }));
+  };
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
-      {/* Ürün bilgileri */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Sol taraf: Görsel */}
-        <div>
-          <label className="block font-semibold mb-2">Ana Resim</label>
-          {form.mainImagePath ? (
-            <img
-              src={form.mainImagePath}
-              alt="Ana Resim"
-              className="w-full h-64 object-cover rounded border mb-3"
-            />
-          ) : (
-            <div className="w-full h-64 flex items-center justify-center bg-gray-100 border rounded mb-3">
-              <span className="text-gray-500">Henüz resim seçilmedi</span>
-            </div>
-          )}
-          <label className="cursor-pointer bg-gray-200 px-3 py-2 rounded flex items-center gap-2">
-            <FaImage /> Resim Seç
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, "main")}
-              className="hidden"
-            />
-          </label>
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Modal arka plan */}
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        onClick={onClose}
+      ></div>
 
-        {/* Sağ taraf: Bilgi Alanları */}
-        <div className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={onChange}
-            placeholder="Ürün Adı"
-            className="text-2xl font-bold w-full border-b p-1"
-          />
-
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={onChange}
-            placeholder="Ürün açıklaması..."
-            className="w-full border rounded p-2"
-            rows={4}
-          />
-
-          <label className="block font-semibold">Kategori</label>
-          <select
-            name="category"
-            value={form.category}
-            onChange={onChange}
-            className="border rounded p-2 w-full"
+      {/* Modal içerik */}
+      <div className="relative bg-white rounded-xl shadow-lg w-full max-w-5xl max-h-[90vh] overflow-y-auto">
+        {/* Başlık */}
+        <div className="flex justify-between items-center p-4 border-b">
+          <h2 className="text-xl font-semibold">
+            {form.id ? "Ürün Güncelle" : "Yeni Ürün Ekle"}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-800 text-lg"
           >
-            <option value="">Kategori Seçin</option>
-            {categories.map((cat, i) => (
-              <option key={i} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="text"
-            name="price"
-            value={form.price}
-            onChange={onChange}
-            placeholder="Fiyat"
-            className="border rounded p-2 w-full"
-          />
-
-          <input
-            type="text"
-            name="cartPrice"
-            value={form.cartPrice || ""}
-            onChange={onChange}
-            placeholder="Sepet Fiyatı"
-            className="border rounded p-2 w-full"
-          />
-
-          <input
-            type="number"
-            name="stock"
-            value={form.stock}
-            onChange={onChange}
-            placeholder="Stok"
-            className="border rounded p-2 w-full"
-          />
-
-          <label className="inline-flex items-center mt-2">
-            <input
-              type="checkbox"
-              name="isSet"
-              checked={isSet}
-              onChange={onChange}
-              className="mr-2"
-            />
-            Set Ürünü mü?
-          </label>
+            ✖
+          </button>
         </div>
-      </div>
 
-      {/* Normal ürünler */}
-      {!isSet && (
-        <>
-          {/* Çoklu resim */}
-          <div>
-            <h3 className="font-semibold text-lg mb-2">Ek Resimler</h3>
-            <div className="flex gap-2 flex-wrap">
-              {form.images?.map((img, idx) => (
-                <div key={img.id || idx} className="relative">
-                  <img
-                    src={img.path}
-                    className="w-24 h-24 object-cover border rounded"
-                  />
-                  <button
-                    onClick={() => removeImage(idx)}
-                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
-                    type="button"
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
-              ))}
-              <label className="cursor-pointer bg-gray-200 px-3 py-2 rounded flex items-center gap-1">
-                <FaPlus /> Resim Ekle
+        {/* Tablar */}
+        <div className="flex border-b gap-4 px-4 py-2">
+          <button
+            className={`pb-2 ${tab === "general" && "border-b-2 border-blue-600 font-semibold"}`}
+            onClick={() => setTab("general")}
+          >
+            Genel
+          </button>
+          <button
+            className={`pb-2 ${tab === "images" && "border-b-2 border-blue-600 font-semibold"}`}
+            onClick={() => setTab("images")}
+          >
+            Görseller
+          </button>
+          {!isSet && (
+            <button
+              className={`pb-2 ${tab === "sizes" && "border-b-2 border-blue-600 font-semibold"}`}
+              onClick={() => setTab("sizes")}
+            >
+              Bedenler
+            </button>
+          )}
+          {isSet && (
+            <button
+              className={`pb-2 ${tab === "subproducts" && "border-b-2 border-blue-600 font-semibold"}`}
+              onClick={() => setTab("subproducts")}
+            >
+              Alt Ürünler
+            </button>
+          )}
+        </div>
+
+        {/* İçerik */}
+        <div className="p-4 space-y-4">
+          {tab === "general" && (
+            <div className="space-y-3">
+              <input
+                type="text"
+                name="name"
+                value={form.name || ""}
+                onChange={handleChange}
+                placeholder="Ürün Adı"
+                className="w-full border rounded px-3 py-2"
+              />
+              <textarea
+                name="description"
+                value={form.description || ""}
+                onChange={handleChange}
+                placeholder="Ürün açıklaması..."
+                className="w-full border rounded px-3 py-2"
+                rows={3}
+              />
+              <input
+                type="text"
+                name="price"
+                value={form.price || ""}
+                onChange={handleChange}
+                placeholder="Fiyat"
+                className="w-full border rounded px-3 py-2"
+              />
+              <input
+                type="text"
+                name="cartPrice"
+                value={form.cartPrice || ""}
+                onChange={handleChange}
+                placeholder="Sepet Fiyatı"
+                className="w-full border rounded px-3 py-2"
+              />
+              <label className="flex items-center gap-2">
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => addImage(e)}
-                  className="hidden"
+                  type="checkbox"
+                  name="isSet"
+                  checked={isSet}
+                  onChange={handleChange}
                 />
+                Set Ürünü mü?
               </label>
             </div>
-          </div>
+          )}
 
-          {/* Bedenler */}
-          <div>
-            <h3 className="font-semibold text-lg mb-2">Bedenler</h3>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {form.sizes?.map((size, idx) => (
-                <span
-                  key={size.id || idx}
-                  className="flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full"
-                >
-                  {size.value}
-                  <button
-                    onClick={() => removeSize(idx)}
-                    className="text-red-600 font-bold"
-                    type="button"
-                  >
-                    ✖
-                  </button>
-                </span>
-              ))}
+          {tab === "images" && (
+            <div className="space-y-3">
+              <h3 className="font-semibold">Ana Resim</h3>
+              {form.mainImagePath && (
+                <img src={form.mainImagePath} className="w-32 h-32 object-cover rounded" />
+              )}
+              <input type="file" onChange={(e) => setForm((f) => ({ ...f, mainImagePath: URL.createObjectURL(e.target.files[0]) }))} />
+
+              <h3 className="font-semibold">Ek Resimler</h3>
+              <div className="flex flex-wrap gap-2">
+                {form.images?.map((img, idx) => (
+                  <div key={idx} className="relative">
+                    <img src={img.path} className="w-20 h-20 object-cover rounded" />
+                    <button
+                      onClick={() => removeImage(idx)}
+                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                ))}
+                <label className="cursor-pointer bg-gray-200 px-3 py-2 rounded flex items-center gap-1">
+                  <FaPlus /> Resim Ekle
+                  <input type="file" accept="image/*" onChange={addImage} className="hidden" />
+                </label>
+              </div>
             </div>
-            <input
-              type="text"
-              placeholder="Beden ekle ve Enter'a bas"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && e.target.value.trim() !== "") {
-                  addSize(e.target.value.trim());
-                  e.target.value = "";
-                }
-              }}
-              className="border rounded p-2 w-64"
-            />
-          </div>
-        </>
-      )}
+          )}
 
-      {/* Set ürünler */}
-      {isSet && (
-        <div>
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="font-semibold text-lg">Alt Ürünler</h3>
-            <button
-              onClick={addSubProduct}
-              className="bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1"
-              type="button"
-            >
-              <FaPlus /> Alt Ürün Ekle
-            </button>
-          </div>
+          {tab === "sizes" && (
+            <div>
+              <h3 className="font-semibold mb-2">Bedenler</h3>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {form.sizes?.map((s, idx) => (
+                  <span key={idx} className="flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full">
+                    {s.value}
+                    <button
+                      onClick={() => removeSize(idx)}
+                      className="text-red-600"
+                    >
+                      ✖
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <input
+                type="text"
+                placeholder="Beden ekle ve Enter"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && e.target.value.trim()) {
+                    addSize(e.target.value.trim());
+                    e.target.value = "";
+                  }
+                }}
+                className="border rounded px-3 py-2 w-64"
+              />
+            </div>
+          )}
 
-          <div className="space-y-4">
-  <div className="space-y-4">
-  {form.subProducts?.map((subProduct, index) => {
-    // 1) Seçili ürün ID'sini string yap
-    const selectedProductId = subProduct.product
-      ? (typeof subProduct.product === "object"
-          ? String(subProduct.product.id)
-          : String(subProduct.product))
-      : "";
+          {tab === "subproducts" && (
+            <div>
+              <h3 className="font-semibold mb-2">Alt Ürünler</h3>
+              <button
+                onClick={addSubProduct}
+                className="bg-green-600 text-white px-3 py-1 rounded flex items-center gap-1 mb-3"
+              >
+                <FaPlus /> Alt Ürün Ekle
+              </button>
+              <div className="space-y-3">
+                {form.subProducts?.map((sub, i) => {
+                  const selectedId = sub.product || "";
+                  let available = nonSetProducts || [];
+                  if (selectedId && !available.find((p) => p.id === selectedId)) {
+                    const found = products.find((p) => p.id === selectedId);
+                    if (found) available = [found, ...available];
+                  }
+                  return (
+                    <div key={i} className="flex gap-2 items-center">
+                      <select
+                        value={selectedId}
+                        onChange={(e) =>
+                          updateSubProduct(
+                            i,
+                            "product",
+                            e.target.value
+                          )
+                        }
+                        className="border p-2 flex-1 rounded"
+                      >
+                        <option value="">Ürün Seçin</option>
+                        {available.map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.name}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="number"
+                        min="1"
+                        value={sub.count}
+                        onChange={(e) =>
+                          updateSubProduct(i, "count", parseInt(e.target.value) || 1)
+                        }
+                        className="border p-2 w-20 rounded"
+                      />
+                      <button
+                        onClick={() => removeSubProduct(i)}
+                        className="text-red-600"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
 
-    // 2) Alt ürün seçim listesi: sadece set olmayan ürünler
-    let availableProducts = products.filter((p) => p.isSet?.id === 0);
-
-    // 3) Eğer seçili ürün listede yoksa, onu bulup ekle
-    if (
-      selectedProductId &&
-      !availableProducts.some((p) => String(p.id) === selectedProductId)
-    ) {
-      const selectedFromAll = products.find(
-        (p) => String(p.id) === selectedProductId
-      );
-      if (selectedFromAll) {
-        availableProducts = [selectedFromAll, ...availableProducts];
-      }
-    }
-
-    return (
-      <div key={index} className="border rounded p-3 bg-gray-50">
-        <div className="flex items-center gap-3">
-          <select
-            value={selectedProductId}
-            onChange={(e) => {
-              const selected = products.find(
-                (p) => String(p.id) === e.target.value
-              );
-              updateSubProduct(index, "product", selected || e.target.value);
-            }}
-            className="border rounded p-2 flex-1"
-          >
-            <option value="">Ürün Seçin</option>
-            {availableProducts.map((p) => (
-              <option key={p.id} value={String(p.id)}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="number"
-            min="1"
-            value={subProduct.count}
-            onChange={(e) =>
-              updateSubProduct(
-                index,
-                "count",
-                parseInt(e.target.value) || 1
-              )
-            }
-            className="border rounded p-2 w-20"
-          />
-
+        {/* Alt butonlar */}
+        <div className="flex justify-end gap-3 p-4 border-t sticky bottom-0 bg-white">
           <button
-            onClick={() => removeSubProduct(index)}
-            className="text-red-600 hover:text-red-800"
-            type="button"
+            onClick={onClose}
+            className="px-4 py-2 border rounded hover:bg-gray-100"
           >
-            <FaTrash />
+            İptal
+          </button>
+          <button
+            onClick={onSave}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Kaydet
           </button>
         </div>
       </div>
-    );
-  })}
-</div>
-
-</div>
-        </div>
-      )}
     </div>
   );
 }
