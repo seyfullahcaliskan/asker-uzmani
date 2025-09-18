@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import ProductManager from "../components/admin/ProductManager";
 import GeneralSettings from "../components/admin/GeneralSettings";
 import { onlinePayment } from "../config";
 import { getGeneralSettings, getNavLinks, getBanks, getAccounts, getProducts } from "../utils/axiosInstance";
+import ProductManager from "../components/admin/ProductManager";
 
 const initialProducts = await getProducts();
 
@@ -62,9 +62,7 @@ export default function AdminPage() {
 
       {activeTab === "products" && (
         <ProductManager
-          products={products}
-          setProducts={setProducts}
-          allProducts={initialProducts}
+          initialProducts={initialProducts}
         />
       )}
 
