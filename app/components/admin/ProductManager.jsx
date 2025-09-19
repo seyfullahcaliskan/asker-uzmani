@@ -1,30 +1,62 @@
 "use client";
 
-import { useState } from "react";
-import { FaTrash, FaPlus, FaEdit } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaTrash, FaPlus, FaEdit, FaImage } from "react-icons/fa";
 import ProductManagerDetailView from "./ProductManagerDetailView";
+import { axiosInstance, getNavLinks } from "../../utils/axiosInstance";
 
 const productAPI = {
   create: async (productData) => {
     console.log("🆕 ÜRÜN EKLEME API ÇAĞRISI");
     console.log("Endpoint: POST /api/products");
     console.log("Gönderilen veri:", productData);
-    return { success: true, id: Date.now().toString() };
+
+    try {
+      const response = await axiosInstance.post("/api/products", productData);
+      console.log("✅ Sunucudan gelen cevap:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("❌ Ürün ekleme hatası:", error);
+      throw error;
+    }
   },
-  
+
   update: async (id, productData) => {
     console.log("📝 ÜRÜN GÜNCELLEME API ÇAĞRISI");
     console.log(`Endpoint: PUT /api/products/${id}`);
     console.log("Gönderilen veri:", productData);
-    return { success: true };
+
+    try {
+      const response = await axiosInstance.put(`/api/products/${id}`, productData);
+      console.log("✅ Sunucudan gelen cevap:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("❌ Ürün güncelleme hatası:", error);
+      throw error;
+    }
   },
-  
+
+
   delete: async (id) => {
     console.log("🗑️ ÜRÜN SİLME API ÇAĞRISI");
-    console.log(`Endpoint: DELETE /api/products/${id}`);
+    console.log(`Endpoint: DELETE /api/products`);
     console.log("Silinecek ID:", id);
-    return { success: true };
+
+    try {
+      const response = await axiosInstance.delete("/api/products", {
+        data: id,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("✅ Sunucudan gelen cevap:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("❌ Ürün silme hatası:", error);
+      throw error;
+    }
   }
+
 };
 
 function slugify(text) {
@@ -41,8 +73,11 @@ function slugify(text) {
     .replace(/^-+|-+$/g, "");
 }
 
-export default function ProductManager({ initialProducts = [] })  {
+export default function ProductManager({ initialProducts = [] }) {
   const [products, setProducts] = useState(() => {
+
+
+
     // JSON verilerini işleyerek uyumlu hale getir
     return initialProducts.map(product => ({
       ...product,
@@ -54,11 +89,29 @@ export default function ProductManager({ initialProducts = [] })  {
       })) || []
     }));
   });
-  
+
   const [form, setForm] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [navLinks, setNavLinks] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getNavLinks().then((data) => {
+
+      const cats = [
+        ...new Set(
+          data
+            .map((item) => item.category)
+            .filter((c) => c !== null && c !== "")
+        )
+      ].sort();
+
+      setCategories(cats);
+    });
+  }, []);
 
   const emptyProduct = {
     id: "",
@@ -76,7 +129,7 @@ export default function ProductManager({ initialProducts = [] })  {
     subProducts: [],
   };
 
-  const nonSetProducts = products.filter((p) => !p.isSet);
+  const nonSetProducts = products.filter((p) => !p?.isSet);
 
   const openAddModal = () => {
     setForm({ ...emptyProduct });
@@ -111,40 +164,63 @@ export default function ProductManager({ initialProducts = [] })  {
     }
 
     setIsLoading(true);
-    
+
     try {
       const slug = slugify(form.name);
-      const productData = { 
-        ...form, 
+
+      // Ana id'yi çıkar
+      const { id, ...cleanForm } = form;
+
+      // images içindeki id alanlarını temizle
+      const cleanedImages = (cleanForm.images || []).map(({ id, ...img }) => img);
+
+      const cleanedSizes = (cleanForm.sizes || []).map(({ id, ...size }) => size);
+
+      // alt ürünler (sadece product id ve count gidecek)
+      const cleanedSubProducts = (cleanForm.subProducts || []).map(sub => ({
+        productId: sub.product,
+        count: sub.count
+      }));
+
+      const productData = {
+        ...cleanForm,
         slug,
-        price: parseFloat(form.price) || 0,
-        cartPrice: parseFloat(form.cartPrice) || 0,
-        stock: parseInt(form.stock) || 0
+        price: parseFloat(cleanForm.price) || 0,
+        cartPrice: parseFloat(cleanForm.cartPrice) || 0,
+        stock: parseInt(cleanForm.stock) || 0,
+        images: cleanedImages,
+        subProducts: cleanedSubProducts,
+        sizes: cleanedSizes,
+        isSet: cleanForm.isSet ? 1 : 0 // 🔥 önemli kısım
       };
 
-      if (editIndex === null) {
-        // Yeni ürün ekleme
-        const response = await productAPI.create(productData);
-        if (response.success) {
-          const newProduct = { ...productData, id: response.id };
-          setProducts((p) => [...p, newProduct]);
-          alert("✅ Ürün başarıyla eklendi!");
-        }
+      let response;
+      if (editIndex !== null && form.id) {
+        // Güncelleme
+        response = await productAPI.update(form.id, productData);
       } else {
-        // Ürün güncelleme
-        const response = await productAPI.update(form.id, productData);
-        if (response.success) {
-          const updated = [...products];
-          updated[editIndex] = productData;
-          setProducts(updated);
-          alert("✅ Ürün başarıyla güncellendi!");
-        }
+        // Yeni ürün ekleme
+        response = await productAPI.create(productData);
       }
 
-      closeModal();
+      if (response.success) {
+        alert(`✅ Ürün başarıyla ${editIndex !== null ? "güncellendi" : "eklendi"}!`);
+
+        // State'i güncelle
+        setProducts((prev) => {
+          if (editIndex !== null) {
+            const updated = [...prev];
+            updated[editIndex] = { ...form, ...productData };
+            return updated;
+          }
+          return [...prev, response.data];
+        });
+
+        closeModal();
+      }
     } catch (error) {
-      console.error("İşlem hatası:", error);
-      alert("❌ Bir hata oluştu!");
+      console.error("Ürün ekleme hatası:", error);
+      alert("❌ Ürün eklenirken bir hata oluştu!");
     } finally {
       setIsLoading(false);
     }
@@ -152,7 +228,9 @@ export default function ProductManager({ initialProducts = [] })  {
 
   const onDelete = async (index) => {
     const product = products[index];
-    
+
+    console.log(product)
+
     if (!confirm(`"${product.name}" adlı ürünü silmek istediğinizden emin misiniz?`)) {
       return;
     }
@@ -169,6 +247,8 @@ export default function ProductManager({ initialProducts = [] })  {
     }
   };
 
+
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
@@ -180,7 +260,7 @@ export default function ProductManager({ initialProducts = [] })  {
                 🛍️ Ürün Yönetim Paneli
               </h1>
               <p className="text-gray-600">
-                Toplam {products.length} ürün • {products.filter(p => p.isSet).length} set • {products.filter(p => !p.isSet).length} tekil ürün
+                Toplam {products.length} ürün • {products.filter(p => p.isSet)?.length} set • {products.filter(p => !p.isSet)?.length} tekil ürün
               </p>
             </div>
             <button
@@ -259,7 +339,7 @@ export default function ProductManager({ initialProducts = [] })  {
                           </button>
                         </div>
                       </td>
-                      
+
                       <td className="px-6 py-4">
                         {product.mainImagePath ? (
                           <img
@@ -273,7 +353,7 @@ export default function ProductManager({ initialProducts = [] })  {
                           </div>
                         )}
                       </td>
-                      
+
                       <td className="px-6 py-4">
                         <div>
                           <h3 className="font-semibold text-gray-900 mb-1">
@@ -290,7 +370,7 @@ export default function ProductManager({ initialProducts = [] })  {
                           )}
                         </div>
                       </td>
-                      
+
                       <td className="px-6 py-4">
                         <div className="space-y-1">
                           <div className="font-semibold text-gray-900">
@@ -303,29 +383,27 @@ export default function ProductManager({ initialProducts = [] })  {
                           )}
                         </div>
                       </td>
-                      
+
                       <td className="px-6 py-4">
-                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-                          product.stock > 10 
-                            ? "bg-green-100 text-green-800"
-                            : product.stock > 0 
+                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${product.stock > 10
+                          ? "bg-green-100 text-green-800"
+                          : product.stock > 0
                             ? "bg-yellow-100 text-yellow-800"
                             : "bg-red-100 text-red-800"
-                        }`}>
+                          }`}>
                           📦 {product.stock || 0}
                         </span>
                       </td>
-                      
+
                       <td className="px-6 py-4">
-                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-                          product.isSet
-                            ? "bg-purple-100 text-purple-800"
-                            : "bg-blue-100 text-blue-800"
-                        }`}>
+                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${product.isSet
+                          ? "bg-purple-100 text-purple-800"
+                          : "bg-blue-100 text-blue-800"
+                          }`}>
                           {product.isSet ? "📦 Set" : "🔧 Tekil"}
                         </span>
                       </td>
-                      
+
                       <td className="px-6 py-4">
                         <div className="space-y-1">
                           {product.isSet ? (
@@ -360,7 +438,9 @@ export default function ProductManager({ initialProducts = [] })  {
             onClose={closeModal}
             onSave={onSave}
             isLoading={isLoading}
+            category={categories}
           />
+
         )}
       </div>
     </div>

@@ -10,7 +10,8 @@ export default function ProductManagerDetailView({
   onSave,
   products,
   nonSetProducts,
-  isLoading
+  isLoading,
+  category
 }) {
   const [tab, setTab] = useState("general");
   const [imageUploading, setImageUploading] = useState(false);
@@ -35,7 +36,7 @@ export default function ProductManagerDetailView({
   const addSubProduct = () => {
     setForm((f) => ({
       ...f,
-      subProducts: [...(f.subProducts || []), { product: "", count: 1 }],
+      subProducts: [...(f.subProducts || []), { productId: "", count: 1 }],
     }));
   };
 
@@ -72,14 +73,13 @@ export default function ProductManagerDetailView({
       setImageUploading(false);
     }
   };
-
   const uploadToFirebase = async (file) => {
-  console.log("Firebase'e yükleniyor:", file.name, file.size);
-  // Simüle edilmiş upload gecikme
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  // Gerçek Firebase URL'i yerine mock URL döndürür
-  return `https://firebase-storage-url.com/${Date.now()}_${file.name}`;
-};
+    console.log("Firebase'e yükleniyor:", file.name, file.size);
+    // Simüle edilmiş upload gecikme
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Gerçek Firebase URL'i yerine mock URL döndürür
+    return `https://firebase-storage-url.com/${Date.now()}_${file.name}`;
+  };
 
   // Ana resim URL ile ekleme
   const handleMainImageUrl = (url) => {
@@ -96,13 +96,13 @@ export default function ProductManagerDetailView({
     setImageUploading(true);
     try {
       const firebaseUrl = await uploadToFirebase(file);
-      setForm((f) => ({ 
-        ...f, 
-        images: [...(f.images || []), { 
+      setForm((f) => ({
+        ...f,
+        images: [...(f.images || []), {
           id: Date.now().toString(),
           path: firebaseUrl,
           is_main_image: 0
-        }] 
+        }]
       }));
     } catch (error) {
       console.error("Resim yükleme hatası:", error);
@@ -115,13 +115,13 @@ export default function ProductManagerDetailView({
   // URL ile ek resim ekleme
   const addImageUrl = (url) => {
     if (!url.trim()) return;
-    setForm((f) => ({ 
-      ...f, 
-      images: [...(f.images || []), { 
+    setForm((f) => ({
+      ...f,
+      images: [...(f.images || []), {
         id: Date.now().toString(),
         path: url.trim(),
         is_main_image: 0
-      }] 
+      }]
     }));
   };
 
@@ -134,7 +134,7 @@ export default function ProductManagerDetailView({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}></div>
-      
+
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-xl">
@@ -157,11 +157,10 @@ export default function ProductManagerDetailView({
             .map((tabName) => (
               <button
                 key={tabName}
-                className={`px-6 py-4 font-medium transition-colors ${
-                  tab === tabName 
-                    ? "border-b-3 border-blue-500 text-blue-600 bg-white" 
-                    : "text-gray-600 hover:text-blue-500 hover:bg-gray-100"
-                }`}
+                className={`px-6 py-4 font-medium transition-colors ${tab === tabName
+                  ? "border-b-3 border-blue-500 text-blue-600 bg-white"
+                  : "text-gray-600 hover:text-blue-500 hover:bg-gray-100"
+                  }`}
                 onClick={() => setTab(tabName)}
               >
                 {tabName === "general" && "📋 Genel Bilgiler"}
@@ -191,19 +190,26 @@ export default function ProductManagerDetailView({
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     🏷️ Kategori
                   </label>
-                  <input
-                    type="text"
+                  <select
                     name="category"
                     value={form.category || ""}
                     onChange={handleChange}
-                    placeholder="Kategori adı"
                     className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  />
+                  >
+                    <option value="" disabled>
+                      Kategori seçin
+                    </option>
+                    {category.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -237,7 +243,7 @@ export default function ProductManagerDetailView({
                     className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     🛒 Sepet Fiyatı
@@ -253,7 +259,7 @@ export default function ProductManagerDetailView({
                     className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     📦 Stok
@@ -297,26 +303,24 @@ export default function ProductManagerDetailView({
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   🖼️ Ana Resim
                 </h3>
-                
+
                 <div className="mb-4">
                   <div className="flex gap-2 mb-3">
                     <button
                       onClick={() => setImageInputType("file")}
-                      className={`px-4 py-2 rounded-lg transition-colors ${
-                        imageInputType === "file"
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                      }`}
+                      className={`px-4 py-2 rounded-lg transition-colors ${imageInputType === "file"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
                     >
                       <FaUpload className="inline mr-2" /> Dosya Yükle
                     </button>
                     <button
                       onClick={() => setImageInputType("url")}
-                      className={`px-4 py-2 rounded-lg transition-colors ${
-                        imageInputType === "url"
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                      }`}
+                      className={`px-4 py-2 rounded-lg transition-colors ${imageInputType === "url"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        }`}
                     >
                       <FaLink className="inline mr-2" /> URL Gir
                     </button>
@@ -385,7 +389,7 @@ export default function ProductManagerDetailView({
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   📸 Ek Resimler
                 </h3>
-                
+
                 <div className="flex flex-wrap gap-4 mb-4">
                   {form.images?.map((img, idx) => (
                     <div key={idx} className="relative">
@@ -402,7 +406,7 @@ export default function ProductManagerDetailView({
                       </button>
                     </div>
                   ))}
-                  
+
                   <div className="flex flex-col gap-2">
                     <label className="cursor-pointer bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-3 rounded-lg flex items-center gap-2 hover:shadow-lg transition-all">
                       <FaImage /> Dosya Seç
@@ -414,7 +418,7 @@ export default function ProductManagerDetailView({
                         disabled={imageUploading}
                       />
                     </label>
-                    
+
                     <input
                       type="url"
                       placeholder="URL gir ve Enter"
@@ -437,7 +441,7 @@ export default function ProductManagerDetailView({
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 📏 Beden Seçenekleri
               </h3>
-              
+
               <div className="flex flex-wrap gap-3 mb-6">
                 {form.sizes?.map((s, idx) => (
                   <span
@@ -454,7 +458,7 @@ export default function ProductManagerDetailView({
                   </span>
                 ))}
               </div>
-              
+
               <div className="flex gap-3">
                 <input
                   type="text"
@@ -488,19 +492,19 @@ export default function ProductManagerDetailView({
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 📦 Alt Ürünler
               </h3>
-              
+
               <button
                 onClick={addSubProduct}
                 className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-6 py-3 rounded-lg flex items-center gap-2 mb-6 hover:shadow-lg transition-all"
               >
                 <FaPlus /> Alt Ürün Ekle
               </button>
-              
+
               <div className="space-y-4">
                 {form.subProducts?.map((sub, i) => {
                   const selectedId = typeof sub.product === 'object' ? sub.product?.id : sub.product;
                   let available = nonSetProducts || [];
-                  
+
                   return (
                     <div key={i} className="flex gap-4 items-center p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
                       <div className="flex-1">
@@ -517,7 +521,7 @@ export default function ProductManagerDetailView({
                           ))}
                         </select>
                       </div>
-                      
+
                       <div className="w-24">
                         <label className="block text-xs text-gray-600 mb-1">Adet</label>
                         <input
@@ -528,7 +532,7 @@ export default function ProductManagerDetailView({
                           className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-center focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       </div>
-                      
+
                       <button
                         onClick={() => removeSubProduct(i)}
                         className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
@@ -538,7 +542,7 @@ export default function ProductManagerDetailView({
                     </div>
                   );
                 })}
-                
+
                 {(!form.subProducts || form.subProducts.length === 0) && (
                   <div className="text-center py-12 text-gray-500">
                     <FaPlus className="mx-auto mb-3 text-4xl" />
