@@ -260,7 +260,7 @@ export default function ProductManager({ initialProducts = [] }) {
                 🛍️ Ürün Yönetim Paneli
               </h1>
               <p className="text-gray-600">
-                Toplam {products.length} ürün • {products.filter(p => p.isSet)?.length} set • {products.filter(p => !p.isSet)?.length} tekil ürün
+                Toplam {products.length} ürün • {products.filter(p => p?.isSet)?.length} set • {products.filter(p => !p?.isSet)?.length} tekil ürün
               </p>
             </div>
             <button

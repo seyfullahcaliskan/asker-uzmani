@@ -1,4 +1,3 @@
-export const onlinePayment = false;
 
 export const bankAccounts = [
   {

@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import GeneralSettings from "../components/admin/GeneralSettings";
-import { onlinePayment } from "../config";
 import { getGeneralSettings, getNavLinks, getBanks, getAccounts, getProducts } from "../utils/axiosInstance";
 import ProductManager from "../components/admin/ProductManager";
 
@@ -13,7 +12,7 @@ export default function AdminPage() {
   const [products, setProducts] = useState(initialProducts);
   const [generalData, setGeneralData] = useState(null);
   const [navLinks, setNavLinks] = useState([]);
-  const [onlinePaymentState, setOnlinePayment] = useState(onlinePayment);
+  const [onlinePaymentState, setOnlinePayment] = useState(generalData?.onlinePayment);
 
   const [banks, setBanks] = useState([]);
   const [bankAccounts, setBankAccounts] = useState([]);
