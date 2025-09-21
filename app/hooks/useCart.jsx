@@ -146,6 +146,7 @@ export const CartProvider = ({ children }) => {
       )
     );
   };
+
   const value = {
     cartItems,
     addToCart,

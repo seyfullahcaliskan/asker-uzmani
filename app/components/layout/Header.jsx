@@ -114,7 +114,6 @@ export default function Header() {
         {/* Mobil Menü */}
         {menuOpen && (
           <div className="md:hidden flex flex-col border-t bg-gray-100 shadow-md divide-y divide-gray-300">
-
             {navLinks.map((link) => (
               <Link
                 onClick={() => setMenuOpen(!menuOpen)}

@@ -148,7 +148,6 @@ export default function OrderTrackingPage() {
                                 ))}
                             </ul>
                         </div>
-
                         <p>
                             <span className="font-semibold">Kargo Durumu:</span>{" "}
                             {(order.cargoStatus.value)}
