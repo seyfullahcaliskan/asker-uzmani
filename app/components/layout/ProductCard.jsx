@@ -8,7 +8,6 @@ import { useCart } from "../../hooks/useCart";
 import Image from "next/image";
 
 export default function ProductCard({ set }) {
-  console.log(set)
   const [isAllHovered, setIsAllHovered] = useState(false);
   const categorySlug = getProductCategorySlug(set);
   const { addToCart } = useCart();
@@ -48,26 +47,26 @@ export default function ProductCard({ set }) {
 
           {/* Fiyat */}
           {set.price && (
-  <div className="flex justify-between items-center">
-    <div className="text-sm md:text-lg font-bold text-gray-900">
-      {set.cartPrice && set.cartPrice !== set.price ? (
-        <div className="flex items-center gap-2">
-          <span>{set.cartPrice.toLocaleString("tr-TR")} ₺</span>
-          <span className="line-through text-gray-400 text-xs">
-            {set.price.toLocaleString("tr-TR")} ₺
-          </span>
-          <span className="text-red-500 text-xs flex items-center gap-1">
-            %
-            {Math.round(((set.price - set.cartPrice) / set.price) * 100)}
-            <MdOutlineTrendingDown />
-          </span>
-        </div>
-      ) : (
-        <span>{set.price.toLocaleString("tr-TR")} ₺</span>
-      )}
-    </div>
-  </div>
-)}
+            <div className="flex justify-between items-center">
+              <div className="text-sm md:text-lg font-bold text-gray-900">
+                {set.cartPrice && set.cartPrice !== set.price ? (
+                  <div className="flex items-center gap-2">
+                    <span>{set.cartPrice.toLocaleString("tr-TR")} ₺</span>
+                    <span className="line-through text-gray-400 text-xs">
+                      {set.price.toLocaleString("tr-TR")} ₺
+                    </span>
+                    <span className="text-red-500 text-xs flex items-center gap-1">
+                      %
+                      {Math.round(((set.price - set.cartPrice) / set.price) * 100)}
+                      <MdOutlineTrendingDown />
+                    </span>
+                  </div>
+                ) : (
+                  <span>{set.price.toLocaleString("tr-TR")} ₺</span>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Masaüstünde hover ile çıkan buton */}

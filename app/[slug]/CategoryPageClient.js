@@ -6,7 +6,6 @@ import ProductCard from "../components/layout/ProductCard";
 import { getCategoryBySlug } from "../navLinks";
 
 export default function CategoryPageClient({ slug, products }) {
-  console.log(slug,products);
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
   const categoryInfo = getCategoryBySlug(slug);
 
@@ -21,7 +20,6 @@ export default function CategoryPageClient({ slug, products }) {
     parseInt(priceString.replace(/[₺,]/g, ""));
 
   const categoryProducts = useMemo(() => {
-    console.log(categoryInfo)
     if (!categoryInfo) return [];
     if (categoryInfo.filterBy === "isSet") {
       return products.filter((p) => p.isSet.id === 1);
