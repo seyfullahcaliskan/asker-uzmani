@@ -16,7 +16,7 @@ import ProductSearch from "./ProductSearch";
 import { useCart } from "../../hooks/useCart";
 import { getGeneralSettings, getNavLinks } from "../../utils/axiosInstance";
 
-  const navLinks = await getNavLinks();
+const navLinks = await getNavLinks();
 const generalData = await getGeneralSettings();
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,10 +63,13 @@ export default function Header() {
 
           {/* Sağ - Masaüstü Menü */}
           <div className="hidden md:flex gap-4 items-center">
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
-              <PiPackageFill className="text-xl" />
-              <span className="text-[10px]">Sipariş Takip</span>
-            </div>
+            <Link
+              href="/siparis-takip"
+            >
+              <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
+                <PiPackageFill className="text-xl" />
+                <span className="text-[10px]">Sipariş Takip</span></div>
+            </Link>
             <div className="text-gray-400 text-lg">|</div>
             <Link
               href="/banka-hesaplarimiz"
@@ -133,7 +136,7 @@ export default function Header() {
             <ProductSearch />
           </div>
           <div className="hidden md:flex justify-end gap-4 items-center">
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
+            {/* <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
               <RiUser6Line className="text-xl" />
               <span className="text-[10px]">Giriş Yap</span>
             </div>
@@ -141,7 +144,7 @@ export default function Header() {
             <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
               <MdOutlineFavorite className="text-xl" />
               <span className="text-[10px]">Favorilerim</span>
-            </div>
+            </div> */}
             <div className="text-gray-400 text-lg">|</div>
             <CartDropdown />
           </div>

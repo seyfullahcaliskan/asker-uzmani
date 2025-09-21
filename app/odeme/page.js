@@ -191,7 +191,7 @@ export default function CheckoutPage() {
 
             {/* Dinamik Ödeme Yöntemi */}
             {generalData?.onlinePayment?.id === 1 ? (
-              <OnlinePaymentCheckout order={order} />
+              <OnlinePaymentCheckout order={order} formData={formData} />
             ) : (
               <BankTransferCheckout formData={formData} cartItems={cartItems} />
             )}

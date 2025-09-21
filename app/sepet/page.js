@@ -156,16 +156,12 @@ export default function CartPage() {
                         </Link>
 
                         {/* Beden seçimi */}
-                        {item.isSet.id === 1 &&
-                          item.products?.some(
-                            (p) => p?.product?.sizes?.length > 0
-                          ) ? (
-                          <div className="space-y-2">
-                            {item.products?.map((p, idx) => {
-                              const productName = p.product.name;
-                              const currentSize =
-                                item.selectedSizes?.[productName] || "";
-                              const hasSizes = p?.product?.sizes?.length > 0;
+                        {item.isSet.id === 1 && item.subProducts?.length > 0 ? (
+                          <div className="space-y-2 mt-2">
+                            {item.subProducts.map((sp, idx) => {
+                              const productName = sp.product.name;
+                              const currentSize = item.selectedSizes?.[productName] || "";
+                              const hasSizes = sp.product?.sizes?.length > 0;
 
                               return hasSizes ? (
                                 <div
@@ -182,15 +178,15 @@ export default function CartPage() {
                                         item.cartId,
                                         productName,
                                         e.target.value,
-                                        item.selectedSizes
+                                        item.selectedSizes || {}
                                       )
                                     }
                                     className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm hover:scale-110 transition-all duration-200 hover:cursor-pointer"
                                   >
                                     <option value="">Beden Seçin</option>
-                                    {p?.product?.sizes?.map((size) => (
-                                      <option key={size} value={size}>
-                                        {size}
+                                    {sp.product.sizes.map((size) => (
+                                      <option key={size.id} value={size.value}>
+                                        {size.value}
                                       </option>
                                     ))}
                                   </select>
@@ -198,20 +194,18 @@ export default function CartPage() {
                               ) : null;
                             })}
                           </div>
-                        ) : !item.isSet.id === 1 && item.sizes?.length > 0 ? (
+                        ) : item.isSet.id === 0 && item.sizes?.length > 0 ? (
                           <div className="flex items-center gap-2 mt-1 text-xs sm:text-sm">
                             <span className="text-gray-600">Beden:</span>
                             <select
                               value={item.selectedSize || ""}
-                              onChange={(e) =>
-                                handleSizeChange(item.cartId, e.target.value)
-                              }
-                              className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm hover:scale-110 transition-all duration-200"
+                              onChange={(e) => handleSizeChange(item.cartId, e.target.value)}
+                              className="border border-gray-300 rounded px-2 py-1 text-xs sm:text-sm hover:scale-110 transition-all duration-200 hover:cursor-pointer"
                             >
                               <option value="">Beden Seçin</option>
                               {item.sizes.map((size) => (
-                                <option key={size} value={size}>
-                                  {size}
+                                <option key={size.id} value={size.value}>
+                                  {size.value}
                                 </option>
                               ))}
                             </select>
