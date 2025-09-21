@@ -100,9 +100,9 @@ export const CartProvider = ({ children }) => {
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
-      const price = 
+      const price =
         (item.cartPrice) || (item.price) || 0;
-   
+
       return total + price * item.quantity;
     }, 0);
   };
@@ -126,7 +126,7 @@ export const CartProvider = ({ children }) => {
   const getItemsNeedingSize = () => {
     return cartItems.filter((item) => {
       if (item.isSet.id === 1) {
-        return item.products?.some(
+        return item.subProducts?.some(
           (p) =>
             p.product?.sizes?.length > 0 &&
             !item.selectedSizes?.[p.product.name]
@@ -146,7 +146,6 @@ export const CartProvider = ({ children }) => {
       )
     );
   };
-
   const value = {
     cartItems,
     addToCart,

@@ -61,8 +61,7 @@ export default function OrderTrackingPage() {
                         disabled={loading}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center"
                     >
-                        <FaSearch className="mr-2" />
-                        {loading ? "Sorgulanıyor..." : "Sorgula"}
+                        <FaSearch />
                     </button>
                 </div>
 
@@ -119,15 +118,37 @@ export default function OrderTrackingPage() {
                             {maskText(order.customerAddress)}
                         </p>
                         <div className="mt-4">
-                            <h2 className="font-bold">Ürünler:</h2>
-                            <ul className="list-disc list-inside">
+                            <h2 className="font-bold">Ürünler</h2>
+                            <ul className="space-y-1">
                                 {order.items?.map((item, i) => (
                                     <li key={i}>
-                                        {item.name} - {item.quantity} adet - {item.price}₺
+                                        <div>
+                                            <span className="font-semibold">{item.name}</span> -{" "}
+                                            {item.quantity} adet - {item.price}₺
+                                        </div>
+
+                                        {/* Eğer set ürünse */}
+                                        {item.size && typeof item.size === "object" ? (
+                                            <ul className="ml-4 list-disc text-sm text-gray-700">
+                                                {Object.entries(item.size).map(([subName, subSize], idx) => (
+                                                    <li key={idx}>
+                                                        {subName} → Beden: <span className="font-medium">{subSize}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            // Normal ürün
+                                            item.size && (
+                                                <div className="ml-4 text-sm text-gray-700">
+                                                    Beden: <span className="font-medium">{item.size}</span>
+                                                </div>
+                                            )
+                                        )}
                                     </li>
                                 ))}
                             </ul>
                         </div>
+
                         <p>
                             <span className="font-semibold">Kargo Durumu:</span>{" "}
                             {(order.cargoStatus.value)}

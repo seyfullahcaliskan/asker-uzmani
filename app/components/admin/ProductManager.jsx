@@ -341,7 +341,7 @@ export default function ProductManager({ initialProducts = [] }) {
                       </td>
 
                       <td className="px-6 py-4">
-                        {product.mainImagePath ? (
+                        {product?.mainImagePath ? (
                           <img
                             src={product.mainImagePath}
                             alt={product.name}

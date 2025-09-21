@@ -88,7 +88,6 @@ export default function CheckoutPage() {
         </Link>
       </div>
     );
-
   // Order objesi PayTR için hazırlanıyor
   const order = {
     merchantOid: Date.now().toString(), // backend üretmeli aslında!
@@ -97,13 +96,24 @@ export default function CheckoutPage() {
     customerName: `${formData.firstName} ${formData.lastName}`,
     customerPhone: formData.phone,
     customerAddress: `${formData.address}, ${formData.city}/${formData.district} ${formData.postalCode}`,
-    items: cartItems.map((item) => ({
-      name: item.name,
-      price: item.cartPrice || item.price,
-      quantity: item.quantity,
-    })),
+    items: cartItems.flatMap((item) => {
+      if (item.isSet?.id === 1) {
+        return {
+          name: `${item.name}`,
+          price: item.cartPrice || item.price,
+          quantity: item.quantity,
+          size: item.selectedSizes || "-",
+        };
+      } else {
+        return {
+          name: item.name,
+          price: item.cartPrice || item.price,
+          quantity: item.quantity,
+          size: item?.selectedSize || "-",
+        };
+      }
+    }),
   };
-
   return (
     <div className="container mx-auto py-8">
       <div className="flex flex-col items-start gap-4 mb-8">
@@ -176,22 +186,40 @@ export default function CheckoutPage() {
             </h2>
 
             {/* Ürünler */}
+            {/* Ürünler */}
             <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6 text-sm sm:text-base">
               {cartItems.map((item) => (
-                <div
-                  key={item.cartId}
-                  className="flex justify-between text-xs sm:text-sm"
-                >
-                  <span>
-                    {item.name}{" "}
-                    {item.selectedSize && `(${item.selectedSize})`} x{item.quantity}
-                  </span>
-                  <span className="font-medium text-[#7F7B59]">
-                    {formatPrice(item.cartPrice || item.price)}
-                  </span>
+                <div key={item.cartId} className="space-y-1">
+                  <div className="flex justify-between text-xs sm:text-sm">
+                    <span>
+                      {item.name} x{item.quantity}
+                    </span>
+                    <span className="font-medium text-[#7F7B59]">
+                      {formatPrice(item.cartPrice || item.price)}
+                    </span>
+                  </div>
+
+                  {/* Eğer set ürünü ise alt ürünleri listele */}
+                  {item.isSet?.id === 1 && (
+                    <div className="ml-4 text-xs text-gray-600 space-y-1">
+                      {Object.entries(item.selectedSizes || {}).map(([subName, size]) => (
+                        <div key={subName}>
+                          {subName} - Beden: {size}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Normal ürün ise beden göster */}
+                  {item.isSet?.id === 0 && item.selectedSize && (
+                    <div className="ml-4 text-xs text-gray-600">
+                      Beden: {item.selectedSize}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
+
 
             <hr className="my-2 sm:my-3" />
 

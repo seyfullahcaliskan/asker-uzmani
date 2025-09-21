@@ -23,12 +23,35 @@ export default function PaymentSuccessClient({ id }) {
 
 
   const copyToClipboard = () => {
-    if (order?.orderNo) {
-      navigator.clipboard.writeText(order.orderNo);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    if (!order?.orderNo) return;
+
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(order.orderNo)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        })
+        .catch((err) => {
+          console.error("Clipboard error:", err);
+        });
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = order.orderNo;
+      textarea.style.position = "fixed";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error("Fallback copy error:", err);
+      }
+      document.body.removeChild(textarea);
     }
   };
+
 
   return (
     <div className="flex items-start justify-center min-h-screen p-4">
