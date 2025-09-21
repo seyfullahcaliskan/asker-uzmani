@@ -11,7 +11,7 @@ import { getGeneralSettings } from "../utils/axiosInstance";
 
 export default function CheckoutPage() {
   const [generalData, setGeneralData] = useState(null);
-  const { cartItems, getTotalPrice, getTotalItems, clearCart } = useCart();
+  const { cartItems, getTotalPrice, getTotalWithCargo, getCargoFee, freeCargoPrice } = useCart();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -92,7 +92,7 @@ export default function CheckoutPage() {
   // Order objesi PayTR için hazırlanıyor
   const order = {
     merchantOid: Date.now().toString(), // backend üretmeli aslında!
-    amount: getTotalPrice(),
+    amount: getTotalWithCargo(),
     customerEmail: formData.email,
     customerName: `${formData.firstName} ${formData.lastName}`,
     customerPhone: formData.phone,
@@ -170,31 +170,78 @@ export default function CheckoutPage() {
 
         {/* Sipariş Özeti & Ödeme */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
-            <h2 className="text-xl font-bold mb-6">Sipariş Özeti</h2>
-            <div className="space-y-3 mb-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 sticky top-4">
+            <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">
+              Sipariş Özeti
+            </h2>
+
+            {/* Ürünler */}
+            <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6 text-sm sm:text-base">
               {cartItems.map((item) => (
-                <div key={item.cartId} className="flex justify-between text-sm">
+                <div
+                  key={item.cartId}
+                  className="flex justify-between text-xs sm:text-sm"
+                >
                   <span>
-                    {item.name} {item.selectedSize && `(${item.selectedSize})`} x{item.quantity}
+                    {item.name}{" "}
+                    {item.selectedSize && `(${item.selectedSize})`} x{item.quantity}
                   </span>
-                  <span>{formatPrice(item.cartPrice || item.price)}</span>
+                  <span className="font-medium text-[#7F7B59]">
+                    {formatPrice(item.cartPrice || item.price)}
+                  </span>
                 </div>
               ))}
             </div>
-            <hr className="mb-4" />
-            <div className="space-y-2 mb-6">
-              <div className="flex justify-between"><span>Ara Toplam:</span><span>{formatPrice(getTotalPrice())}</span></div>
-              <div className="flex justify-between"><span>Kargo:</span><span className="text-green-600">Ücretsiz</span></div>
-              <div className="flex justify-between font-bold text-lg"><span>Toplam:</span><span className="text-[#7F7B59]">{formatPrice(getTotalPrice())}</span></div>
+
+            <hr className="my-2 sm:my-3" />
+
+            {/* Fiyat Detayları */}
+            <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6 text-sm sm:text-base">
+              <div className="flex justify-between">
+                <span>Ürün Toplamı:</span>
+                <span>{formatPrice(getTotalPrice())}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Kargo:</span>
+                <span
+                  className={getCargoFee() === 0 ? "text-green-600" : "text-red-600"}
+                >
+                  {getCargoFee() === 0 ? "Ücretsiz" : formatPrice(getCargoFee())}
+                </span>
+              </div>
+
+              {/* Kargo ücretsiz bilgilendirme */}
+              {getCargoFee() > 0 && (
+                <p className="text-xs sm:text-sm text-gray-600 mt-2">
+                  {formatPrice(freeCargoPrice - getTotalPrice())} daha alışveriş
+                  yaparsanız kargo ücretsiz!
+                </p>
+              )}
+
+              <hr />
+              <div className="flex justify-between font-bold text-base sm:text-lg">
+                <span>Toplam:</span>
+                <span className="text-[#7F7B59]">
+                  {formatPrice(getTotalWithCargo())}
+                </span>
+              </div>
             </div>
 
             {/* Dinamik Ödeme Yöntemi */}
-            {generalData?.onlinePayment?.id === 1 ? (
-              <OnlinePaymentCheckout order={order} formData={formData} />
-            ) : (
-              <BankTransferCheckout formData={formData} cartItems={cartItems} />
-            )}
+            <div className="mt-6">
+              {generalData?.onlinePayment?.id === 1 ? (
+                <OnlinePaymentCheckout order={order} formData={formData} />
+              ) : (
+                <BankTransferCheckout formData={formData} cartItems={cartItems} />
+              )}
+            </div>
+
+            <div className="mt-4 text-center">
+              <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-gray-600">
+                <span>🔒</span>
+                <span>Güvenli Ödeme</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

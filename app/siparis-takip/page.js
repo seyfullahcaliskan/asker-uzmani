@@ -75,12 +75,32 @@ export default function OrderTrackingPage() {
                             {order.orderNo}
                         </p>
                         <p>
+                            <span className="font-semibold">Sipariş Tarihi:</span>{" "}
+                            {new Date(order.dateOfRecorded).toLocaleString("tr-TR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            })}
+                        </p>
+                        <p>
                             <span className="font-semibold">Durum:</span>{" "}
                             {order.status?.value}
                         </p>
                         <p>
                             <span className="font-semibold">Ödeme Durumu:</span>{" "}
                             {order.payStatus?.value}
+                        </p>
+                        <p>
+                            <span className="font-semibold">Ödeme Tarihi:</span>{" "}
+                            {new Date(order.dateOfPay).toLocaleString("tr-TR", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            })}
                         </p>
                         <p>
                             <span className="font-semibold">Müşteri:</span>{" "}
@@ -108,6 +128,19 @@ export default function OrderTrackingPage() {
                                 ))}
                             </ul>
                         </div>
+                        <p>
+                            <span className="font-semibold">Kargo Durumu:</span>{" "}
+                            {(order.cargoStatus.value)}
+                        </p>
+                        {order.cargoCompany ? <p>
+                            <span className="font-semibold">Kargo Firması:</span>{" "}
+                            {(order.cargoCompany)}
+                        </p> : null}
+                        {order.cargoCode ? <p>
+                            <span className="font-semibold">Kargo Takip Numarası:</span>{" "}
+                            {(order.cargoCode)}
+                        </p> : null}
+
                         <p className="mt-2 font-bold">
                             Toplam Tutar: {order.amount}₺
                         </p>
