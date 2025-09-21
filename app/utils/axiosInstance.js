@@ -12,6 +12,7 @@ export const getGeneralSettings = () => axiosInstance.get("/api/general-settings
 export const getNavLinks = () => axiosInstance.get("/api/navlinks").then(r => r.data);
 export const getBanks = () => axiosInstance.get("/api/banks").then(r => r.data);
 export const getAccounts = () => axiosInstance.get("/api/bank-accounts").then(r => r.data);
+export const getOrders = () => axiosInstance.get("/api/orders/get-all").then(r => r.data);
 export const getProducts = () => axiosInstance.get("/api/products").then(r => r.data);
 export const getProduct = (id) => axiosInstance.get(`/api/products/${id}`).then(r => r.data);
 export const getProductsByCategory = (category) => axiosInstance.get(`/api/products?category=${category}`).then(r => r.data);

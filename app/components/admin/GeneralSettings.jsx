@@ -99,7 +99,7 @@ export default function GeneralSettings({
           </label>
           <label className="flex flex-col text-gray-700 font-medium">
             Online Ödeme:
-            <select value={onlinePayment.id === 1 ? "true" : "false"} onChange={onOnlinePaymentChange} className="mt-1 border border-gray-300 rounded-md p-2 w-36 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <select value={onlinePayment?.id === 1 ? "true" : "false"} onChange={onOnlinePaymentChange} className="mt-1 border border-gray-300 rounded-md p-2 w-36 focus:outline-none focus:ring-2 focus:ring-blue-400">
               <option value="true">Aktif</option>
               <option value="false">Pasif</option>
             </select>
