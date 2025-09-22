@@ -15,7 +15,6 @@ export default function ProductCard({ set }) {
   const handleAddToCart = () => {
     addToCart(set);
   };
-console.log(set)
   return (
     <>
       <div

@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getProductCategorySlug } from "../../navLinks";
 import { useCart } from "../../hooks/useCart";
-import products from "./data/products";
 import { TbBasketPlus } from "react-icons/tb";
-import { AiOutlineSearch } from "react-icons/ai"; // 🔍 Search ikonunu ekledim
+import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
+import { getProducts } from "../../utils/axiosInstance";
+const products = await getProducts()
 
 export default function ProductSearch() {
   const [query, setQuery] = useState("");
@@ -17,13 +18,16 @@ export default function ProductSearch() {
 
   const filteredProducts =
     query.trim().length > 0
-      ? products.filter((p) =>
-          p.name.toLowerCase().includes(query.toLowerCase())
-        )
+      ? products?.filter((p) =>
+        p.name.toLowerCase().includes(query.toLowerCase())
+      )
       : [];
 
-  const imageOf = (item) =>
-    item.isSet.id === 1 ? item.mainImagePath : item.images?.[0] || "/images/no_image.jpg";
+  const imageOf = (item) => {
+    return item.isSet?.id === 1
+      ? item.mainImagePath
+      : item.images?.[0]?.path || "/images/no_image.jpg";
+  };
 
   const needsSizeSelection = (item) => {
     if (item.isSet.id === 1) {

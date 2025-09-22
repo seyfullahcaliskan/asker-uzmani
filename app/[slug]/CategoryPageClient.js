@@ -17,7 +17,7 @@ export default function CategoryPageClient({ slug, products }) {
   ];
 
   const parsePrice = (priceString) =>
-    parseInt(priceString.replace(/[₺,]/g, ""));
+    parseInt(priceString);
 
   const categoryProducts = useMemo(() => {
     if (!categoryInfo) return [];
