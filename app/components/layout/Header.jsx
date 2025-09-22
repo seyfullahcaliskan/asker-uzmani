@@ -1,15 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   RiWhatsappFill,
-  RiUser6Line,
   RiShoppingBasketLine,
 } from "react-icons/ri";
 import { PiPackageFill } from "react-icons/pi";
 import { AiTwotoneBank } from "react-icons/ai";
 import { LiaLifeRingSolid } from "react-icons/lia";
-import { MdOutlineFavorite } from "react-icons/md";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import CartDropdown from "./cart/CartDropdown";
 import ProductSearch from "./ProductSearch";
@@ -17,12 +15,29 @@ import { useCart } from "../../hooks/useCart";
 import { getGeneralSettings, getNavLinks } from "../../utils/axiosInstance";
 import Image from "next/image";
 
-const navLinks = await getNavLinks();
-const generalData = await getGeneralSettings();
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-
   const { getTotalItems } = useCart();
+
+  const [navLinks, setNavLinks] = useState([]);
+  const [generalData, setGeneralData] = useState(null);
+
+  // API'den datayı çek
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [links, general] = await Promise.all([
+          getNavLinks(),
+          getGeneralSettings(),
+        ]);
+        setNavLinks(Array.isArray(links) ? links : []);
+        setGeneralData(general || {});
+      } catch (err) {
+        console.error("Header data fetch error:", err);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow">
@@ -34,16 +49,18 @@ export default function Header() {
         <span className="animate-blink-white text-sm md:text-lg">
           Açılışa Özel Kampanyalı Fiyatlar
         </span>
-        <span className="animate-blink-white text-sm md:text-lg mt-1 md:mt-2">
-          {generalData?.freeCargoPrice}₺ ve Üzeri Alışverişlerde{" "}
-          <span className="underline">KARGO ÜCRETSİZ</span>
-        </span>
+        {generalData?.freeCargoPrice && (
+          <span className="animate-blink-white text-sm md:text-lg mt-1 md:mt-2">
+            {generalData.freeCargoPrice}₺ ve Üzeri Alışverişlerde{" "}
+            <span className="underline">KARGO ÜCRETSİZ</span>
+          </span>
+        )}
       </div>
 
       <div className="max-w-screen-xl mx-auto px-4">
         {/* Üst Bar */}
         <div className="flex justify-between py-2 text-[10px]">
-          {/* Sol - Telefon & Firma */}
+          {/* Sol */}
           <div className="flex flex-col sm:flex-row sm:gap-2 items-start sm:items-center">
             <a
               href="https://wa.me/905386820112"
@@ -112,19 +129,21 @@ export default function Header() {
             </button>
           </div>
         </div>
+
         {/* Mobil Menü */}
         {menuOpen && (
           <div className="md:hidden flex flex-col border-t bg-gray-100 shadow-md divide-y divide-gray-300">
-            {navLinks.map((link) => (
-              <Link
-                onClick={() => setMenuOpen(!menuOpen)}
-                key={link.href}
-                href={link.href}
-                className="px-4 py-3 text-sm font-semibold text-gray-700 hover:text-[#7F7B59] hover:bg-gray-200 transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {Array.isArray(navLinks) &&
+              navLinks.map((link) => (
+                <Link
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  key={link.href}
+                  href={link.href}
+                  className="px-4 py-3 text-sm font-semibold text-gray-700 hover:text-[#7F7B59] hover:bg-gray-200 transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ))}
             <Link
               onClick={() => setMenuOpen(!menuOpen)}
               key="/banka-hesaplarimiz"
@@ -175,19 +194,20 @@ export default function Header() {
 
         {/* Alt Menü (Desktop) */}
         <div className="hidden md:flex justify-center items-center gap-0 py-2 mt-2">
-          {navLinks.map((link, index) => (
-            <div key={link.href} className="flex gap-2 items-center">
-              <Link
-                href={link.href}
-                className="relative px-4 font-semibold text-lg text-gray-800 transition-all duration-300 hover:text-[#7F7B59] hover:scale-110"
-              >
-                {link.label}
-              </Link>
-              {index !== navLinks.length - 1 && (
-                <span className="text-gray-400 text-lg">|</span>
-              )}
-            </div>
-          ))}
+          {Array.isArray(navLinks) &&
+            navLinks.map((link, index) => (
+              <div key={link.href} className="flex gap-2 items-center">
+                <Link
+                  href={link.href}
+                  className="relative px-4 font-semibold text-lg text-gray-800 transition-all duration-300 hover:text-[#7F7B59] hover:scale-110"
+                >
+                  {link.label}
+                </Link>
+                {index !== navLinks.length - 1 && (
+                  <span className="text-gray-400 text-lg">|</span>
+                )}
+              </div>
+            ))}
         </div>
       </div>
     </header>

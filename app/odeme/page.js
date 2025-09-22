@@ -202,7 +202,7 @@ export default function CheckoutPage() {
                   {/* Eğer set ürünü ise alt ürünleri listele */}
                   {item.isSet?.id === 1 && (
                     <div className="ml-4 text-xs text-gray-600 space-y-1">
-                      {Object.entries(item.selectedSizes || {}).map(([subName, size]) => (
+                      {Object.entries(item.selectedSizes || []).map(([subName, size]) => (
                         <div key={subName}>
                           {subName} - Beden: {size}
                         </div>

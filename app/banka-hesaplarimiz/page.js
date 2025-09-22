@@ -1,16 +1,41 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiCopy } from "react-icons/fi";
 import { getAccounts, getBanks } from "../utils/axiosInstance";
 
-const banks = await getBanks();
-const bankAccounts = await getAccounts();
-
 export default function BankAccounts() {
+    const [banks, setBanks] = useState([]);
+    const [bankAccounts, setBankAccounts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const banksData = await getBanks();
+                const accountsData = await getAccounts();
+                setBanks(banksData || []);
+                setBankAccounts(accountsData || []);
+            } catch (error) {
+                console.error("Banka bilgileri alınamadı:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
+
     const handleCopy = (text) => {
         navigator.clipboard.writeText(text);
         alert(`Kopyalandı: ${text}`);
     };
+
+    if (loading) {
+        return (
+            <div className="max-w-3xl mx-auto p-6 text-center text-gray-500">
+                Yükleniyor...
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-3xl mx-auto p-6">
@@ -29,7 +54,7 @@ export default function BankAccounts() {
                                 {bank?.logoUrl && (
                                     <img
                                         src={bank.logoUrl}
-                                        alt={bank.name}
+                                        alt={bank?.name || "Banka"}
                                         className="w-14 h-14 object-contain"
                                     />
                                 )}

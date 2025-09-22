@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getProductCategorySlug } from "../../navLinks";
@@ -8,7 +8,7 @@ import { TbBasketPlus } from "react-icons/tb";
 import { AiOutlineSearch } from "react-icons/ai";
 import Image from "next/image";
 import { getProducts } from "../../utils/axiosInstance";
-const products = await getProducts()
+
 
 export default function ProductSearch() {
   const [query, setQuery] = useState("");
@@ -16,12 +16,19 @@ export default function ProductSearch() {
   const router = useRouter();
   const { addToCart } = useCart();
 
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    getProducts().then((res) => setProducts(res));
+  }, []);
+
   const filteredProducts =
     query.trim().length > 0
-      ? products?.filter((p) =>
-        p.name.toLowerCase().includes(query.toLowerCase())
+      ? (products?.data || products || []).filter((p) =>
+        p.name?.toLowerCase().includes(query.toLowerCase())
       )
       : [];
+
 
   const imageOf = (item) => {
     return item.isSet?.id === 1
