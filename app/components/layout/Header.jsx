@@ -15,6 +15,7 @@ import CartDropdown from "./cart/CartDropdown";
 import ProductSearch from "./ProductSearch";
 import { useCart } from "../../hooks/useCart";
 import { getGeneralSettings, getNavLinks } from "../../utils/axiosInstance";
+import Image from "next/image";
 
 const navLinks = await getNavLinks();
 const generalData = await getGeneralSettings();
@@ -146,7 +147,13 @@ export default function Header() {
         {/* Orta Bar */}
         <div className=" md:grid md:grid-cols-3 md:py-2 md:items-center md:gap-2">
           <div className="hidden md:flex font-bold text-base sm:text-lg">
-            Özhan Asker Malzemeleri
+            <Image
+              src="/images/logo.png"
+              alt="logo"
+              width={300}
+              height={100}
+              className="w-[300px] h-[100px] object-contain"
+            />
           </div>
           <div className="col-span-2 md:col-span-1 order-3 md:order-none flex justify-center w-full">
             <ProductSearch />

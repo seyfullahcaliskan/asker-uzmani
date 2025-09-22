@@ -12,14 +12,14 @@ export async function generateMetadata({ params }) {
 
   if (!categoryInfo || !product) {
     return {
-      title: "Ürün Bulunamadı - Özhan Asker Malzemeleri",
+      title: "Ürün Bulunamadı -  Asker Uzmanı",
       description: "Aradığınız ürün mevcut değil.",
       robots: { index: false, follow: false },
     };
   }
 
   return {
-    title: `${product.name} - Özhan Asker Malzemeleri`,
+    title: `${product.name} - Asker Uzmanı`,
     description: `${product.name} hakkında detaylı bilgi alın. ${categoryInfo.label} kategorisindeki en kaliteli ürünler.`,
   };
 }

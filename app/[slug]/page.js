@@ -10,14 +10,14 @@ export async function generateMetadata({ params }) {
 
   if (!categoryInfo) {
     return {
-      title: "Kategori Bulunamadı - Özhan Asker Malzemeleri",
+      title: "Kategori Bulunamadı - Asker Uzmanı",
       description: "Aradığınız kategori mevcut değil.",
       robots: { index: false, follow: false },
     };
   }
 
   return {
-    title: `${categoryInfo.label} - Özhan Asker Malzemeleri`,
+    title: `${categoryInfo.label} - Asker Uzmanı`,
     description: `${categoryInfo.label} kategorisindeki en kaliteli ürünler.`,
   };
 }
@@ -25,6 +25,6 @@ export async function generateMetadata({ params }) {
 export default async function CategoryPage({ params }) {
   const p = await params;
   const products = await getProducts(); // Server tarafında products verisi çağırılıyor
-  
+
   return <CategoryPageClient slug={p.slug} products={products} />;
 }

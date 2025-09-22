@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
 import { FaFacebook, FaInstagram, FaPhone, FaWhatsapp } from "react-icons/fa";
 
@@ -53,7 +54,31 @@ export default function Footer() {
 
   return (
     <footer className="bg-white text-black pt-12 border-t border-black cabin">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 text-sm">
+      <div className="flex flex-col justify-center items-center border-t border-b border-black mb-6">
+        <Image
+          src="/images/paytr/bankalar-tek-parca.jpg"
+          alt="logo"
+          width={300}
+          height={100}
+          className="w-[100%] md:[50%] h-[100px] object-contain"
+        />
+
+        <Image
+          src="/images/paytr/tekparca-logolar-1.jpg"
+          alt="logo"
+          width={300}
+          height={100}
+          className="w-full h-[100px] object-contain"
+        />
+        <Image
+          src="/images/paytr/tekparca-logolar-3.jpg"
+          alt="logo"
+          width={300}
+          height={100}
+          className="w-full h-[100px] object-contain "
+        />
+      </div>
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 text-sm ">
         {/* {footerSections.map((section, index) => (
           <div key={index}>
             <h3
@@ -105,7 +130,7 @@ export default function Footer() {
         </a>
       </div>
       <div className="max-w-7xl mx-auto px-4 mt-8">
-        <hr className="border-t border-black mt-6" />
+        <hr className="" />
         <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-600 mt-4 pb-6 gap-2">
           {/* <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center md:justify-start">
             <a href="#" className="hover:underline">
@@ -124,7 +149,7 @@ export default function Footer() {
               Web Sitesi Hüküm ve Koşulları
             </a>
           </div> */}
-          <p>© 2025 Özhan Asker Malzemeleri </p>
+          <p>© 2025 - Asker Uzmanı </p>
         </div>
 
         <div className="flex justify-center md:text-md text-gray-600 pb-6">
