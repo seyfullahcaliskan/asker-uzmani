@@ -21,7 +21,7 @@ export default function OnlinePaymentCheckout({ order, formData }) {
                 customerPhone: order.customerPhone,
                 customerAddress: order.customerAddress,
                 orderNotes: formData.orderNotes,
-                testMode: 1,
+                testMode: 0,
                 amount: order.amount,
                 items: order.items
             });
