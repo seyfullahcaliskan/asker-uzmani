@@ -36,49 +36,63 @@ export default function Home() {
     (link) => link.filterBy === "category" && link.isHomePage?.id !== 1
   );
 
-  // Reusable slider
-  const Slider = ({ items }) => {
-    const sliderRef = useRef(null);
+const Slider = ({ items }) => {
+  const sliderRef = useRef(null);
 
-    const scroll = (direction) => {
-      if (!sliderRef.current) return;
-      const { clientWidth } = sliderRef.current;
-      sliderRef.current.scrollBy({
-        left: direction === "left" ? -clientWidth : clientWidth,
-        behavior: "smooth",
-      });
-    };
-
-    return (
-      <div className="relative group">
-        {/* Scroll Buttons */}
-        <button
-          onClick={() => scroll("left")}
-          className="hidden md:flex items-center justify-center absolute -left-[60px] top-1/2 -translate-y-1/2 z-20 bg-transparent hover:shadow-md p-2 rounded-full hover:bg-gray-100"
-        >
-          <BiChevronLeft className="w-5 h-5" />
-        </button>
-
-        <div
-          ref={sliderRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-4"
-        >
-          {items.map((product) => (
-            <div key={product.slug} className="snap-start">
-              <ProductCard set={product} />
-            </div>
-          ))}
-        </div>
-
-        <button
-          onClick={() => scroll("right")}
-          className="hidden md:flex items-center justify-center absolute -right-[60px] top-1/2 -translate-y-1/2 z-20 bg-transparent hover:shadow-md p-2 rounded-full hover:bg-gray-100"
-        >
-          <BiChevronRight className="w-5 h-5" />
-        </button>
-      </div>
-    );
+  const scroll = (direction) => {
+    if (!sliderRef.current) return;
+    const { clientWidth } = sliderRef.current;
+    sliderRef.current.scrollBy({
+      left: direction === "left" ? -clientWidth : clientWidth,
+      behavior: "smooth",
+    });
   };
+
+  useEffect(() => {
+    if (!sliderRef.current) return;
+
+    const isMobile = window.innerWidth < 768;
+    const limit = isMobile ? 2 : 4;
+
+    if (items.length <= limit) return;
+
+    const interval = setInterval(() => {
+      scroll("right");
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [items]);
+
+  return (
+    <div className="relative group">
+      {/* Scroll Buttons */}
+      <button
+        onClick={() => scroll("left")}
+        className="hidden md:flex items-center justify-center absolute -left-[60px] top-1/2 -translate-y-1/2 z-20 bg-transparent hover:shadow-md p-2 rounded-full hover:bg-gray-100"
+      >
+        <BiChevronLeft className="w-5 h-5" />
+      </button>
+
+      <div
+        ref={sliderRef}
+        className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory pb-4"
+      >
+        {items.map((product) => (
+          <div key={product.slug} className="snap-start">
+            <ProductCard set={product} disableHoverEffect />
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={() => scroll("right")}
+        className="hidden md:flex items-center justify-center absolute -right-[60px] top-1/2 -translate-y-1/2 z-20 bg-transparent hover:shadow-md p-2 rounded-full hover:bg-gray-100"
+      >
+        <BiChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
+};
 
   return (
     <div className="space-y-16 px-4 md:px-8">

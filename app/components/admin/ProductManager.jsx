@@ -205,17 +205,6 @@ export default function ProductManager({ initialProducts = [] }) {
 
       if (response.success) {
         alert(`✅ Ürün başarıyla ${editIndex !== null ? "güncellendi" : "eklendi"}!`);
-
-        // State'i güncelle
-        setProducts((prev) => {
-          if (editIndex !== null) {
-            const updated = [...prev];
-            updated[editIndex] = { ...form, ...productData };
-            return updated;
-          }
-          return [...prev, response.data];
-        });
-
         closeModal();
       }
     } catch (error) {
@@ -320,7 +309,7 @@ export default function ProductManager({ initialProducts = [] }) {
                   </tr>
                 ) : (
                   products.map((product, index) => (
-                    <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+                    <tr key={product?.name} className="hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex gap-2">
                           <button
@@ -357,15 +346,15 @@ export default function ProductManager({ initialProducts = [] }) {
                       <td className="px-6 py-4">
                         <div>
                           <h3 className="font-semibold text-gray-900 mb-1">
-                            {product.name}
+                            {product?.name}
                           </h3>
                           <p className="text-sm text-gray-600 mb-1">
-                            📂 {product.category || "Kategori yok"}
+                            📂 {product?.category || "Kategori yok"}
                           </p>
-                          {product.description && (
+                          {product?.description && (
                             <p className="text-sm text-gray-500 line-clamp-2">
-                              {product.description.substring(0, 60)}
-                              {product.description.length > 60 ? "..." : ""}
+                              {product?.description.substring(0, 60)}
+                              {product?.description?.length > 60 ? "..." : ""}
                             </p>
                           )}
                         </div>
@@ -374,49 +363,49 @@ export default function ProductManager({ initialProducts = [] }) {
                       <td className="px-6 py-4">
                         <div className="space-y-1">
                           <div className="font-semibold text-gray-900">
-                            💰 {product.price || 0}₺
+                            💰 {product?.price || 0}₺
                           </div>
-                          {product.cartPrice && product.cartPrice !== product.price && (
+                          {product?.cartPrice && product?.cartPrice !== product?.price && (
                             <div className="text-sm text-green-600">
-                              🛒 {product.cartPrice}₺
+                              🛒 {product?.cartPrice}₺
                             </div>
                           )}
                         </div>
                       </td>
 
                       <td className="px-6 py-4">
-                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${product.stock > 10
+                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${product?.stock > 10
                           ? "bg-green-100 text-green-800"
-                          : product.stock > 0
+                          : product?.stock > 0
                             ? "bg-yellow-100 text-yellow-800"
                             : "bg-red-100 text-red-800"
                           }`}>
-                          📦 {product.stock || 0}
+                          📦 {product?.stock || 0}
                         </span>
                       </td>
 
                       <td className="px-6 py-4">
-                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${product.isSet
+                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${product?.isSet
                           ? "bg-purple-100 text-purple-800"
                           : "bg-blue-100 text-blue-800"
                           }`}>
-                          {product.isSet ? "📦 Set" : "🔧 Tekil"}
+                          {product?.isSet ? "📦 Set" : "🔧 Tekil"}
                         </span>
                       </td>
 
                       <td className="px-6 py-4">
                         <div className="space-y-1">
-                          {product.isSet ? (
+                          {product?.isSet ? (
                             <div className="text-sm text-gray-600">
-                              🔗 {product.subProducts?.length || 0} alt ürün
+                              🔗 {product?.subProducts?.length || 0} alt ürün
                             </div>
                           ) : (
                             <div className="text-sm text-gray-600">
-                              📏 {product.sizes?.length || 0} beden
+                              📏 {product?.sizes?.length || 0} beden
                             </div>
                           )}
                           <div className="text-xs text-gray-500">
-                            🖼️ {(product.images?.length || 0) + (product.mainImagePath ? 1 : 0)} resim
+                            🖼️ {(product?.images?.length || 0) + (product?.mainImagePath ? 1 : 0)} resim
                           </div>
                         </div>
                       </td>

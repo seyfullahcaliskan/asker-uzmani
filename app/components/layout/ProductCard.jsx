@@ -15,12 +15,12 @@ export default function ProductCard({ set }) {
   const handleAddToCart = () => {
     addToCart(set);
   };
-
+console.log(set)
   return (
     <>
       <div
-        className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden max-w-xs mx-auto hover:shadow-lg hover:scale-105 transition-all duration-300 
-        md:max-w-sm"
+        className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden min-w-[200px] min-h-[300px] mx-auto hover:shadow-lg hover:scale-105 transition-all duration-300 
+        md:max-w-sm md:min-w-[200px] md:min-h-[300px]"
         onMouseEnter={() => setIsAllHovered(true)}
         onMouseLeave={() => setIsAllHovered(false)}
       >
@@ -28,7 +28,7 @@ export default function ProductCard({ set }) {
         <Link href={`/${categorySlug}/${set.slug}`}>
           <div className="relative bg-gray-50 p-3 md:p-4 cursor-pointer">
             <Image
-              src={set.mainImagePath || set.images?.[0] || "/images/no_image.jpg"}
+              src={set?.mainImagePath || set?.images?.[0].path || "/images/no_image.jpg"}
               alt={set.name}
               width={500}
               height={300}
