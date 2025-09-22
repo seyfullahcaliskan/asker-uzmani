@@ -14,8 +14,8 @@ RUN npm install
 # Tüm kaynak dosyaları kopyala
 COPY . .
 
-# Build sırasında env dosyasını da kopyala (eğer varsa)
-COPY .env .env
+# Build sırasında production env dosyasını kullan
+COPY .env.production .env
 
 # Next.js build
 RUN npm run build
@@ -32,7 +32,7 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/next.config.* ./ 
-COPY --from=builder /app/.env ./.env
+COPY --from=builder /app/.env.production ./.env
 
 # Portu expose et
 EXPOSE 8086
