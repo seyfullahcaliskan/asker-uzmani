@@ -60,7 +60,7 @@ export default function Footer() {
           alt="logo"
           width={300}
           height={100}
-          className="w-[100%] md:[50%] h-[100px] object-contain"
+          className="w-[20%] md:[10%] h-[100px] object-contain"
         />
 
         <Image

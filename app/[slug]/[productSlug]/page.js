@@ -7,7 +7,7 @@ export async function generateMetadata({ params }) {
   const { slug, productSlug } = p;
 
   const categoryInfo = getCategoryBySlug(slug);
-  const products = await getProducts(); // server tarafında ürünleri çağır
+  const products = await getProducts(); 
   const product = products.find((p) => p.slug === productSlug);
 
   if (!categoryInfo || !product) {
@@ -20,12 +20,12 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `${product.name} - Asker Uzmanı`,
-    description: `${product.name} hakkında detaylı bilgi alın. ${categoryInfo.label} kategorisindeki en kaliteli ürünler.`,
+    description: `${product.name} ürününü detaylıca inceleyin. ${categoryInfo.label} kategorisindeki en kaliteli askeri ürünlere güvenle ulaşın!`,
   };
 }
 
 export default async function ProductDetail({ params }) {
   const p = await params;
-  const products = await getProducts(); // ürünler server tarafında çekiliyor
+  const products = await getProducts();
   return <ProductDetailClient params={p} products={products} />;
 }

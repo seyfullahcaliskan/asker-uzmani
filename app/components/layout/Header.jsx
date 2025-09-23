@@ -97,10 +97,13 @@ export default function Header() {
                 <span className="text-[10px]">Banka Hesaplarımız</span></div>
             </Link>
             <div className="text-gray-400 text-lg">|</div>
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
-              <LiaLifeRingSolid className="text-xl" />
-              <span className="text-[10px]">Bize Ulaşın</span>
-            </div>
+            <Link
+              href="/bize-ulasin"
+            >
+              <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
+                <AiTwotoneBank className="text-xl" />
+                <span className="text-[10px]">Bize Ulaşın</span></div>
+            </Link>
           </div>
 
           {/* Sağ - Mobil Hamburger */}
@@ -164,7 +167,7 @@ export default function Header() {
         )}
 
         {/* Orta Bar */}
-        <div className=" md:grid md:grid-cols-3 md:py-2 md:items-center md:gap-2">
+        <div className=" md:grid md:grid-cols-3 md:py-2 md:items-start md:gap-2">
           <div className="hidden md:flex font-bold text-base sm:text-lg">
             <Image
               src="/images/logo.png"

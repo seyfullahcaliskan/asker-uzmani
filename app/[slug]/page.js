@@ -18,13 +18,13 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `${categoryInfo.label} - Asker Uzmanı`,
-    description: `${categoryInfo.label} kategorisindeki en kaliteli ürünler.`,
+    description: `${categoryInfo.label} kategorisinde en kaliteli ürünleri keşfedin. İhtiyacınız olan askeri malzemeleri güvenle online sipariş verin!`,
   };
 }
 
 export default async function CategoryPage({ params }) {
   const p = await params;
-  const products = await getProducts(); // Server tarafında products verisi çağırılıyor
+  const products = await getProducts();
 
   return <CategoryPageClient slug={p.slug} products={products} />;
 }
