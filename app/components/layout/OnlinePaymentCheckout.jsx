@@ -1,20 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
 import { axiosInstance } from "../../utils/axiosInstance";
+import MesafeliSatisSozlesmesi from "../../mesafeli-satis-sozlesmesi/page";
 
 export default function OnlinePaymentCheckout({ order, formData }) {
     const [loading, setLoading] = useState(false);
     const [iframeUrl, setIframeUrl] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [error, setError] = useState(null);
+
+    const [agreementChecked, setAgreementChecked] = useState(false);
+    const [isAgreementModalOpen, setIsAgreementModalOpen] = useState(false);
 
     const handlePay = async () => {
         try {
             setLoading(true);
             setError(null);
 
-            // 1. Siparişi oluştur
             const orderRes = await axiosInstance.post("/api/orders/create", {
                 customerName: order.customerName,
                 customerEmail: order.customerEmail,
@@ -28,7 +32,6 @@ export default function OnlinePaymentCheckout({ order, formData }) {
 
             const { merchantOid } = orderRes.data;
 
-            // 2. PayTR token al
             const tokenRes = await axiosInstance.post("/api/orders/paytr/token", {
                 merchantOid,
                 amount: order.amount * 100,
@@ -38,10 +41,7 @@ export default function OnlinePaymentCheckout({ order, formData }) {
                 throw new Error("PayTR token alınamadı!");
             }
 
-            // 3. Iframe URL hazırla
-            const iframe = `https://www.paytr.com/odeme/guvenli/${tokenRes.data.token}`;
-            setIframeUrl(iframe);
-            setIsModalOpen(true);
+            setIframeUrl(`https://www.paytr.com/odeme/guvenli/${tokenRes.data.token}`);
 
         } catch (err) {
             console.error("Online ödeme hatası:", err);
@@ -52,73 +52,84 @@ export default function OnlinePaymentCheckout({ order, formData }) {
     };
 
     return (
-        <div className="mt-5">
-            {/* Hata mesajı */}
+        <div className="mt-6 space-y-4 max-w-xl mx-auto px-4">
             {error && (
-                <div className="mb-3 text-red-600 bg-red-100 border border-red-300 px-4 py-2 rounded-lg text-sm">
+                <div className="mb-3 text-red-700 bg-red-100 border border-red-300 px-4 py-3 rounded-lg text-sm shadow-sm">
                     {error}
                 </div>
             )}
 
+            {/* Checkbox */}
+            <div className="flex items-center gap-3">
+                <input
+                    type="checkbox"
+                    id="agreementCheckbox"
+                    checked={agreementChecked}
+                    onChange={() => setIsAgreementModalOpen(true)}
+                    className="w-5 h-5 text-blue-600 accent-blue-600 rounded"
+                />
+                <label htmlFor="agreementCheckbox" className="select-none text-gray-700 font-medium">
+                    Mesafeli satış sözleşmesini okudum ve onaylıyorum
+                </label>
+            </div>
+
             {/* Ödeme butonu */}
-            <button
+            <Button
+                label="Ödeme Yap"
                 onClick={handlePay}
-                disabled={loading}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-70 transition flex items-center justify-center"
+                className={`w-full py-3 font-semibold text-lg rounded-lg transition ${
+                    agreementChecked
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+                disabled={!agreementChecked || loading}
+                loading={loading}
+            />
+
+            {/* Sözleşme Modal */}
+            <Dialog
+                visible={isAgreementModalOpen}
+                style={{ width: '95%', maxWidth: '650px', zIndex:999 }}
+                modal
+                onHide={() => setIsAgreementModalOpen(false)}
+                draggable={false}
+                resizable={false}
+                className="rounded-lg"
             >
-                {loading ? (
-                    <span className="flex items-center gap-2">
-                        <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
-                        Yükleniyor...
-                    </span>
-                ) : (
-                    "Ödeme Yap"
-                )}
-            </button>
-
-            {/* Modal */}
-            {isModalOpen && (
-                <div
-                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-                    onClick={() => setIsModalOpen(false)}
-                >
-                    <div
-                        className="relative w-full max-w-5xl mx-4 bg-white rounded-xl shadow-lg overflow-hidden"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        {/* Header */}
-                        <div className="flex justify-between items-center px-4 py-3 border-b">
-                            <h2 className="text-lg font-semibold">Güvenli Ödeme</h2>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="text-gray-500 hover:text-black text-xl"
-                            >
-                                ✕
-                            </button>
-                        </div>
-
-                        {/* Iframe */}
-                        <div className="max-h-[85vh] overflow-y-auto">
-                            <iframe
-                                src={iframeUrl}
-                                id="paytriframe"
-                                frameBorder="0"
-                                scrolling="auto"
-                                className="w-full h-[80vh] md:h-[700px]"
-                            ></iframe>
-                        </div>
-
-                        {/* Footer */}
-                        <div className="flex justify-end px-4 py-3 border-t bg-gray-50">
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-                            >
-                                Kapat
-                            </button>
-                        </div>
-                    </div>
+                <div className="p-4 text-sm leading-relaxed max-h-[70vh] overflow-y-auto">
+                    <MesafeliSatisSozlesmesi />
                 </div>
+
+                <div className="flex justify-end mt-4 p-4">
+                    <Button
+                        label="Onaylıyorum"
+                        onClick={() => {
+                            setAgreementChecked(true);
+                            setIsAgreementModalOpen(false);
+                        }}
+                        className={`w-full py-3 font-semibold text-lg rounded-lg transition bg-blue-600 hover:bg-blue-700 text-white`}
+                    />
+                </div>
+            </Dialog>
+
+            {/* Ödeme iframe modal */}
+            {iframeUrl && (
+                <Dialog
+                    visible={!!iframeUrl}
+                    style={{ width: '95%', maxWidth: '1000px', zIndex:999  }}
+                    modal
+                    onHide={() => setIframeUrl(null)}
+                    draggable={false}
+                    resizable={false}
+                    className="rounded-lg"
+                >
+                    <iframe
+                        src={iframeUrl}
+                        frameBorder="0"
+                        scrolling="auto"
+                        className="w-full h-[70vh] rounded-md"
+                    ></iframe>
+                </Dialog>
             )}
         </div>
     );

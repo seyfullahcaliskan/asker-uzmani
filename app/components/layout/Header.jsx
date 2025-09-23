@@ -163,6 +163,14 @@ export default function Header() {
             >
               Sipariş Takip
             </Link>
+            <Link
+              onClick={() => setMenuOpen(!menuOpen)}
+              key="/bize-ulasin"
+              href="/bize-ulasin"
+              className="px-4 py-3 text-sm font-semibold text-gray-700 hover:text-[#7F7B59] hover:bg-gray-200 transition-colors"
+            >
+              Bize Ulaşın
+            </Link>
           </div>
         )}
 
