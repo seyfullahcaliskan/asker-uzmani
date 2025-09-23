@@ -1,5 +1,5 @@
 # 1. Base image
-FROM node:20-alpine AS base
+FROM node:20-slim AS base
 
 # 2. Build aşaması
 FROM base AS builder
