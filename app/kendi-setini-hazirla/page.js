@@ -11,7 +11,7 @@ export default function CustomSetPage() {
   const [groupedProducts, setGroupedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [discountRate, setDiscountRate] = useState(0.1); // %10
-  const [discountThreshold, setDiscountThreshold] = useState(1000); // 5000 TL
+  const [discountThreshold, setDiscountThreshold] = useState(2000); // 5000 TL
   const [errorMessage, setErrorMessage] = useState("");
   const [hasMissingSize, setHasMissingSize] = useState(false);
 
@@ -124,6 +124,14 @@ export default function CustomSetPage() {
   const handleAddToCart = () => {
     if (hasMissingSize || selectedProducts.length === 0) return;
 
+    // selectedSizes objesini oluştur
+    const selectedSizesObj = {};
+    selectedProducts.forEach((p) => {
+      if (p.selectedSize) { // null, undefined veya boş değerleri atla
+        selectedSizesObj[p.name] = p.selectedSize;
+      }
+    });
+
     addToCart(
       {
         id: `manual-set-${Date.now()}`,
@@ -131,13 +139,25 @@ export default function CustomSetPage() {
         name: "Kendi Oluşturduğun Set",
         isSet: { id: 1 },
         subProducts: selectedProducts.map((p) => ({
-          product: p,
-          quantity: p.quantity,
-          selectedSize: p.selectedSize,
+          count: p.quantity,
+          product: {
+            id: p.id,
+            name: p.name,
+            slug: p.slug,
+            price: p.price,
+            sizes: p.sizes || [],
+            stock: p.stock,
+            images: p.images || [],
+            cart_price: p.cartPrice || 0,
+            description: p.description || "",
+            main_image_path: p.mainImagePath || ""
+          },
+          main_product_id: `manual-set-${Date.now()}`
         })),
         price: discountedTotal,
         mainImagePath: "/images/kendi-setin.png",
         isCustomSet: true,
+        selectedSizes: selectedSizesObj, // selectedSize yerine selectedSizes
       },
       null,
       1
