@@ -50,6 +50,14 @@
 .border-acik-kahve { border-color: var(--acik-kahve); }
 .border-koyu-kahve { border-color: var(--koyu-kahve); }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE ve Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;

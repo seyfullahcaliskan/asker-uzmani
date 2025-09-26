@@ -44,7 +44,7 @@ export const CartProvider = ({ children }) => {
         (item) =>
           item.id === product.id &&
           item.selectedSize === selectedSize &&
-          item.isSet === product.isSet.id === 1
+          item.isSet?.id === product.isSet?.id
       );
 
       if (existingItemIndex > -1) {

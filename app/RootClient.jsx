@@ -13,7 +13,7 @@ function AppContent({ children }) {
     <CartProvider>
       <Header />
       <WhatsappButton />
-      <main className="min-h-screen container mx-auto py-4 md:py-12">
+      <main className="min-h-screen container mx-auto py-4">
         {children}
       </main>
       <Footer />

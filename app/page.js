@@ -38,41 +38,53 @@ export default function Home() {
 
   const Slider = ({ items }) => {
     const sliderRef = useRef(null);
+    const intervalRef = useRef(null);
 
     const scroll = (direction) => {
       if (!sliderRef.current) return;
       const { clientWidth, scrollLeft, scrollWidth } = sliderRef.current;
 
+      const step = clientWidth * 0.5; // 2 ürün atlamak için (yaklaşık yarım ekran)
       if (direction === "right") {
-        // Eğer sona geldiyse başa dön
         if (scrollLeft + clientWidth >= scrollWidth - 10) {
           sliderRef.current.scrollTo({ left: 0, behavior: "smooth" });
         } else {
-          sliderRef.current.scrollBy({ left: clientWidth, behavior: "smooth" });
+          sliderRef.current.scrollBy({ left: step, behavior: "smooth" });
         }
       } else {
-        // Eğer başa geldiyse sona dön
         if (scrollLeft <= 0) {
           sliderRef.current.scrollTo({ left: scrollWidth, behavior: "smooth" });
         } else {
-          sliderRef.current.scrollBy({ left: -clientWidth, behavior: "smooth" });
+          sliderRef.current.scrollBy({ left: -step, behavior: "smooth" });
         }
       }
     };
 
+    const startAutoScroll = () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+
+      const setRandomInterval = () => {
+        const randomDelay = Math.floor(Math.random() * 2000) + 4000; // 3000-6000 ms arası
+        intervalRef.current = setTimeout(() => {
+          scroll("right");
+          setRandomInterval(); // tekrar kur
+        }, randomDelay);
+      };
+
+      setRandomInterval();
+    };
+
     useEffect(() => {
       if (!sliderRef.current) return;
-
       const isMobile = window.innerWidth < 768;
       const limit = isMobile ? 2 : 4;
-
       if (items.length <= limit) return;
 
-      const interval = setInterval(() => {
-        scroll("right");
-      }, 3000);
+      startAutoScroll();
 
-      return () => clearInterval(interval);
+      return () => {
+        if (intervalRef.current) clearTimeout(intervalRef.current);
+      };
     }, [items]);
 
     return (
@@ -87,8 +99,9 @@ export default function Home() {
 
         <div
           ref={sliderRef}
-          className="flex gap-4 overflow-x-auto scrollbar-none scroll-smooth snap-x snap-mandatory pb-4"
+          className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 no-scrollbar"
         >
+
           {items.map((product) => (
             <div key={product.slug} className="snap-start">
               <ProductCard set={product} disableHoverEffect />
@@ -106,16 +119,17 @@ export default function Home() {
     );
   };
 
-
   return (
-    <div className="space-y-16 px-4 md:px-8">
+    <div className="mx-auto space-y-4 md:space-y-16 px-4 md:px-8">
       {/* Setler */}
       {setCategory && products.some((p) => p.isSet?.id === 1) && (
-        <div>
-          <div className="mb-4">
+        <div className="px-2 border-b-1 border-gray-300">
+          <div className="mb-4 text-center">
             <h2 className="text-2xl font-bold">{setCategory.name}</h2>
             {setCategory.label && (
-              <p className="text-lg text-gray-500">{setCategory.label}</p>
+              <p className="text-lg text-gray-700 font-bold">
+                {setCategory.label}
+              </p>
             )}
           </div>
           <Slider items={products.filter((p) => p.isSet?.id === 1)} />
@@ -128,16 +142,10 @@ export default function Home() {
           (p) => p.category === category.category
         );
 
-        if (!categoryProducts.length) return null; // ürün yoksa render etme
+        if (!categoryProducts.length) return null;
 
         return (
-          <div key={category.slug}>
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold">{category.name}</h2>
-              {category.label && (
-                <p className="text-lg text-gray-500">{category.label}</p>
-              )}
-            </div>
+          <div key={category.slug} className="px-2 border-b-1 border-gray-300">
             <Slider items={categoryProducts} />
           </div>
         );

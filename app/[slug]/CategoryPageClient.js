@@ -52,7 +52,7 @@ export default function CategoryPageClient({ slug, products }) {
         </div>
       ) : (
         <>
-          <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center lg:text-left">
+          <h1 className="text-md md:text-3xl font-bold mb-2 md:mb-6 text-center lg:text-left">
             {categoryInfo.label}
           </h1>
 
@@ -72,7 +72,7 @@ export default function CategoryPageClient({ slug, products }) {
             </div>
 
             <div className="col-span-3">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.slug} set={product} />
                 ))}

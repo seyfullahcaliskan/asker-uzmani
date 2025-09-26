@@ -32,13 +32,11 @@ export default function ProductDetailClient({ params, products }) {
     );
   }
 
-  return (
-    <div className="container mx-auto py-6">
+  return ( 
       <ProductDetailPage
         productData={product}
         isSet={categoryInfo.filterBy === "isSet"}
         categoryInfo={categoryInfo}
       />
-    </div>
   );
 }

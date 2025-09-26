@@ -7,13 +7,13 @@ import {
 } from "react-icons/ri";
 import { PiPackageFill } from "react-icons/pi";
 import { AiTwotoneBank } from "react-icons/ai";
-import { LiaLifeRingSolid } from "react-icons/lia";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import CartDropdown from "./cart/CartDropdown";
 import ProductSearch from "./ProductSearch";
 import { useCart } from "../../hooks/useCart";
 import { getGeneralSettings, getNavLinks } from "../../utils/axiosInstance";
 import Image from "next/image";
+import { FaChevronRight } from "react-icons/fa";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,7 +22,6 @@ export default function Header() {
   const [navLinks, setNavLinks] = useState([]);
   const [generalData, setGeneralData] = useState(null);
 
-  // API'den datayı çek
   useEffect(() => {
     async function fetchData() {
       try {
@@ -41,27 +40,43 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow">
-      {/* Kampanya Bandı */}
-      <div
-        className="flex flex-col justify-center items-center font-bold text-base md:text-2xl py-2 md:py-3 bg-center text-white text-center"
-        style={{ backgroundImage: "url('/images/kamuflaj_desen.png')" }}
-      >
-        <span className="animate-blink-white text-sm md:text-lg">
-          Açılışa Özel Kampanyalı Fiyatlar
-        </span>
-        {generalData?.freeCargoPrice && (
-          <span className="animate-blink-white text-sm md:text-lg mt-1 md:mt-2">
-            {generalData.freeCargoPrice}₺ ve Üzeri Alışverişlerde{" "}
-            <span className="underline">KARGO ÜCRETSİZ</span>
-          </span>
-        )}
+     <div
+          className="flex flex-col justify-center items-center font-bold text-base md:text-2xl py-2 md:py-3 bg-center text-white text-center"
+          style={{ backgroundImage: "url('/images/kamuflaj_desen.png')" }}
+        >
+        <div className="max-w-7xl mx-auto py-2 flex flex-col items-center justify-center text-center">
+          
+          <Link
+            href="/kendi-setini-hazirla"
+            className="bg-acik-yesil hover:bg-acik-kahve text-white px-6 py-3 rounded-2xl text-sm md:text-base font-semibold shadow-md transition-all duration-300"
+          >
+            AVANTAJLI FİYATLARLAR KENDİ SETİNİ HAZIRLA !
+          </Link>
+        </div>
       </div>
+      {/* Kampanya Bandı */}
+      {/* <div className="hidden md:flex flex-col">
+        <div
+          className="flex flex-col justify-center items-center font-bold text-base md:text-2xl py-2 md:py-3 bg-center text-white text-center"
+          style={{ backgroundImage: "url('/images/kamuflaj_desen.png')" }}
+        >
+          <span className="animate-blink-white text-sm md:text-lg">
+            Açılışa Özel Kampanyalı Fiyatlar
+          </span>
+          {generalData?.freeCargoPrice && (
+            <span className="animate-blink-white text-sm md:text-lg mt-1 md:mt-2">
+              {generalData.freeCargoPrice}₺ ve Üzeri Alışverişlerde{" "}
+              <span className="underline">KARGO ÜCRETSİZ</span>
+            </span>
+          )}
+        </div>
+      </div> */}
 
-      <div className="max-w-screen-xl mx-auto px-4">
+      <div className="max-w-screen-xl mx-auto px-2 md:px-4">
         {/* Üst Bar */}
-        <div className="flex justify-between py-2 text-[10px]">
+        <div className="flex justify-between text-[10px] h-[50px]">
           {/* Sol */}
-          <div className="flex flex-col sm:flex-row sm:gap-2 items-start sm:items-center">
+          <div className="hidden md:flex md:flex-row md:justify-start md:items-center gap-2">
             <a
               href="https://wa.me/905386820112"
               target="_blank"
@@ -81,129 +96,71 @@ export default function Header() {
 
           {/* Sağ - Masaüstü Menü */}
           <div className="hidden md:flex gap-4 items-center">
-            <Link
-              href="/siparis-takip"
-            >
+            <Link href="/siparis-takip">
               <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
                 <PiPackageFill className="text-xl" />
-                <span className="text-[10px]">Sipariş Takip</span></div>
+                <span className="text-[10px]">Sipariş Takip</span>
+              </div>
             </Link>
             <div className="text-gray-400 text-lg">|</div>
-            <Link
-              href="/banka-hesaplarimiz"
-            >
+            <Link href="/banka-hesaplarimiz">
               <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
                 <AiTwotoneBank className="text-xl" />
-                <span className="text-[10px]">Banka Hesaplarımız</span></div>
+                <span className="text-[10px]">Banka Hesaplarımız</span>
+              </div>
             </Link>
             <div className="text-gray-400 text-lg">|</div>
-            <Link
-              href="/bize-ulasin"
-            >
+            <Link href="/bize-ulasin">
               <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
                 <AiTwotoneBank className="text-xl" />
-                <span className="text-[10px]">Bize Ulaşın</span></div>
+                <span className="text-[10px]">Bize Ulaşın</span>
+              </div>
             </Link>
           </div>
 
-          {/* Sağ - Mobil Hamburger */}
-          <div className="md:hidden flex flex-row gap-4 items-center">
+          {/* Mobil Hamburger */}
+          <div className="w-full md:hidden flex justify-between gap-4 items-center py-2">
+            <button
+              onClick={() => setMenuOpen(true)}
+            >
+              <HiOutlineMenu className="text-2xl" />
+            </button>
+
+            <Image src="/images/logo.png" alt="logo" width={45} height={15} />
+
             <Link
               onClick={() => setMenuOpen(false)}
               href="/sepet"
-              className="relative p-2 rounded-md shadow-sm inline-block"
+              className="relative p-2 inline-block"
             >
               <RiShoppingBasketLine className="text-2xl" />
               {getTotalItems() > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                   {getTotalItems()}
                 </span>
               )}
             </Link>
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 rounded-md shadow-sm"
-            >
-              {menuOpen ? (
-                <HiOutlineX className="text-2xl" />
-              ) : (
-                <HiOutlineMenu className="text-2xl" />
-              )}
-            </button>
           </div>
         </div>
 
-        {/* Mobil Menü */}
-        {menuOpen && (
-          <div className="md:hidden flex flex-col border-t bg-gray-100 shadow-md divide-y divide-gray-300">
-            {Array.isArray(navLinks) &&
-              navLinks.map((link) => (
-                <Link
-                  onClick={() => setMenuOpen(!menuOpen)}
-                  key={link.href}
-                  href={link.href}
-                  className="px-4 py-3 text-sm font-semibold text-gray-700 hover:text-[#7F7B59] hover:bg-gray-200 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            <Link
-              onClick={() => setMenuOpen(!menuOpen)}
-              key="/banka-hesaplarimiz"
-              href="/banka-hesaplarimiz"
-              className="px-4 py-3 text-sm font-semibold text-gray-700 hover:text-[#7F7B59] hover:bg-gray-200 transition-colors"
-            >
-              Banka Hesaplarımız
-            </Link>
-            <Link
-              onClick={() => setMenuOpen(!menuOpen)}
-              key="/siparis-takip"
-              href="/siparis-takip"
-              className="px-4 py-3 text-sm font-semibold text-gray-700 hover:text-[#7F7B59] hover:bg-gray-200 transition-colors"
-            >
-              Sipariş Takip
-            </Link>
-            <Link
-              onClick={() => setMenuOpen(!menuOpen)}
-              key="/bize-ulasin"
-              href="/bize-ulasin"
-              className="px-4 py-3 text-sm font-semibold text-gray-700 hover:text-[#7F7B59] hover:bg-gray-200 transition-colors"
-            >
-              Bize Ulaşın
-            </Link>
-          </div>
-        )}
-
-        {/* Orta Bar */}
-        <div className=" md:grid md:grid-cols-3 md:py-2 md:items-start md:gap-2">
-          <div className="hidden md:flex font-bold text-base sm:text-lg">
+        {/* Masaüstü Arama & Sepet */}
+        <div className=" md:grid md:grid-cols-3 md:items-center md:gap-2 h-[50px]">
+          <div className="hidden md:flex font-bold text-base sm:text-lg justify-center">
             <Image
               src="/images/logo.png"
               alt="logo"
-              width={300}
-              height={100}
-              className="w-[300px] h-[100px] object-contain"
+              width={250}
+              height={50}
+              className="w-[250px] h-[50px] object-contain"
             />
           </div>
           <div className="col-span-2 md:col-span-1 order-3 md:order-none flex justify-center w-full">
             <ProductSearch />
           </div>
           <div className="hidden md:flex justify-end gap-4 items-center">
-            {/* <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
-              <RiUser6Line className="text-xl" />
-              <span className="text-[10px]">Giriş Yap</span>
-            </div>
-            <div className="text-gray-400 text-lg">|</div>
-            <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
-              <MdOutlineFavorite className="text-xl" />
-              <span className="text-[10px]">Favorilerim</span>
-            </div> */}
-            <div className="text-gray-400 text-lg">|</div>
             <CartDropdown />
           </div>
         </div>
-
-        {/* Alt Menü (Desktop) */}
         <div className="hidden md:flex justify-center items-center gap-0 py-2 mt-2">
           {Array.isArray(navLinks) &&
             navLinks.map((link, index) => (
@@ -219,6 +176,75 @@ export default function Header() {
                 )}
               </div>
             ))}
+        </div>
+
+
+        {/* ----- SLIDE MENU ----- */}
+        <div
+          className={`fixed inset-0 bg-black/50 z-[999] transition-opacity duration-300 ${menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+            }`}
+          onClick={() => setMenuOpen(false)}
+        ></div>
+
+        <div
+          className={`fixed top-0 left-0 h-full w-full bg-white shadow-xl z-[1000] transform transition-transform duration-300 ${menuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+        >
+          <div className="flex justify-between items-center p-4 border-b text-white bg-[#7F7B59]">
+            <div className="flex gap-2 items-center">
+              <HiOutlineMenu className="text-3xl" />
+              <h2 className="ml-4 text-2xl font-bold">Menü</h2>
+            </div>
+            <button onClick={() => setMenuOpen(false)}>
+              <HiOutlineX className="text-2xl" />
+            </button>
+          </div>
+          <nav className="flex flex-col">
+            {Array.isArray(navLinks) &&
+              navLinks.map((link) => (
+                <div key={link.href} className="flex justify-between items-center border-b border-gray-200 px-4 py-2 mt-2">
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="text-md hover:text-[#7F7B59]"
+                  >
+                    {link.label}
+                  </Link>
+                  <FaChevronRight className="text-gray-400 text-lg" />
+                </div>
+              ))}
+            <div key="banka-hesaplarimiz" className="flex justify-between items-center border-b border-gray-200 px-4 py-2 mt-2">
+              <Link
+                onClick={() => setMenuOpen(!menuOpen)}
+                key="/banka-hesaplarimiz"
+                href="/banka-hesaplarimiz"
+                className="text-md hover:text-[#7F7B59]"              >
+                Banka Hesaplarımız
+              </Link>
+              <FaChevronRight className="text-gray-400 text-lg" />
+            </div>
+            <div key="siparis-takip" className="flex justify-between items-center border-b border-gray-200 px-4 py-2 mt-2">
+              <Link
+                onClick={() => setMenuOpen(!menuOpen)}
+                key="/siparis-takip"
+                href="/siparis-takip"
+                className="text-md hover:text-[#7F7B59]"            >
+                Sipariş Takip
+              </Link>
+              <FaChevronRight className="text-gray-400 text-lg" />
+            </div>
+            <div key="bize-ulasin" className="flex justify-between items-center border-b border-gray-200 px-4 py-2 mt-2">
+              <Link
+                onClick={() => setMenuOpen(!menuOpen)}
+                key="/bize-ulasin"
+                href="/bize-ulasin"
+                className="text-md hover:text-[#7F7B59]"            >
+                Bize Ulaşın
+              </Link>
+              <FaChevronRight className="text-gray-400 text-lg" />
+            </div>
+          </nav>
         </div>
       </div>
     </header>

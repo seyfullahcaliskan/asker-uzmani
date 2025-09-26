@@ -198,9 +198,8 @@ export default function ProductDetailPage({ productData }) {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`text-yellow-400 ${
-          i < rating ? "fas fa-star" : "far fa-star"
-        }`}
+        className={`text-yellow-400 ${i < rating ? "fas fa-star" : "far fa-star"
+          }`}
       ></span>
     ));
   };
@@ -244,9 +243,8 @@ export default function ProductDetailPage({ productData }) {
         "Aralık",
       ];
 
-      return `${date.getDate()} ${
-        months[date.getMonth()]
-      } ${date.getFullYear()} ${days[date.getDay()]}`;
+      return `${date.getDate()} ${months[date.getMonth()]
+        } ${date.getFullYear()} ${days[date.getDay()]}`;
     };
 
     if (currentHour < 14) {
@@ -291,90 +289,83 @@ export default function ProductDetailPage({ productData }) {
     }
     return 1;
   };
-  
+
   return (
     <>
       <div className="p-4 md:p-6 bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-12">
           {/* Thumbnails Column - Hidden on mobile, shown as horizontal scroll on mobile */}
-          <div className="hidden md:block md:col-span-2">
-            <div className="space-y-3">
+          <div className="hidden md:block md:col-span-3">
+            <div className="grid grid-cols-3 gap-1">
               {isSet && (
                 <div
-                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden ${
-                    currentImageIndex === 0
-                      ? "border-blue-500"
-                      : "border-gray-200"
-                  }`}
+                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden w-[100px] h-[100px] ${currentImageIndex === 0
+                    ? "border-blue-500"
+                    : "border-gray-200"
+                    }`}
                   onClick={handleMainImageClick}
                 >
-                  <div className="flex justify-center items-center">
-                    <Image
-                      src={imageStructure.mainImage || "/images/no_image.jpg"}
-                      alt="Ana set resmi"
-                      width={100}
-                      height={20}
-                    />
-                  </div>
+                  <Image
+                    src={imageStructure.mainImage || "/images/no_image.jpg"}
+                    alt="Ana set resmi"
+                    fill
+                    className="object-contain p-1"
+                  />
                 </div>
               )}
+
               {imageStructure.products.map((product, productIndex) => (
                 <div key={productIndex} className="space-y-1">
+                  {/* Ana ürün resmi */}
                   <div
-                    className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
-                      (!isSet &&
-                        currentImageIndex >= 0 &&
-                        productIndex === 0) ||
+                    className={`relative cursor-pointer border-2 rounded-lg overflow-hidden w-[100px] h-[100px] transition-all duration-200 hover:shadow-md ${(!isSet &&
+                      currentImageIndex >= 0 &&
+                      productIndex === 0) ||
                       (isSet &&
                         currentImageIndex > 0 &&
                         currentProductIndex === productIndex)
-                        ? "border-blue-500 shadow-lg"
-                        : "border-gray-200"
-                    }`}
+                      ? "border-blue-500 shadow-lg"
+                      : "border-gray-200"
+                      }`}
                     onClick={() => handleProductSelect(productIndex)}
                   >
-                    <div className="flex justify-center items-center">
-                      <Image
-                        src={product.images?.[0] || "/images/no_image.jpg"}
-                        alt={`${product.name} thumbnail`}
-                        width={100}
-                        height={20}
-                      />
-                    </div>
-
+                    <Image
+                      src={product.images?.[0] || "/images/no_image.jpg"}
+                      alt={`${product.name} thumbnail`}
+                      fill
+                      className="object-contain p-1"
+                    />
                     {getProductLabel(productIndex) && (
-                      <div className="absolute bottom-1 left-1 text-green-800 text-xs px-1.5 py-0.5 rounded-full font-medium">
+                      <div className="absolute bottom-1 left-1 text-green-800 text-xs px-1.5 py-0.5 rounded-full font-medium bg-white">
                         {getProductLabel(productIndex)}
                       </div>
                     )}
                   </div>
+
+                  {/* Alt resimler */}
                   {product.images.length > 1 && (
                     <div className="grid grid-cols-2 gap-1">
                       {product.images.slice(1, 5).map((image, imageIndex) => (
                         <div
                           key={imageIndex}
-                          className={`relative cursor-pointer border rounded overflow-hidden transition-all duration-200 hover:shadow-sm ${
-                            (isSet && currentImageIndex === imageIndex + 1) ||
+                          className={`relative cursor-pointer border rounded overflow-hidden w-[48px] h-[48px] transition-all duration-200 hover:shadow-sm ${(isSet && currentImageIndex === imageIndex + 1) ||
                             (isSet &&
                               currentImageIndex > 0 &&
                               currentProductIndex === productIndex &&
                               currentSubImageIndex === imageIndex + 1)
-                              ? "border-blue-400 shadow-md"
-                              : "border-gray-200"
-                          }`}
+                            ? "border-blue-400 shadow-md"
+                            : "border-gray-200"
+                            }`}
                           onClick={() =>
                             handleSubImageSelect(productIndex, imageIndex + 1)
                           }
                         >
-                          <div className="flex justify-center items-center">
-                            <Image
-                              src={image || "/images/no_image.jpg"}
-                              alt={`${product.name} resim ${imageIndex + 2}`}
-                              width={100}
-                              height={80}
-                              className="w-full object-contain"
-                            />
-                          </div>
+                          <Image
+                            src={image || "/images/no_image.jpg"}
+                            alt={`${product.name} resim ${imageIndex + 2}`}
+                            fill
+                            className="object-contain p-0.5"
+                          />
                           {imageIndex === 3 && product.images.length > 5 && (
                             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                               <span className="text-white text-xs font-medium">
@@ -390,20 +381,25 @@ export default function ProductDetailPage({ productData }) {
               ))}
             </div>
           </div>
-
           {/* Main Image Column */}
           <div className="md:col-span-5">
             <div className="relative bg-transparent rounded-lg overflow-hidden">
-              {/* Mobile Thumbnails - Horizontal scroll */}
-              <div className="md:hidden mb-4">
+              <div className=" w-[400px] h-[400px] md:w-[600px] md:h-[600px]">
+                <Image
+                  src={getCurrentImage() || "/images/no_image.jpg"}
+                  alt="Ana ürün resmi"
+                  fill
+                  className="object-contain rounded-md"
+                />
+              </div>
+              <div className="md:hidden mx-2 my-4">
                 <div className="flex overflow-x-auto space-x-2 pb-2">
-                  {isSet&& (
+                  {isSet && (
                     <div
-                      className={`flex-shrink-0 cursor-pointer border-2 rounded-lg overflow-hidden ${
-                        currentImageIndex === 0
-                          ? "border-blue-500"
-                          : "border-gray-200"
-                      }`}
+                      className={`flex-shrink-0 cursor-pointer border-2 rounded-lg overflow-hidden ${currentImageIndex === 0
+                        ? "border-blue-500"
+                        : "border-gray-200"
+                        }`}
                       onClick={handleMainImageClick}
                       style={{ minWidth: "80px", height: "80px" }}
                     >
@@ -423,16 +419,15 @@ export default function ProductDetailPage({ productData }) {
                   {imageStructure.products.map((product, productIndex) => (
                     <div key={productIndex} className="flex-shrink-0">
                       <div
-                        className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${
-                          (isSet &&
-                            currentImageIndex >= 0 &&
-                            productIndex === 0) ||
+                        className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-md ${(isSet &&
+                          currentImageIndex >= 0 &&
+                          productIndex === 0) ||
                           (isSet &&
                             currentImageIndex > 0 &&
                             currentProductIndex === productIndex)
-                            ? "border-blue-500 shadow-lg"
-                            : "border-gray-200"
-                        }`}
+                          ? "border-blue-500 shadow-lg"
+                          : "border-gray-200"
+                          }`}
                         onClick={() => handleProductSelect(productIndex)}
                         style={{ minWidth: "80px", height: "80px" }}
                       >
@@ -456,18 +451,6 @@ export default function ProductDetailPage({ productData }) {
                   ))}
                 </div>
               </div>
-
-              {/* Main Image */}
-              <div className="flex justify-center items-center">
-                <Image
-                  src={getCurrentImage() || "/images/no_image.jpg"}
-                  alt="Ana ürün resmi"
-                  width={200}
-                  height={200}
-                  className="w-full h-auto object-contain"
-                />
-              </div>
-
               {shouldShowImageNavigation() && (
                 <>
                   <button
@@ -501,13 +484,12 @@ export default function ProductDetailPage({ productData }) {
                           setCurrentImageIndex(index);
                         }
                       }}
-                      className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-200 ${
-                        (isSet && currentImageIndex > 0
-                          ? currentSubImageIndex
-                          : currentImageIndex) === index
-                          ? "bg-green-500 scale-125"
-                          : "bg-white bg-opacity-70 hover:bg-opacity-90"
-                      }`}
+                      className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all duration-200 ${(isSet && currentImageIndex > 0
+                        ? currentSubImageIndex
+                        : currentImageIndex) === index
+                        ? "bg-green-500 scale-125"
+                        : "bg-white bg-opacity-70 hover:bg-opacity-90"
+                        }`}
                     />
                   ))}
                 </div>
@@ -522,9 +504,9 @@ export default function ProductDetailPage({ productData }) {
           </div>
 
           {/* Product Info Column */}
-          <div className="md:col-span-5">
+          <div className="md:col-span-4">
             <div className="space-y-4">
-              <h1 className="text-xl md:text-2xl font-bold text-gray-800 border-b-1">
+              <h1 className="text-md md:text-2xl font-bold text-gray-800 border-b-1">
                 {productData.name}
               </h1>
               {needsSizeSelection() && (
@@ -538,10 +520,10 @@ export default function ProductDetailPage({ productData }) {
                         return (
                           <div
                             key={productIndex}
-                            className="flex flex-col md:flex-row md:items-center justify-between gap-2"
+                            className="flex justify-between md:flex-row md:items-center gap-2"
                           >
-                            <span className="text-sm text-gray-600">
-                             {item.count}x - {item.product.name} 
+                            <span className="font-bold text-sm text-gray-700">
+                              {item.count}x - {item.product.name}
                             </span>
                             <div className="relative">
                               <select
@@ -598,8 +580,8 @@ export default function ProductDetailPage({ productData }) {
               )}
               <div className="space-y-2">
                 {productData.cartPrice &&
-                productData.cartPrice !== productData.price ? (
-                  <div className="flex flex-col md:flex-row md:justify-end items-start md:items-center gap-2 md:gap-5 space-y-2">
+                  productData.cartPrice !== productData.price ? (
+                  <div className="flex flex-col md:flex-row justify-end items-start md:items-center gap-2 md:gap-5 space-y-2">
                     <div className="flex items-start gap-1">
                       <div className="text-2xl md:text-3xl font-bold">
                         {productData.cartPrice} ₺
@@ -609,7 +591,7 @@ export default function ProductDetailPage({ productData }) {
                         {Math.round(
                           ((productData.price - productData.cartPrice) /
                             productData.price) *
-                            100
+                          100
                         )}{" "}
                         <MdOutlineTrendingDown />
                       </div>
@@ -645,11 +627,10 @@ export default function ProductDetailPage({ productData }) {
                   </div>
                 </div>
                 <button
-                  className={`flex items-center gap-2 py-3 px-4 md:px-6 rounded-lg font-medium shadow-md w-full md:w-auto justify-center ${
-                    isAddToCartDisabled()
-                      ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                      : "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer hover:scale-105 transition-all duration-200"
-                  }`}
+                  className={`flex items-center gap-2 py-3 px-4 md:px-6 rounded-lg font-medium shadow-md w-full md:w-auto justify-center ${isAddToCartDisabled()
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    : "bg-orange-500 hover:bg-orange-600 text-white cursor-pointer hover:scale-105 transition-all duration-200"
+                    }`}
                   onClick={handleAddToCartWithSize}
                   disabled={isAddToCartDisabled()}
                 >
@@ -674,15 +655,15 @@ export default function ProductDetailPage({ productData }) {
               {isSet && (
                 <div className="border-t pt-4">
                   <h3 className="text-gray-800 mb-3 font-bold">Set İçeriği</h3>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-4 space-y-2 ">
                     {productData?.subProducts?.map((item, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between text-sm"
+                        className="border-l-gray-400 flex items-center justify-between text-sm"
                       >
                         <span>{item.product.name}</span>
                         <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-                          {item.count} Adet
+                          x {item.count}
                         </span>
                       </div>
                     ))}
