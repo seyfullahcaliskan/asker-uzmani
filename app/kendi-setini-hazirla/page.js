@@ -11,7 +11,7 @@ export default function CustomSetPage() {
   const [groupedProducts, setGroupedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [discountRate, setDiscountRate] = useState(0.1); // %10
-  const [discountThreshold, setDiscountThreshold] = useState(2000); // 5000 TL
+  const [discountThreshold, setDiscountThreshold] = useState(5000); // 5000 TL
   const [errorMessage, setErrorMessage] = useState("");
   const [hasMissingSize, setHasMissingSize] = useState(false);
 

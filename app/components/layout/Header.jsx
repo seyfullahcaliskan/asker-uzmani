@@ -91,28 +91,28 @@ export default function Header() {
             </a>
             <span className="hidden sm:block text-gray-400 text-lg">|</span>
             <div className="text-[10px] sm:text-xs">
-              Özhan Asker Malzemeleri - Halil HAN
-            </div>
+              Whatsapp Destek Hattı
+            </div> 
           </div>
 
           {/* Sağ - Masaüstü Menü */}
           <div className="hidden md:flex gap-4 items-center">
             <Link href="/siparis-takip">
-              <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
+              <div className="flex items-center gap-2 cursor-pointer hover:text-green-800 hover:scale-110 transition-all duration-200">
                 <PiPackageFill className="text-xl" />
                 <span className="text-[10px]">Sipariş Takip</span>
               </div>
             </Link>
             <div className="text-gray-400 text-lg">|</div>
             <Link href="/banka-hesaplarimiz">
-              <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
+              <div className="flex items-center gap-2 cursor-pointer hover:text-green-800 hover:scale-110 transition-all duration-200">
                 <AiTwotoneBank className="text-xl" />
                 <span className="text-[10px]">Banka Hesaplarımız</span>
               </div>
             </Link>
             <div className="text-gray-400 text-lg">|</div>
             <Link href="/bize-ulasin">
-              <div className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200">
+              <div className="flex items-center gap-2 cursor-pointer hover:text-green-800 hover:scale-110 transition-all duration-200">
                 <AiTwotoneBank className="text-xl" />
                 <span className="text-[10px]">Bize Ulaşın</span>
               </div>
@@ -168,7 +168,7 @@ export default function Header() {
               <div key={link.href} className="flex gap-2 items-center">
                 <Link
                   href={link.href}
-                  className="relative px-4 font-semibold text-lg text-gray-800 transition-all duration-300 hover:text-[#7F7B59] hover:scale-110"
+                  className="relative px-4 font-bold text-lg text-gray-800 transition-all duration-300 hover:text-green-800 hover:scale-110 uppercase"
                 >
                   {link.label}
                 </Link>
@@ -191,7 +191,7 @@ export default function Header() {
           className={`fixed top-0 left-0 h-full w-full bg-white shadow-xl z-[1000] transform transition-transform duration-300 ${menuOpen ? "translate-x-0" : "-translate-x-full"
             }`}
         >
-          <div className="flex justify-between items-center p-4 border-b text-white bg-[#7F7B59]">
+          <div className="flex justify-between items-center p-4 border-b text-white bg-green-800">
             <div className="flex gap-2 items-center">
               <HiOutlineMenu className="text-3xl" />
               <h2 className="ml-4 text-2xl font-bold">Menü</h2>
@@ -208,7 +208,7 @@ export default function Header() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="text-md hover:text-[#7F7B59]"
+                    className="text-md hover:text-green-800"
                   >
                     {link.label}
                   </Link>
@@ -220,7 +220,7 @@ export default function Header() {
                 onClick={() => setMenuOpen(!menuOpen)}
                 key="/banka-hesaplarimiz"
                 href="/banka-hesaplarimiz"
-                className="text-md hover:text-[#7F7B59]"              >
+                className="text-md hover:text-green-800"              >
                 Banka Hesaplarımız
               </Link>
               <FaChevronRight className="text-gray-400 text-lg" />
@@ -230,7 +230,7 @@ export default function Header() {
                 onClick={() => setMenuOpen(!menuOpen)}
                 key="/siparis-takip"
                 href="/siparis-takip"
-                className="text-md hover:text-[#7F7B59]"            >
+                className="text-md hover:text-green-800"            >
                 Sipariş Takip
               </Link>
               <FaChevronRight className="text-gray-400 text-lg" />
@@ -240,7 +240,7 @@ export default function Header() {
                 onClick={() => setMenuOpen(!menuOpen)}
                 key="/bize-ulasin"
                 href="/bize-ulasin"
-                className="text-md hover:text-[#7F7B59]"            >
+                className="text-md hover:text-green-800"            >
                 Bize Ulaşın
               </Link>
               <FaChevronRight className="text-gray-400 text-lg" />

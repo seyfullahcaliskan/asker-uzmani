@@ -129,7 +129,13 @@ export default function Home() {
     <div className="mx-auto space-y-4 md:space-y-8 px-4 md:px-8">
       {/* Üst Tablar */}
       <div className="grid grid-cols-2 md:grid-cols-4 text-white gap-2 space-y-4">
-        <div className="grid grid-cols-4 bg-green-500 p-2 rounded-lg shadow-lg cursor-pointer h-full">
+        <Link
+          href="https://wa.me/905386820112"
+          className="grid grid-cols-4 bg-green-500 p-4 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 h-full"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp ile iletişime geç"
+          target="_blank" // WhatsApp linkini yeni sekmede açmak için
+        >
           <div className="col-span-1 text-3xl md:text-5xl flex justify-center items-center">
             <FaWhatsapp />
           </div>
@@ -140,7 +146,7 @@ export default function Home() {
             </div>
             <span className="text-xs md:text-md">Kolay Sipariş İçin Tıklayınız</span>
           </div>
-        </div>
+        </Link>
         <div className="grid grid-cols-4 bg-orange-500 p-2 rounded-lg shadow-lg h-full">
           <div className="col-span-1 text-3xl md:text-5xl flex justify-center items-center">
             <CiGift />
@@ -163,7 +169,12 @@ export default function Home() {
             </span>
           </div>
         </div>
-        <div className="grid grid-cols-4 bg-red-500 p-2 rounded-lg shadow-lg cursor-pointer h-full">
+        <Link
+          href="/kendi-setini-hazirla"
+          className="grid grid-cols-4 bg-red-500 p-4 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 h-full"
+          rel="noopener noreferrer"
+          aria-label="Kendi Setinizi Hazırlayın !"
+        >
           <div className="col-span-1 text-3xl md:text-5xl flex justify-center items-center">
             <GoPackage />
           </div>
@@ -173,23 +184,26 @@ export default function Home() {
               <TbClick className="text-xl" />
             </div>
             <span className="text-xs md:text-md">
-              Avantajlı fiyatlarla setini oluştur!
+              Avantajlı fiyatlarla setini oluştur !
             </span>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Kategori Kutuları */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-white">
         {[
-          { title: "Askerlik Setleri", image: "/images/kendi-setin.png" },
-          { title: "Tekstil", image: "https://www.askerigiyim.com/wp-content/uploads/2022/11/asker-malzemeleri-ana-sayfa-banner.jpg" },
-          { title: "Çanta", image: "https://cdn.qukasoft.com/f/599098/b3NDVUoyVTArYkI4Tmk4Z1RvTTZKYms9/i/6561be4e6f410-20182597-sw427sh427.webp" },
-          { title: "Yardımcı Ürünler", image: "https://st2.depositphotos.com/3423429/11947/v/450/depositphotos_119479396-stock-illustration-personal-care-set.jpg" },
+          { title: "Askerlik Setleri", href: 'askerlik-setleri', image: "/images/kendi-setin.png" },
+          { title: "Tekstil", href: 'tekstil', image: "https://www.askerigiyim.com/wp-content/uploads/2022/11/asker-malzemeleri-ana-sayfa-banner.jpg" },
+          { title: "Çanta", href: 'canta', image: "https://cdn.qukasoft.com/f/599098/b3NDVUoyVTArYkI4Tmk4Z1RvTTZKYms9/i/6561be4e6f410-20182597-sw427sh427.webp" },
+          { title: "Yardımcı Ürünler", href: 'yardimci-urunler', image: "https://st2.depositphotos.com/3423429/11947/v/450/depositphotos_119479396-stock-illustration-personal-care-set.jpg" },
         ].map((item, index) => (
-          <div
+          <Link
             key={index}
-            className="relative rounded-lg shadow-lg overflow-hidden cursor-pointer min-h-[100px] md:min-h-[200px]"
+            className="relative rounded-lg shadow-lg overflow-hidden cursor-pointer min-h-[100px] md:min-h-[200px] hover:scale-105 transition-transform duration-200"
+            href={item.href}
+            rel="noopener noreferrer"
+            aria-label={item.title}
           >
             {/* Arka plan görseli */}
             <div className="absolute inset-0 z-0">
@@ -206,7 +220,7 @@ export default function Home() {
               <span className="text-[10px] md:text-sm font-bold">{item.title}</span>
               <span className="text-[8px] md:text-xs underline font-bold">Ürünleri İncele</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
@@ -217,9 +231,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto p-2 flex flex-col items-center justify-center text-center">
           <Link
             href="/kendi-setini-hazirla"
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 animate-blink-white px-8 py-3 rounded-2xl text-xs md:text-2xl font-bold shadow-lg shadow-orange-300 hover:shadow-orange-500 hover:scale-105 transition-all duration-300"
+            className="flex items-center justify-center gap-4 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 animate-blink-white px-12 py-4 rounded-xl text-xs md:text-2xl font-bold shadow-lg shadow-orange-300 hover:shadow-orange-500 hover:scale-105 transition-all duration-300"
           >
-            <span>AVANTAJLI FİYATLARLA KENDİ SETİNİ HAZIRLA!</span>
+            <span>Avantajlı Fiyatlarla Kendi Setini Hazırla !</span>
             <TbClick className="text-xl" />
           </Link>
         </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getProductCategorySlug } from "../../navLinks";
@@ -11,39 +11,98 @@ import { getProducts } from "../../utils/axiosInstance";
 
 export default function ProductSearch() {
   const [query, setQuery] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const router = useRouter();
   const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     getProducts().then((res) => setProducts(res));
 
-    // Ekran genişliğini dinle
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Dışarı tıklamayı dinle
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Türkçe karakter normalize
+  const turkishNormalize = (str) => {
+    return str
+      .toLowerCase()
+      .replace(/ı/g, "i")
+      .replace(/ç/g, "c")
+      .replace(/ğ/g, "g")
+      .replace(/ö/g, "o")
+      .replace(/ş/g, "s")
+      .replace(/ü/g, "u");
+  };
+
+  // Fuzzy arama
+  const fuzzyMatch = (text, q) => {
+    if (!text || !q) return false;
+    text = turkishNormalize(text);
+    q = turkishNormalize(q);
+
+    const pattern = q
+      .split("")
+      .map((ch) => ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+      .join(".*?");
+    const regex = new RegExp(pattern);
+
+    return regex.test(text);
+  };
+
+  // Skor bazlı arama
+  const scoreMatch = (text, q) => {
+    if (!text || !q) return -1;
+    text = turkishNormalize(text);
+    q = turkishNormalize(q);
+
+    if (text === q) return 100; // Tam eşleşme
+    if (text.startsWith(q)) return 90; // Başlangıçta eşleşme
+    if (text.includes(q)) return 75; // İçinde geçenler
+
+    // Fuzzy eşleşme (harfler sırayla geçiyorsa)
+    const pattern = q
+      .split("")
+      .map((ch) => ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+      .join(".*?");
+    const regex = new RegExp(pattern);
+    if (regex.test(text)) return 50; // düşük skor
+
+    return -1; // eşleşme yok
+  };
+
   const filteredProducts =
     query.trim().length > 0
-      ? (products?.data || products || []).filter((p) =>
-          p.name?.toLowerCase().includes(query.toLowerCase())
-        )
+      ? (products?.data || products || [])
+        .map((p) => ({
+          ...p,
+          matchScore: scoreMatch(p.name, query),
+        }))
+        .filter((p) => p.matchScore > -1) // sadece eşleşenler
+        .sort((a, b) => b.matchScore - a.matchScore) // skora göre sırala
       : [];
 
-  // Gösterilecek ürün sayısı (mobile=2, desktop=4)
-  const itemsPerPage = isMobile ? 2 : 4;
-
-  // Gösterilecek ürünler (sayfalama)
+  const itemsPerPage = isMobile ? 3 : 4;
   const paginatedProducts = filteredProducts.slice(
     currentPage * itemsPerPage,
     currentPage * itemsPerPage + itemsPerPage
   );
-
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   const imageOf = (item) => {
@@ -54,7 +113,7 @@ export default function ProductSearch() {
 
   const handleAddToCart = (item) => {
     addToCart(item);
-    setIsFocused(false);
+    // Burada setShowResults(false) eklemek istersen sonuçları kapatır
   };
 
   const nextPage = () => {
@@ -68,31 +127,31 @@ export default function ProductSearch() {
   };
 
   return (
-    <div className="relative w-full max-w-md">
+    <div ref={containerRef} className="relative w-full max-w-md">
       {/* Arama kutusu */}
-      <div className="relative flex items-center border border-[#7F7B59] rounded-3xl overflow-hidden">
+      <div className="relative flex items-center border border-green-800 rounded-3xl overflow-hidden">
         <input
           type="text"
           placeholder="Arama"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
-            setCurrentPage(0); // arama değişince başa dön
+            setCurrentPage(0);
+            setShowResults(true);
           }}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 150)}
           className="flex-1 px-4 py-2 text-sm text-gray-700 focus:outline-none"
         />
         <button
           type="button"
-          className="bg-[#7F7B59] text-white p-1 rounded-full mr-2 hover:bg-[#505034] transition-colors"
+          className="bg-green-800 text-white p-1 rounded-full mr-2 hover:bg-green-800 transition-colors"
+          onClick={() => setShowResults(true)}
         >
           <AiOutlineSearch className="text-lg" />
         </button>
       </div>
 
       {/* Arama Sonuçları */}
-      {isFocused && query && (
+      {showResults && query.trim() && (
         <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
           {paginatedProducts.length > 0 ? (
             <>
@@ -106,11 +165,10 @@ export default function ProductSearch() {
                     <Link
                       className="col-span-9"
                       href={`/${categorySlug}/${item.slug}`}
-                      onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => setIsFocused(false)}
+                      onClick={() => setShowResults(false)}
                     >
                       <div className="grid grid-cols-10 items-center gap-2">
-                        {/* Sabit boyutlu resim container */}
+                        {/* Resim */}
                         <div className="col-span-2">
                           <div className="relative w-16 h-16">
                             <Image
@@ -146,10 +204,7 @@ export default function ProductSearch() {
                       className="flex justify-center"
                       onClick={() => handleAddToCart(item)}
                     >
-                      <button
-                        onMouseDown={(e) => e.preventDefault()}
-                        className="text-3xl md:text-4xl text-orange-600 hover:scale-105 transition-all duration-150"
-                      >
+                      <button className="text-xl md:text-2xl text-orange-600 hover:scale-105 transition-all duration-150">
                         <TbBasketPlus />
                       </button>
                     </div>

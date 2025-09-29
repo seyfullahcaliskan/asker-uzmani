@@ -24,8 +24,6 @@ export default function CartPage() {
     freeCargoPrice,
   } = useCart();
 
-  console.log(cartItems)
-
   const productTotal = getTotalPrice();
   const cargoFee = getCargoFee();
   const totalPriceWithCargo = getTotalWithCargo();
@@ -61,7 +59,7 @@ export default function CartPage() {
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 bg-[#7F7B59] text-white px-6 py-3 rounded-lg hover:bg-[#6d6849] hover:scale-110 transition-all duration-200"
+          className="inline-flex items-center gap-2 bg-green-800 text-white px-6 py-3 rounded-lg hover:bg-[#6d6849] hover:scale-110 transition-all duration-200"
         >
           <BiArrowBack />
           Alışverişe Devam Et
@@ -76,7 +74,7 @@ export default function CartPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
         <Link
           href="/"
-          className="flex items-center gap-2 text-[#7F7B59] hover:text-[#6d6849] hover:scale-110 transition-all duration-200 text-sm sm:text-base"
+          className="flex items-center gap-2 text-green-800 hover:text-[#6d6849] hover:scale-110 transition-all duration-200 text-sm sm:text-base"
         >
           <BiArrowBack className="text-lg sm:text-xl" />
           Alışverişe Devam Et
@@ -219,7 +217,7 @@ export default function CartPage() {
 
                       {/* Fiyat ve Sil */}
                       <div className="flex items-center gap-3">
-                        <span className="font-bold text-[#7F7B59]">
+                        <span className="font-bold text-green-800">
                           {formatPrice(item.cartPrice || item.price)}
                         </span>
                         <button
@@ -266,7 +264,7 @@ export default function CartPage() {
               <hr />
               <div className="flex justify-between font-bold text-base">
                 <span>Toplam:</span>
-                <span className="text-[#7F7B59]">
+                <span className="text-green-800">
                   {formatPrice(totalPriceWithCargo)}
                 </span>
               </div>
@@ -276,7 +274,7 @@ export default function CartPage() {
               href={canProceedToCheckout ? "/odeme" : "#"}
               onClick={(e) => !canProceedToCheckout && e.preventDefault()}
               className={`block w-full text-center py-3 rounded-lg font-bold transition-all ${canProceedToCheckout
-                  ? "bg-[#7F7B59] text-white hover:bg-[#6d6849]"
+                  ? "bg-green-800 text-white hover:bg-[#6d6849]"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
             >

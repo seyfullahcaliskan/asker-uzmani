@@ -43,7 +43,7 @@ export default function CartDropdown() {
   return (
     <div className="relative" ref={dropdownRef}>
       <div
-        className="flex items-center gap-2 cursor-pointer hover:text-[#7F7B59] hover:scale-110 transition-all duration-200"
+        className="flex items-center gap-2 cursor-pointer hover:text-green-800 hover:scale-110 transition-all duration-200"
         onMouseEnter={() => setIsOpen(true)}
       >
         <Link
@@ -141,7 +141,7 @@ export default function CartDropdown() {
                         )}
                         <div className="flex items-center justify-end gap-4 mt-2">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-[#7F7B59]">
+                            <span className="text-sm font-bold text-green-800">
                               {formatPrice(item.cartPrice || item.price)}
                             </span>
                             <button
@@ -184,7 +184,7 @@ export default function CartDropdown() {
                   <hr className="my-2" />
                   <div className="flex justify-between font-bold text-base">
                     <span>Toplam:</span>
-                    <span className="text-[#7F7B59]">
+                    <span className="text-green-800">
                       {formatPrice(totalWithCargo)}
                     </span>
                   </div>
@@ -194,7 +194,7 @@ export default function CartDropdown() {
                   <Link
                     onClick={() => setIsOpen(false)}
                     href="/sepet"
-                    className="border border-[#7F7B59] text-[#7F7B59] px-4 py-2 rounded-lg hover:bg-[#7F7B59] hover:text-white transition-all"
+                    className="border border-green-800 text-green-800 px-4 py-2 rounded-lg hover:bg-green-800 hover:text-white transition-all"
                   >
                     Sepeti Görüntüle
                   </Link>

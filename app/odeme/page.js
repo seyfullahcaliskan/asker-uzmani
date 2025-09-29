@@ -82,7 +82,7 @@ export default function CheckoutPage() {
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 bg-[#7F7B59] text-white px-6 py-3 rounded-lg hover:bg-[#6d6849] transition-colors"
+          className="inline-flex items-center gap-2 bg-green-800 text-white px-6 py-3 rounded-lg hover:bg-[#6d6849] transition-colors"
         >
           <BiArrowBack /> Alışverişe Devam Et
         </Link>
@@ -117,7 +117,7 @@ export default function CheckoutPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="flex flex-col items-start gap-4 mb-8">
-        <Link href="/sepet" className="flex items-center gap-2 text-[#7F7B59] hover:text-[#6d6849]">
+        <Link href="/sepet" className="flex items-center gap-2 text-green-800 hover:text-[#6d6849]">
           <BiArrowBack className="text-xl" /> Sepete Dön
         </Link>
         <h1 className="text-3xl font-bold">Ödeme</h1>
@@ -194,7 +194,7 @@ export default function CheckoutPage() {
                     <span>
                       {item.name} x{item.quantity}
                     </span>
-                    <span className="font-medium text-[#7F7B59]">
+                    <span className="font-medium text-green-800">
                       {formatPrice(item.cartPrice || item.price)}
                     </span>
                   </div>
@@ -249,7 +249,7 @@ export default function CheckoutPage() {
               <hr />
               <div className="flex justify-between font-bold text-base sm:text-lg">
                 <span>Toplam:</span>
-                <span className="text-[#7F7B59]">
+                <span className="text-green-800">
                   {formatPrice(getTotalWithCargo())}
                 </span>
               </div>

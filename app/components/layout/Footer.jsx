@@ -150,19 +150,19 @@ export default function Footer() {
           <Link
             href="/iptal-iade-politikasi"
           >
-            <div className="flex items-start gap-2 cursor-pointer hover:text-[#7F7B59]">
+            <div className="flex items-start gap-2 cursor-pointer hover:text-green-800">
               <span className="text-[10px]">İptal - İade Politikası</span></div>
           </Link>
           <Link
             href="/teslimat-bilgileri"
           >
-            <div className="flex items-start gap-2 cursor-pointer hover:text-[#7F7B59]">
+            <div className="flex items-start gap-2 cursor-pointer hover:text-green-800">
               <span className="text-[10px]">Teslimat Bilgileri</span></div>
           </Link>
           <Link
             href="/gizlilik-sozlesmesi"
           >
-            <div className="flex items-start gap-2 cursor-pointer hover:text-[#7F7B59]">
+            <div className="flex items-start gap-2 cursor-pointer hover:text-green-800">
               <span className="text-[10px]">Gizlilik Sözleşmesi</span></div>
           </Link>
           <p>© 2025 - Asker Uzmanı </p>
