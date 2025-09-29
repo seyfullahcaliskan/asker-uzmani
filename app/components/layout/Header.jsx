@@ -79,7 +79,7 @@ export default function Header() {
           {/* Sol */}
           <div className="hidden md:flex md:flex-row md:justify-start md:items-center gap-2">
             <a
-              href="https://wa.me/905386820112"
+              href="https://wa.me/905409951216"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 hover:scale-105 transition-all duration-200"

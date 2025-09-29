@@ -128,13 +128,13 @@ export default function Footer() {
           <FaInstagram className="text-3xl" />
         </a> */}
         <a
-          href="https://wa.me/905386820112"
+          href="https://wa.me/905409951216"
           target="_blank"
           rel="noopener noreferrer"
         >
           <FaWhatsapp className="text-3xl" />
         </a>
-        <a href="tel:+905386820112">
+        <a href="tel:+905409951216">
           <FaPhone className="text-2xl" />
         </a>
       </div>

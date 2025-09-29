@@ -130,7 +130,7 @@ export default function Home() {
       {/* Üst Tablar */}
       <div className="grid grid-cols-2 md:grid-cols-4 text-white gap-2 space-y-4">
         <Link
-          href="https://wa.me/905386820112"
+          href="https://wa.me/905409951216"
           className="grid grid-cols-4 bg-green-500 p-4 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 h-full"
           rel="noopener noreferrer"
           aria-label="WhatsApp ile iletişime geç"

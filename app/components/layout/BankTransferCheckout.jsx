@@ -37,7 +37,7 @@ export default function BankTransferCheckout({ formData, setFormData }) {
     return msg;
   };
 
-  const whatsappLink = `https://wa.me/905386820112?text=${encodeURIComponent(formatMessage())}`;
+  const whatsappLink = `https://wa.me/905409951216?text=${encodeURIComponent(formatMessage())}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(formatMessage());

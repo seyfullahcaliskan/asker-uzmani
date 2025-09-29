@@ -16,7 +16,7 @@ export default function ContactUs() {
         {/* Left: Contact Info */}
         <div className="space-y-4">
           <h1 className="text-2xl font-semibold">ÖZHAN ASKER MALZEMELERİ</h1>
-          <p className="text-sm text-gray-600">(Talip HAN - Halil HAN)</p>
+          <p className="text-sm text-gray-600">(Talip HAN)</p>
 
           <div className="pt-2">
             <h2 className="font-medium">Adres</h2>
@@ -29,7 +29,7 @@ export default function ContactUs() {
               <a href="tel:+903122323905" className="underline">Tel: 0312 232 39 05</a>
             </p>
             <p className="text-sm">
-              <a href="tel:+905386820112" className="underline">Halil HAN: 0 538 682 01 12</a>
+              <a href="tel:+905409951216" className="underline">Tel: 0 540 995 12 16</a>
             </p>
           </div>
 
