@@ -6,7 +6,13 @@ import RootClient from "./RootClient";
 
 export const metadata = {
   title: "Asker Uzmanı - Özhan Asker Malzemeleri",
-  description: "Özhan Asker Malzemeleri dijitalde! Güvenilir askeri malzeme tedariki ve hızlı sipariş için online mağazamızı keşfedin.",
+  description:
+    "Özhan Asker Malzemeleri dijitalde! Güvenilir askeri malzeme tedariki ve hızlı sipariş için online mağazamızı keşfedin.",
+  icons: {
+    icon: "/favicon.ico", // Tarayıcı sekmesinde görünen favicon
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico", // iOS için
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -231,7 +231,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto p-2 flex flex-col items-center justify-center text-center">
           <Link
             href="/kendi-setini-hazirla"
-            className="flex items-center justify-center gap-4 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 animate-blink-white px-12 py-4 rounded-xl text-xs md:text-2xl font-bold shadow-lg shadow-orange-300 hover:shadow-orange-500 hover:scale-105 transition-all duration-300"
+            className="flex items-center justify-center gap-4 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 animate-blink-white px-12 py-2 rounded-xl text-xs md:text-2xl font-bold shadow-lg shadow-orange-300 hover:shadow-orange-500 hover:scale-105 transition-all duration-300"
           >
             <span>Avantajlı Fiyatlarla Kendi Setini Hazırla !</span>
             <TbClick className="text-xl" />

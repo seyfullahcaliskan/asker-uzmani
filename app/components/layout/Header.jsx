@@ -86,7 +86,7 @@ export default function Header() {
             >
               <RiWhatsappFill className="text-xl text-green-600" />
               <span className="text-xs text-green-600 font-bold">
-                0 538 682 01 12
+                0 540 995 12 16
               </span>
             </a>
             <span className="hidden sm:block text-gray-400 text-lg">|</span>
