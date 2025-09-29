@@ -144,7 +144,7 @@ export default function Footer() {
           <Link
             href="/mesafeli-satis-sozlesmesi"
           >
-            <div className="flex items-start gap-2 cursor-pointer hover:text-[#7F7B59]">
+            <div className="flex items-start gap-2 cursor-pointer hover:text-green-800">
               <span className="text-[10px]">Mesafeli Satış Sözleşmesi</span></div>
           </Link>
           <Link

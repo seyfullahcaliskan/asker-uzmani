@@ -14,6 +14,7 @@ import { useCart } from "../../hooks/useCart";
 import { getGeneralSettings, getNavLinks } from "../../utils/axiosInstance";
 import Image from "next/image";
 import { FaChevronRight } from "react-icons/fa";
+import { TbClick } from "react-icons/tb";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -40,25 +41,25 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow">
-     <div
-          className="flex flex-col justify-center items-center font-bold text-base md:text-2xl py-2 md:py-3 bg-center text-white text-center"
-          style={{ backgroundImage: "url('/images/kamuflaj_desen.png')" }}
-        >
-        <div className="max-w-7xl mx-auto py-2 flex flex-col items-center justify-center text-center">
-          
+      {/* <div
+        className="flex flex-col justify-center items-center font-bold text-base md:text-2xl py-2 md:py-3 bg-center text-white text-center"
+        style={{ backgroundImage: "url('/images/kamuflaj_desen.png')" }}
+      >
+        <div className="max-w-7xl mx-auto p-2 flex flex-col items-center justify-center text-center">
           <Link
             href="/kendi-setini-hazirla"
-            className="bg-acik-yesil hover:bg-acik-kahve text-white px-6 py-3 rounded-2xl text-sm md:text-base font-semibold shadow-md transition-all duration-300"
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 animate-blink-white px-8 py-3 rounded-2xl text-xs md:text-md font-bold shadow-lg shadow-orange-300 hover:shadow-orange-500 hover:scale-105 transition-all duration-300"
           >
-            AVANTAJLI FİYATLARLAR KENDİ SETİNİ HAZIRLA !
+            <span>AVANTAJLI FİYATLARLA KENDİ SETİNİ HAZIRLA!</span>
+            <TbClick className="text-xl" />
           </Link>
         </div>
-      </div>
+      </div> */}
       {/* Kampanya Bandı */}
-      {/* <div className="hidden md:flex flex-col">
+      <div className="hidden md:flex flex-col">
         <div
           className="flex flex-col justify-center items-center font-bold text-base md:text-2xl py-2 md:py-3 bg-center text-white text-center"
-          style={{ backgroundImage: "url('/images/kamuflaj_desen.png')" }}
+          style={{ backgroundImage: "url('/images/kamuflaj-desen.jpg')" }}
         >
           <span className="animate-blink-white text-sm md:text-lg">
             Açılışa Özel Kampanyalı Fiyatlar
@@ -70,7 +71,7 @@ export default function Header() {
             </span>
           )}
         </div>
-      </div> */}
+      </div>
 
       <div className="max-w-screen-xl mx-auto px-2 md:px-4">
         {/* Üst Bar */}
